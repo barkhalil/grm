@@ -1,0 +1,525 @@
+/**
+ * Created by NAGUI on 14/11/2015.
+ */
+
+var f = "http://";
+var s = location.host;
+if(location.host=="www.vital-crm.tn"){
+    var url = f + s ;
+}else{
+     var url = f + s + "/grm";
+   // var url = f + s + "/VitalGrm";
+}
+//console.log(url);
+function MSg(msg, type) {
+    console.log(msg);
+    jQuery(".alert").addClass(type);
+    jQuery(".alert").show();
+    jQuery("#MsgAlert").html(msg);
+    window.setTimeout(function () {
+            jQuery(".alert").fadeOut('slow')
+        },
+        10000);
+}
+function GetLocation(Page) {
+    var val = jQuery('#TypeClient').val();
+    if (val != "") {
+        var url = Page + '&idClient=' + val;
+    }
+    else url = Page;
+    window.location = url;
+}
+function GetPage(Page) {
+    var val = jQuery('#TypeClient').val();
+    if (val != "") {
+        var url = Page + '&idDel=' + val;
+    }
+    else url = Page;
+    window.location = url;
+}
+function GetPageI(Page,id) {
+    var val = jQuery('#TypeClient').val();
+    if (val != "") {
+        var url = Page + '&idDel=' + id+'&selVal='+val;
+    }
+    else url = Page;
+    window.location = url;
+}
+function FindDel() {
+    var sect = $("#Secteur").val();
+    if (sect != "") {
+        // ajax rechercher les délégation associer : 
+        $.ajax({
+            url: url + "/ajax/FindDel.php",
+            type: "POST",
+            data: ({
+                secteur: sect
+            }),
+            dataType: 'html',
+            success: function (result) {
+                $("#DelListe").html(result);
+                $("#delegationListe").select2();
+                $("#EtablissementListe").select2();
+            }
+        });
+
+
+    }
+}
+function AddPRod(admin) {
+    var prod=$("#ProdSelect").val();
+    var prodName=$("#ProdSelect :selected").text();
+    var prodSerialisable=$("#ProdSelect :selected").attr('rel');
+    var prodbonus=$("#ProdSelect :selected").attr('bonus');
+    var TotalPoint= $("#TotPoint").val();
+    console.log(prodSerialisable);
+    console.log(prodbonus);
+    var divApp=$("#ProdListeINp");
+    if(TotalPoint < prodbonus){
+        alert('Point Bonus insufisante ');
+        return false;
+    }
+    if(prod!=""){
+        $("#"+prod).remove();
+
+        divApp.append('<div class="form-group" id="'+prod+'"> ' +
+            '<label>'+
+        '<a href="javascript:void(0)" onclick="RemouveDiv('+prod+')" class="btn btn-danger"><i class="fa fa-trash"></i></a> '
+            +prodName+'<br/> Quantité : ' +
+
+            '</label>' +
+            '<input type="number" name="prodValue['+prod+']" value="1"  min="1" class="form-control QteProd" onchange="VerifyPoints()">' );
+        if(prodSerialisable==1 && admin==1){
+            divApp.append('<div id="prodSerie'+prod+'">' +
+                '<label>Numero de Série</label>'+
+                '<textarea name="Series" class="form-control"></textarea>'+
+                '</div>');
+        }
+        divApp.append('</div>');
+    }
+
+
+}
+function VerifyPoints() {
+    
+}
+function AddPoint(divID) {
+    var newP=parseInt($("#"+divID).val());
+    $("#PointVal").html(newP);
+    var pIni = $("#PointValIni").html();
+    pTot=parseInt(pIni)+newP;
+    $("#PointValTot").html(pTot);
+    $("#TotPoint").val(pTot);
+}
+function RemouveDiv(divID) {
+    $("#"+divID).remove();
+}
+function StartFiltre() {
+    var sect = $("#Secteur").val();
+    if (sect != "") {
+        // ajax rechercher les délégation associer :
+        $.ajax({
+            url: url + "/ajax/FiltreDel.php",
+            type: "POST",
+            data: ({
+                secteur: sect
+            }),
+            dataType: 'html',
+            success: function (result) {
+                $("#ResFiltre").html(result);
+                $(".select2").select2();
+                // $("#EtablissementListe").select2();
+            }
+        });
+
+
+    } else {
+        $("#ResFiltre").html("");
+    }
+}
+function FindDelSimple() {
+    var sect = $("#Secteur").val();
+    if (sect != "") {
+        // ajax rechercher les délégation associer :
+        $.ajax({
+            url: url + "/ajax/FindDel_1.php",
+            type: "POST",
+            data: ({
+                secteur: sect
+            }),
+            dataType: 'html',
+            success: function (result) {
+                $("#DelListe").html(result);
+            }
+        });
+
+
+    }
+}
+function FindEtabSimple() {
+    var sect = $("#delegationListe").val();
+    if (sect != "") {
+        // ajax rechercher les délégation associer :
+        $.ajax({
+            url: url + "/ajax/FindEtab.php",
+            type: "POST",
+            data: ({
+                secteur: sect
+            }),
+            dataType: 'html',
+            success: function (result) {
+                $("#EtabListDiv").html(result);
+            }
+        });
+
+
+    }
+}
+function FindDelListe() {
+    var sect = $("#Secteur").val();
+    if (sect != "") {
+        // ajax rechercher les délégation associer :
+        $.ajax({
+            url: url + "/ajax/FindDel_3.php",
+            type: "POST",
+            data: ({
+                secteur: sect
+            }),
+            dataType: 'html',
+            success: function (result) {
+                $("#DelListe").html(result);
+            }
+        });
+
+
+    }
+}
+function FindDelDemande() {
+    var sect = $("#Secteur").val();
+    if (sect != "") {
+        // ajax rechercher les délégation associer : 
+        $.ajax({
+            url: url + "/ajax/FindDel_2.php",
+            type: "POST",
+            data: ({
+                secteur: sect
+            }),
+            dataType: 'html',
+            success: function (result) {
+                $("#DelListe").html(result);
+                $(".select2").select2();
+            }
+        });
+
+
+    }
+}
+function ShwoTable() {
+    event.preventDefault();
+    $("#Tdetail").show();
+}
+$(window).load(function () {
+    // full load
+    $('table.highchart').highchartTable()
+});
+$(function () {
+    $('#cadx').hide();
+    $("#Cviste").load(url + '/modules/visites.php', function (response, status, xhr) {
+        console.log(xhr.status + " " + xhr.statusText);
+        if (status == "200" || xhr.status == "200") {
+            $('table.highchart').highchartTable()
+            // alert(msg + xhr.status + " " + xhr.statusText);
+            console.log(xhr.status + " " + xhr.statusText);
+        }
+        if (status == "error") {
+            // alert(msg + xhr.status + " " + xhr.statusText);
+            console.log(xhr.status + " " + xhr.statusText);
+        }
+    });
+   /* $("#SearchBC").keypress(function (e) {
+        var key = e.keyCode;
+        if(key==13){
+            alert("ok");
+        }
+    })*/
+    $("#SearchBC").keydown(function (e) {
+        var key = e.keyCode;
+        if(key==13){
+            var redi= $("#SearchBC").val();
+            // get type to redirec
+            var type =$('input[name=type]:checked', '#SearchForm').val();
+            if(type==1){
+              //ajouter au stock :
+                window.location="../fournisseur/addStocks&id="+redi;
+            }else{
+                window.location="EdtitCadeau&id="+redi;
+            }
+        }
+    })
+    $('[data-toggle="tooltip"]').tooltip();
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+    $("#Tdetail").hide();
+    $("#linkTable").click(function () {
+        $("#Tdetail").show();
+        console.log("cliked");
+    });
+    //  $('table.highchart').highchartTable();
+    $(".select2").select2();
+    $("#DivRes").hide();
+    $("#FilterFreq").click(function (e) {
+        e.preventDefault();
+        // ajx call for gain time :
+        $.ajax({
+            url: url + "/ajax/Freq.php",
+            type: "POST",
+            data: ({
+                de: $("#Dedate").val(),
+                a: $("#Adate").val()
+            }),
+            dataType: 'html',
+            success: function (result) {
+                $("#FreLoad").html(result);
+            }
+
+        });
+
+    });
+//bootstrap WYSIHTML5 - text editor
+    /* $(".textarea").wysihtml5({
+     "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
+     "emphasis": true, //Italics, bold, etc. Default true
+     "lists": true, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+     "html": false, //Button which allows you to edit the generated HTML. Default false
+     "link": false, //Button to insert a link. Default true
+     "image": false, //Button to insert an image. Default true,
+     "color": true //Button to change color of font
+     });*/
+    jQuery('#modal-from-dom').on('shown.bs.modal', function () {
+        var id = jQuery(this).data('id');
+        var name = jQuery(this).data('title');
+        var removeBtn = jQuery(this).find('.btn-danger');
+        var pkliste = jQuery('textarea#pkliste').val();
+        removeBtn.attr('href', removeBtn.attr('href').replace(/(&|\?)SuppID=\d*/, '$1SuppID=' + id));
+
+        jQuery('#debug-url').html('Delete URL: <strong>' + removeBtn.attr('href') + '</strong>');
+        jQuery('.TitD').html(name);
+
+    });
+    jQuery('.PkAdd').click(function () {
+        var pkliste = jQuery('textarea#pkliste').val();
+        var href = jQuery('.PkAdd').attr('href');
+        jQuery('a.PkAdd').attr('href', href + '&prk=' + pkliste);
+
+    });
+    $('.confirm-delete').on('click', function (e) {
+        e.preventDefault();
+
+        var id = $(this).data('id');
+        var name = $(this).data('title');
+        // jQuery('#debug-url').html(name);
+        //  alert(id);
+        $('#modal-from-dom').data('id', id).data('title', name).modal('show');
+    });
+
+    $.fn.bootstrapSwitch.defaults.onColor = 'success';
+    $.fn.bootstrapSwitch.defaults.offColor = 'danger';
+    $(".previlege").bootstrapSwitch();
+    $('.switcher').bootstrapSwitch('state'); // true || false
+    $('.switcher').bootstrapSwitch('toggleState');
+    $('.switcher').bootstrapSwitch('setState', false); // true || false
+    //filter
+    $("#FilterPros").click(function (event) {
+        //event.preventDefault();
+        // ajax call 
+        $("#ListeDiv").html('');
+        var secteur = $("#Secteur").val();
+        var spec = $("#Spec").val();
+        var del = $("#delegationListe").val();
+        if (secteur !== "" || spec != "") {
+            $("#MsgPRo").hide();
+            $("#DivRes").show();
+            $.ajax({
+                url: url + "/ajax/AjaxProspects.php",
+                type: "POST",
+                data: ({
+                    secteur: $("#Secteur").val(),
+                    spec: $("#Spec").val(),
+                    del: del
+                }),
+                dataType: 'html',
+                success: function (result) {
+                    $("#ListeDiv").html(result);
+                }
+
+            }).done();
+
+        } else {
+            $("#MsgPRo").append("Merci de choisir le secteur et la spécialité").show();
+        }
+    });
+    /*$("#ListeDiv").bind('change','#AllLink',function(ee){  
+     $("INPUT[id*='PRosSel_']").attr('checked', $('#AllLink').is(':checked'));
+     //  $(".checkbox1").prop('checked', $(this).prop("checked"));
+     }); $('#AllLink').change(function() {  
+     var checkboxes = $(this).closest('form').find(':checkbox');
+     if($(this).is(':checked')) {
+     checkboxes.prop('checked', true);
+     } else {
+     checkboxes.prop('checked', false);
+     }
+     });*/
+    $('#ListeDiv').on('change', '#AllLink', function (ee) {
+        console.log('dd' + $('#AllLink').is(':checked'));
+        // var checkboxes = $(this).closest('form').find(':checkbox');
+        if ($('#AllLink').is(':checked')) {
+            $(".checkbox1").prop('checked', true);
+        } else {
+            $(".checkbox1").prop('checked', false);
+        }
+    });
+    $('#ListeDiv').on('change', '.checkbox1', function (ee) {
+        if ($(this).is(':checked')) {
+            console.log($('#AllLink').is(':checked'));
+        } else {
+            $("#AllLink").prop('checked', false);
+        }
+    });
+
+
+    $("#DelListe").on('change', '#EtabSelc', function () {
+        if ($("#EtabSelc").find(':selected').text() == "----") {
+            $("#adresse").val('').prop('readonly', '');
+        } else {
+            $("#adresse").val($("#EtabSelc").find(':selected').text()).prop('readonly', 'readonly');
+        }
+
+
+    });
+    $("#DelListe").on('change', '#delegationListe', function () {
+        $("#code_postal").val($("#delegationListe").find(':selected').attr('rel')).prop('readonly', 'readonly');
+        $("#adresse").val('').prop('readonly', '');
+    });
+    $("#DelListe").on('change', '#EtabSelc', function () {
+        $("#code_postal").val($("#EtabSelc").find(':selected').attr('rel')).prop('readonly', 'readonly');
+
+    });
+});
+function PrintDiv() {
+    $(".box-footer").hide();
+    $(".direct-chat-img").hide();
+    var divToPrint = document.getElementById('DivToPrint');
+    var newWin = window.open();
+    newWin.document.write(divToPrint.innerHTML);
+    newWin.document.close();
+    newWin.focus();
+    newWin.print();
+    newWin.close();
+    $(".box-footer").show();
+    $(".direct-chat-img").show();
+}
+function Jouv(da) {
+    console.log('da', da);
+    var par = $("#" + da);
+    console.log(par);
+    $.ajax({
+        url: url + "/ajax/AddJouv.php",
+        type: "POST",
+        data: ({dateJ: da}),
+        dataType: 'html',
+        success: function (result) {
+            if (par.hasClass('active')) {
+                par.removeClass('active');
+            } else {
+                par.addClass('active');
+            }
+        }
+
+    })
+}
+function GetProdListe(){
+    var gamme = $("#gamme").val();
+    if(!gamme) return false;
+    $.ajax({
+        type:'POST',
+        data:{Gammeid:gamme},
+        url:url+'/ajax/Bonus/prodListe.php',
+        success:function (data) {
+
+            $("#ProdACmd").html(data);
+            $('#ProdSeaC').select2();
+            $('#BtnCmd').show()
+        }
+    })
+}
+
+function RediPage(id){
+    window.location='DmdPb&id='+id;
+}
+function ShowDiv(id) {
+    $("#cadx").hide();
+    $("#prodL").hide();
+    $("#"+id).show();
+}
+function PbAdd() {
+    var TotPoint =$("#TotPoint").val();
+    var Point =$("#PintC").val();
+    var type;
+    var ProdSeaC;
+    var qte;
+    var Obs = $("#ObsAdm").val();
+    var client =$('#client').val();
+    if(TotPoint<=0){
+        MSg('Merci de saisir le nombre de points bonus','alert-danger');
+        return false;
+    }
+    var prodbonus=0;
+    if($('#TypeProd').is(':checked')){
+        type=1; // c'est un produits
+        ProdSeaC=$("#ProdSeaC").val();
+        console.log(ProdSeaC)
+        qte= $("#qte").val();
+    }else{
+        type=2;
+        ProdSeaC=$("#CdxSelect").val();
+        qte=$("#qteC").val();
+        prodbonus = $("#CdxSelect :selected").attr('bonus');
+    }
+    if(!ProdSeaC || !qte || !client){
+        MSg('Merci de choisir le produits / articles','alert-danger');
+        return false;
+    }else{
+        //ajax pour la session.
+        $.ajax({
+            url:url+'/ajax/Bonus/AddBonusSession.php',
+            type:'POST',
+            data:{type:type,qte:qte,client:client,ProdSeaC:ProdSeaC,TotPoint:TotPoint,prodbonus:prodbonus,Point:Point,Obs:Obs},
+            success:function (data) {
+                $("#ListeProdSessions").html(data);
+            },
+            error:function () {
+                Msq('Un problème est survenu merci de refraichir la page','alert-danger');
+            }
+
+        })
+    }
+}
+function FinalisationPb() {
+    $.ajax({
+        url:url+'/ajax/Bonus/ValidateListeBonus.php',
+        type:'POST',
+        data:{},
+        success:function (data) {
+            MSg('Demande enregistrer','alert-success');
+            window.location = 'Cadeaux';
+        },
+        error:function () {
+            MSg('Un problème est survenu merci de refraichir la page','alert-danger');
+        }
+
+    })
+}

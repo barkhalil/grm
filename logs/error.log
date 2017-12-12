@@ -1,0 +1,18 @@
+[Mon Dec 26 21:22:37.573405 2016] [:error] [pid 4026] [client 197.28.85.73:49927] PHP Warning:  require(librairie/loadall.php): failed to open stream: No such file or directory in /var/www/html/grm/index.php on line 24
+[Mon Dec 26 21:22:37.573442 2016] [:error] [pid 4026] [client 197.28.85.73:49927] PHP Stack trace:
+[Mon Dec 26 21:22:37.573453 2016] [:error] [pid 4026] [client 197.28.85.73:49927] PHP   1. {main}() /var/www/html/grm/index.php:0
+[Mon Dec 26 21:22:37.573500 2016] [:error] [pid 4026] [client 197.28.85.73:49927] PHP Fatal error:  require(): Failed opening required 'librairie/loadall.php' (include_path='.:/usr/share/php') in /var/www/html/grm/index.php on line 24
+[Mon Dec 26 21:22:37.573510 2016] [:error] [pid 4026] [client 197.28.85.73:49927] PHP Stack trace:
+[Mon Dec 26 21:22:37.573517 2016] [:error] [pid 4026] [client 197.28.85.73:49927] PHP   1. {main}() /var/www/html/grm/index.php:0
+[Mon Dec 26 21:22:40.440365 2016] [:error] [pid 4026] [client 197.28.85.73:49929] PHP Warning:  require(librairie/loadall.php): failed to open stream: No such file or directory in /var/www/html/grm/index.php on line 24
+[Mon Dec 26 21:22:40.440388 2016] [:error] [pid 4026] [client 197.28.85.73:49929] PHP Stack trace:
+[Mon Dec 26 21:22:40.440398 2016] [:error] [pid 4026] [client 197.28.85.73:49929] PHP   1. {main}() /var/www/html/grm/index.php:0
+[Mon Dec 26 21:22:40.440434 2016] [:error] [pid 4026] [client 197.28.85.73:49929] PHP Fatal error:  require(): Failed opening required 'librairie/loadall.php' (include_path='.:/usr/share/php') in /var/www/html/grm/index.php on line 24
+[Mon Dec 26 21:22:40.440440 2016] [:error] [pid 4026] [client 197.28.85.73:49929] PHP Stack trace:
+[Mon Dec 26 21:22:40.440447 2016] [:error] [pid 4026] [client 197.28.85.73:49929] PHP   1. {main}() /var/www/html/grm/index.php:0
+[Fri Dec 30 23:40:38.153337 2016] [:error] [pid 15463] [client 197.28.20.225:53747] PHP Warning:  PDOStatement::execute(): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'num_bl' in 'field list' in /var/www/html/grm/librairie/crud.php on line 57, referer: https://grm.vital-crm.tn/gift/ValidateDemande&idDemande=16
+[Fri Dec 30 23:40:38.153372 2016] [:error] [pid 15463] [client 197.28.20.225:53747] PHP Stack trace:, referer: https://grm.vital-crm.tn/gift/ValidateDemande&idDemande=16
+[Fri Dec 30 23:40:38.153390 2016] [:error] [pid 15463] [client 197.28.20.225:53747] PHP   1. {main}() /var/www/html/grm/index.php:0, referer: https://grm.vital-crm.tn/gift/ValidateDemande&idDemande=16
+[Fri Dec 30 23:40:38.153400 2016] [:error] [pid 15463] [client 197.28.20.225:53747] PHP   2. include() /var/www/html/grm/index.php:81, referer: https://grm.vital-crm.tn/gift/ValidateDemande&idDemande=16
+[Fri Dec 30 23:40:38.153408 2016] [:error] [pid 15463] [client 197.28.20.225:53747] PHP   3. update() /var/www/html/grm/pages/gift/ValidateDemande.php:55, referer: https://grm.vital-crm.tn/gift/ValidateDemande&idDemande=16
+[Fri Dec 30 23:40:38.153418 2016] [:error] [pid 15463] [client 197.28.20.225:53747] PHP   4. PDOStatement->execute() /var/www/html/grm/librairie/crud.php:57, referer: https://grm.vital-crm.tn/gift/ValidateDemande&idDemande=16
