@@ -5,6 +5,7 @@
  * Date: 10/11/2016
  * Time: 14:17
  */
+
 $idDemandeau=filter_input(INPUT_GET,'idDel',257);
 $link="&idDel=$idDemandeau";
 $Limite=filter_input(INPUT_GET,'d',257);
@@ -26,11 +27,24 @@ if($idDemLivraison){
         'modifier_par'=>$_SESSION['user']['id']
     ) ,'grm_demande_cadeaux');
 }
-// récupération des cadeaux demander :
-$Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'point_bonus>'=>0),'AND',array('id'=>'DESC'),array($Limite,30));
+if($idDemandeau) {
+    // récupération des cadeaux demander :
+   $Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'famille='=>2),'AND',array('id'=>'DESC'),array($Limite,30));
+} else {
+    // récupération des cadeaux demander :
+    $Cadeaux=get("*",'grm_demande_cadeaux',array('famille='=>2),'AND',array('id'=>'DESC'),array($Limite,30));
+}
+//echo '<pre>';print_r($Cadeaux);die;
+$_SESSION['Point']=0;
+$_SESSION['TotPoint']=0;
+$_SESSION['TotalCdx']=0;
+unset($_SESSION['TotalCdx']);
+unset($_SESSION['ProdPbCmd']);
+unset($_SESSION['CdxCmd']);
+
 ?>
 <section class="content-header">
-    <h1> Liste demande cadeaux</h1>
+    <h1>Liste demandes vitrines</h1>
 </section><!-- Main content -->
 <section class="content">
     <div class="row">
@@ -38,7 +52,7 @@ $Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'poin
             <div class="box box-success box-body table-responsive">
                 <div class="form-group">
                     <label>Demander par : </label>
-                    <select class="form-control" name="id_demandeur" onchange="GetPage('Liste')" id="TypeClient" >
+                    <select class="form-control" name="id_demandeur" onchange="GetPage('listeDemandeVitrine')" id="TypeClient" >
                         <option value=""> Par utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users',array('active>'=>0));
@@ -56,7 +70,7 @@ $Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'poin
                     <tr>
                         <th>#</th>
                         <th>date remise</th>
-                        <th>Point remis</th>
+                        <th>Demandeur</th>
                         <th>Pour : </th>
                         <th>Etat demande</th>
                         <th>Cadeaux demander</th>
@@ -68,19 +82,21 @@ $Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'poin
                         <tr>
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['system_date']))?></td>
                             <td><?=$cdt['date_remise_point']?></td>
-                            <td><?=$cdt['point_bonus']?></td>
+                            <td><?=
+                                getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom')
+                                ?></td>
                             <td><?=getinfo($cdt['id_pros'],'prospect' ,'Nom').' '.getinfo($cdt['id_pros'],'prospect' ,'prenom')?></td>
                             <td><?
                                 if($cdt['etat']==0){
                                     echo "En cours de traitement";
+                                }elseif($cdt['etat']==-1){
+                                    echo "Réfuser";
                                 }elseif($cdt['etat']==1){
                                     echo "Pointer";
                                 }elseif($cdt['etat']==2){
                                     echo "Points insufissant, avec reste =  ".$cdt['rest_point'];
-                                }elseif($cdt['etat']==3){
-                                    echo "Valider avec reste = ".$cdt['rest_point'];
                                 }else{
-                                    echo "Livrer le " .$cdt['date_livraison'];
+                                    echo "Valider";
                                 }
                                 ?></td>
                             <td>
@@ -100,18 +116,18 @@ $Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'poin
                             </td>
                             <td>
                                 <? if(!$cdt['pointage']): ?>
-                                <a href="Liste<?=$link?>&pointage=<?=$cdt['id']?>" class="btn btn-google" data-toggle="tooltip" title="Pointer">
-                                    <i class="fa fa-calculator"></i>
-                                </a>
+                                    <a href="listeDemandeVitrine<?=$link?>&pointage=<?=$cdt['id']?>" class="btn btn-google" data-toggle="tooltip" title="Pointer">
+                                        <i class="fa fa-calculator"></i>
+                                    </a>
                                 <?else: if($cdt['etat']<2) :?>
-                                    <a href="DmdPb&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
+                                    <a href="ValidateDemande&idDemande=<?=$cdt['id']?>" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                         <i class="fa fa-check"></i>
                                     </a>
-                                    <?else:?>
+                                <?else:?>
                                     <?if($cdt['date_livraison']==""):?>
-                                    <a href="Liste<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
-                                        <i class="fa fa-train"></i>
-                                    </a>
+                                        <a href="listeDemandeVitrine<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
+                                            <i class="fa fa-train"></i>
+                                        </a>
                                     <?endif;?>
                                     <a href="printDoc&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
                                         <i class="fa fa-print"></i>
@@ -124,30 +140,5 @@ $Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'poin
                 </table>
             </div>
         </div>
-    </div>
-    <div class="row">
-
-        <div class="col-md-5">
-
-            <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
-
-                Affichage de <?= ($Limite > 1) ? $Limite : 1 ?>
-                à <?= ($Limite + 30 < $Cadeaux['total']) ? $Limite + 30 : $Cadeaux['total'] ?>
-                de <?= $Cadeaux['total'] ?> Demande cadeaux
-
-            </div>
-
-        </div>
-
-        <div class="col-md-7">
-
-            <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-
-                <? pagination($Cadeaux['total'], 30, WEBRoot . "/gift/Liste".$link."&d=", ""); ?>
-
-            </div>
-
-        </div>
-
     </div>
 </section>

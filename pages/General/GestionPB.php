@@ -33,8 +33,7 @@ if($Blocid){
     <div class="row">
         <div class="col-md-4">
         <div class="box box-body box-danger">
-            <?php $TypePbActive=get('*','grm_pb_type',array('etat='=>1));
-            if($TypePbActive['total']==0):?>
+
             <form class="" method="post">
                 <div class="form-group">
                     <label>Value PB</label>
@@ -42,9 +41,7 @@ if($Blocid){
                 </div>
                 <button type="submit" name="AddPb" class="btn btn-block btn-primary" value="1">Ajouter </button>
             </form>
-            <?else:?>
-            <h3>Pour ajouter un pb merci de désactivé le dernier pb active</h3>
-            <?endif;?>
+
         </div>
         </div>
         <div class="col-md-8">
@@ -64,11 +61,11 @@ if($Blocid){
                         <td><?php echo $Ty['id'] ?></td>
                         <td><?php echo $Ty['value'] ?></td>
                         <td>
-                            <?php  if($Ty['etat']==1):?>
+                            <?php  if($Ty['etat']==1 && $Ty['id']!=1):?>
                             <a href="GestionPB&Blocid=<?php echo $Ty['id'] ?>" class="btn btn-danger">
                                 <i class="fa fa-ban"></i>
                             </a>
-                                <?else:?>
+                            <?else:?>
                                 Date de désactivation : <?php echo $Ty['date_stop']?>
                             <?php endif;?>
                         </td>

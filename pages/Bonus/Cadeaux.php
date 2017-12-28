@@ -6,7 +6,7 @@
  * Time: 14:17
  */
 // récupération des cadeaux demander :
-$Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$_SESSION['user']['id']),'AND',array('id'=>'DESC'));
+$Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$_SESSION['user']['id'],'famille='=>10),'AND',array('id'=>'DESC'));
 
 
 $_SESSION['Point']=0;

@@ -1,12 +1,12 @@
 <?php
 //PDO connexion
- try {
-     $PDO = new PDO('mysql:host=127.0.0.1;dbname=crm', 'crm', 'CrmVit@17');
+try {
+    $PDO = new PDO('mysql:host=127.0.0.1;dbname=crm', 'root', 'MySql17');
     $PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     $PDO->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     $PDO->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
     $PDO->query("SET NAMES 'utf8'");
 } catch (PDOException $exc) {
-	// print_r($exc);
+    // print_r($exc);
     echo '<h1 class="text-red center-block text-center">Connexion Immpossible</h1>';
 }
