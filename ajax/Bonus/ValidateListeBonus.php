@@ -6,6 +6,7 @@
  * Time: 12:35
  */
 //just call this page for geting session and add to data base :p
+//ALTER TABLE `grm_demande_cadeaux` ADD `pointsRealByType` VARCHAR(255) NULL DEFAULT NULL AFTER `ponitsByType`;
 session_start();
 require_once '../../Connextion.php';
 include '../../librairie/loadall.php';

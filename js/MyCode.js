@@ -7,8 +7,8 @@ var s = location.host;
 if(location.host=="www.vital-crm.tn"){
     var url = f + s ;
 }else{
-     var url = f + s + "/grm";
-   // var url = f + s + "/VitalGrm";
+    var url = f + s + "/GrmProject";
+    // var url = f + s + "/VitalGrm";
 }
 //console.log(url);
 function MSg(msg, type) {
@@ -70,21 +70,18 @@ function AddPRod(admin) {
     var prod=$("#ProdSelect").val();
     var prodName=$("#ProdSelect :selected").text();
     var prodSerialisable=$("#ProdSelect :selected").attr('rel');
-    var prodbonus=$("#ProdSelect :selected").attr('bonus');
-    var TotalPoint= $("#TotPoint").val();
     console.log(prodSerialisable);
-    console.log(prodbonus);
     var divApp=$("#ProdListeINp");
-    if(TotalPoint < prodbonus){
+    /*if(TotalPoint < prodbonus){
         alert('Point Bonus insufisante ');
         return false;
-    }
+    }*/
     if(prod!=""){
         $("#"+prod).remove();
 
         divApp.append('<div class="form-group" id="'+prod+'"> ' +
             '<label>'+
-        '<a href="javascript:void(0)" onclick="RemouveDiv('+prod+')" class="btn btn-danger"><i class="fa fa-trash"></i></a> '
+            '<a href="javascript:void(0)" onclick="RemouveDiv('+prod+')" class="btn btn-danger"><i class="fa fa-trash"></i></a> '
             +prodName+'<br/> Quantité : ' +
 
             '</label>' +
@@ -100,15 +97,39 @@ function AddPRod(admin) {
 
 
 }
-function VerifyPoints() {
+$('#AddDmd').on('click',function () {
     
+})
+function VerifyPoints() {
+
 }
 function AddPoint(divID) {
-    var newP=parseInt($("#"+divID).val());
-    $("#PointVal").html(newP);
-    var pIni = $("#PointValIni").html();
-    pTot=parseInt(pIni)+newP;
+    var pIni = $("#PointValIni").text();
+    pTot =parseInt(pIni);
+    var i=0;
+    $('#pBonus input').each(function(){
+        var newP = parseInt($(this).val());
+        var pbVal = parseFloat($(this).attr('pbval'));
+        //alert(newP);
+        if(!isNaN(newP)) {
+            i++;
+            pTot += newP*pbVal;
+        }
+    });
+    if(i==0) {
+        var pIni = $("#PointValIni").text();
+        pTot =parseInt(pIni);
+        $('#pbByDeleg input').each(function(){
+            var newP = parseInt($(this).val());
+            var pbVal = parseFloat($(this).attr('pbval'));
+            //alert(newP);
+            if(!isNaN(newP))
+                pTot += newP*pbVal;
+        });
+    }
+    $("#PointVal").html(pTot-parseInt(pIni));
     $("#PointValTot").html(pTot);
+    $(".totPB").text(pTot);
     $("#TotPoint").val(pTot);
 }
 function RemouveDiv(divID) {
@@ -236,12 +257,12 @@ $(function () {
             console.log(xhr.status + " " + xhr.statusText);
         }
     });
-   /* $("#SearchBC").keypress(function (e) {
-        var key = e.keyCode;
-        if(key==13){
-            alert("ok");
-        }
-    })*/
+    /* $("#SearchBC").keypress(function (e) {
+         var key = e.keyCode;
+         if(key==13){
+             alert("ok");
+         }
+     })*/
     $("#SearchBC").keydown(function (e) {
         var key = e.keyCode;
         if(key==13){
@@ -249,7 +270,7 @@ $(function () {
             // get type to redirec
             var type =$('input[name=type]:checked', '#SearchForm').val();
             if(type==1){
-              //ajouter au stock :
+                //ajouter au stock :
                 window.location="../fournisseur/addStocks&id="+redi;
             }else{
                 window.location="EdtitCadeau&id="+redi;
@@ -467,27 +488,39 @@ function ShowDiv(id) {
 }
 function PbAdd() {
     var TotPoint =$("#TotPoint").val();
+    var ponits = new Array();
+    $('#pBonus input').each(function(){
+        var id = $(this).attr('rel');
+        ponits[id] = $(this).val();
+    });
     var Point =$("#PintC").val();
+    var newPb =$("#PointVal").text();
     var type;
     var ProdSeaC;
     var qte;
     var Obs = $("#ObsAdm").val();
     var client =$('#client').val();
+    var idDemande =$('#idDemande').val();
     if(TotPoint<=0){
         MSg('Merci de saisir le nombre de points bonus','alert-danger');
         return false;
     }
     var prodbonus=0;
     if($('#TypeProd').is(':checked')){
-        type=1; // c'est un produits
+        type=2; // c'est un produits
         ProdSeaC=$("#ProdSeaC").val();
-        console.log(ProdSeaC)
+        console.log(ProdSeaC);
         qte= $("#qte").val();
+        prodbonus=10;
     }else{
-        type=2;
+        type=1;
         ProdSeaC=$("#CdxSelect").val();
         qte=$("#qteC").val();
         prodbonus = $("#CdxSelect :selected").attr('bonus');
+    }
+    if(type==2 && qte>6){
+        MSg('Max article est 6','alert-danger');
+        return false;
     }
     if(!ProdSeaC || !qte || !client){
         MSg('Merci de choisir le produits / articles','alert-danger');
@@ -497,7 +530,7 @@ function PbAdd() {
         $.ajax({
             url:url+'/ajax/Bonus/AddBonusSession.php',
             type:'POST',
-            data:{type:type,qte:qte,client:client,ProdSeaC:ProdSeaC,TotPoint:TotPoint,prodbonus:prodbonus,Point:Point,Obs:Obs},
+            data:{type:type,qte:qte,client:client,ProdSeaC:ProdSeaC,TotPoint:TotPoint,prodbonus:prodbonus,Point:Point,Obs:Obs,ponits:ponits,newPb:newPb,idDemande:idDemande },
             success:function (data) {
                 $("#ListeProdSessions").html(data);
             },
@@ -510,12 +543,16 @@ function PbAdd() {
 }
 function FinalisationPb() {
     $.ajax({
-        url:url+'/ajax/Bonus/ValidateListeBonus.php',
+        url:url+'/ajax/Bonus/validationDemande.php',
         type:'POST',
-        data:{},
+        data:{
+            idDemande: $('#idDemande').val(),
+            idRemise: $('#id_remise').val(),
+            ObsAdm: $('#ObsAdm').val(),
+        },
         success:function (data) {
-            MSg('Demande enregistrer','alert-success');
-            window.location = 'Cadeaux';
+            MSg('Demande valider','alert-success');
+            window.location = 'Liste';
         },
         error:function () {
             MSg('Un problème est survenu merci de refraichir la page','alert-danger');
