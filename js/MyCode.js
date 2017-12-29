@@ -70,15 +70,12 @@ function AddPRod(admin) {
     var prod=$("#ProdSelect").val();
     var prodName=$("#ProdSelect :selected").text();
     var prodSerialisable=$("#ProdSelect :selected").attr('rel');
-    var prodbonus=$("#ProdSelect :selected").attr('bonus');
-    var TotalPoint= $("#TotPoint").val();
     console.log(prodSerialisable);
-    console.log(prodbonus);
     var divApp=$("#ProdListeINp");
-    if(TotalPoint < prodbonus){
+    /*if(TotalPoint < prodbonus){
         alert('Point Bonus insufisante ');
         return false;
-    }
+    }*/
     if(prod!=""){
         $("#"+prod).remove();
 
@@ -100,19 +97,36 @@ function AddPRod(admin) {
 
 
 }
+$('#AddDmd').on('click',function () {
+    
+})
 function VerifyPoints() {
 
 }
 function AddPoint(divID) {
     var pIni = $("#PointValIni").text();
     pTot =parseInt(pIni);
+    var i=0;
     $('#pBonus input').each(function(){
         var newP = parseInt($(this).val());
         var pbVal = parseFloat($(this).attr('pbval'));
         //alert(newP);
-        if(!isNaN(newP))
+        if(!isNaN(newP)) {
+            i++;
             pTot += newP*pbVal;
+        }
     });
+    if(i==0) {
+        var pIni = $("#PointValIni").text();
+        pTot =parseInt(pIni);
+        $('#pbByDeleg input').each(function(){
+            var newP = parseInt($(this).val());
+            var pbVal = parseFloat($(this).attr('pbval'));
+            //alert(newP);
+            if(!isNaN(newP))
+                pTot += newP*pbVal;
+        });
+    }
     $("#PointVal").html(pTot-parseInt(pIni));
     $("#PointValTot").html(pTot);
     $(".totPB").text(pTot);
@@ -484,8 +498,9 @@ function PbAdd() {
     var type;
     var ProdSeaC;
     var qte;
-    var Obs = $("#Obs").val();
+    var Obs = $("#ObsAdm").val();
     var client =$('#client').val();
+    var idDemande =$('#idDemande').val();
     if(TotPoint<=0){
         MSg('Merci de saisir le nombre de points bonus','alert-danger');
         return false;
@@ -503,7 +518,7 @@ function PbAdd() {
         qte=$("#qteC").val();
         prodbonus = $("#CdxSelect :selected").attr('bonus');
     }
-    if(qte>6){
+    if(type==2 && qte>6){
         MSg('Max article est 6','alert-danger');
         return false;
     }
@@ -515,7 +530,7 @@ function PbAdd() {
         $.ajax({
             url:url+'/ajax/Bonus/AddBonusSession.php',
             type:'POST',
-            data:{type:type,qte:qte,client:client,ProdSeaC:ProdSeaC,TotPoint:TotPoint,prodbonus:prodbonus,Point:Point,Obs:Obs,ponits:ponits,newPb:newPb },
+            data:{type:type,qte:qte,client:client,ProdSeaC:ProdSeaC,TotPoint:TotPoint,prodbonus:prodbonus,Point:Point,Obs:Obs,ponits:ponits,newPb:newPb,idDemande:idDemande },
             success:function (data) {
                 $("#ListeProdSessions").html(data);
             },
@@ -528,12 +543,16 @@ function PbAdd() {
 }
 function FinalisationPb() {
     $.ajax({
-        url:url+'/ajax/Bonus/ValidateListeBonus.php',
+        url:url+'/ajax/Bonus/validationDemande.php',
         type:'POST',
-        data:{},
+        data:{
+            idDemande: $('#idDemande').val(),
+            idRemise: $('#id_remise').val(),
+            ObsAdm: $('#ObsAdm').val(),
+        },
         success:function (data) {
-            MSg('Demande enregistrer','alert-success');
-            window.location = 'Cadeaux';
+            MSg('Demande valider','alert-success');
+            window.location = 'Liste';
         },
         error:function () {
             MSg('Un problème est survenu merci de refraichir la page','alert-danger');

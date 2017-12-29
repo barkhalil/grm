@@ -18,6 +18,7 @@ if(filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT)){
     redirect("Liste");
 }
 
+
 $id=filter_input(INPUT_GET,'idDemande',FILTER_VALIDATE_INT);
 //echo $id;die;
 /*if(!$id){
@@ -29,62 +30,74 @@ $id=filter_input(INPUT_GET,'idDemande',FILTER_VALIDATE_INT);
 $Pbs=get('*','grm_pb_type',array('etat='=>1));
 $pb=$Pbs['reponse'][0];
 $edit=filter_input(INPUT_GET,'edit',FILTER_VALIDATE_INT);
-if($edit):
-// récupération de la demande et ces détails :
-$DemandeInfo=get('*','grm_demande_cadeaux',array('id='=>$id));
-$Dmd=$DemandeInfo['reponse'][0];
-    $_SESSION['TotPoint']=$Dmd['point_bonus'];
-    $_SESSION['Obs']=$Dmd['observation_client'];
-    $_SESSION['PbClient']=$Dmd['id_pros'];
-    $pointsBs=explode('@_@',$Dmd['ponitsByType']);
-    unset($_SESSION['bonusPoints']);
-    for($i=0;$i<count($pointsBs);$i++){
-        //echo $pointsBs[$i];die;
-        $_SESSION['bonusPoints'][$i]['valeur']=$pointsBs[$i];
-        $_SESSION['bonusPoints'][$i]['pb']=$Pbs['reponse'][$i]['value'];
+//echo '<pre>';print_r($_SESSION);die;
+if($_SESSION['TotPoint']==0) {
+    if($edit):
+        // récupération de la demande et ces détails :
+        $DemandeInfo=get('*','grm_demande_cadeaux',array('id='=>$id));
+        $Dmd=$DemandeInfo['reponse'][0];
+        $_SESSION['TotPoint']=$Dmd['point_bonus'];
+        $_SESSION['Obs']=$Dmd['observation_client'];
+        $_SESSION['ObsAdmin']='';
+        $_SESSION['PbClient']=$Dmd['id_pros'];
+        $pointsBs=explode('@_@',$Dmd['ponitsByType']);
+        unset($_SESSION['bonusPoints']);
+        for($i=0;$i<count($pointsBs);$i++) {
+            //echo $pointsBs[$i];die;
+            $_SESSION['bonusPoints'][$i]['valeur']=$pointsBs[$i];
+            $_SESSION['bonusPoints'][$i]['pb']=$Pbs['reponse'][$i]['value'];
+        }
 
-    }
+        //echo'<pre>';print_r($_SESSION['bonusPoints']);die;
+        $_SESSION['PbUser']=$Dmd['id_demandeur'];
+        $_SESSION['ProdPbCmd']=null;
+        //$_SESSION['CdxCmd']=null;
+        $DmdDetailsProd=get('*','grm_cadeaux_demander',array('id_demande='=>$id,'type_cdx='=>2));
+        $DmdDetailsCdx=get('*','grm_cadeaux_demander',array('id_demande='=>$id,'type_cdx='=>1));
+        $QteTot=0;
+        //echo'<pre>';print_r($DmdDetailsProd['reponse']);die;
+        foreach($DmdDetailsProd['reponse'] as $ProdPb) {
+            $ProdSeaC=$ProdPb['id_cadeaux'];
+            $qte=$ProdPb['qte'];
+            $_SESSION['ProdPbCmd'][$ProdSeaC]=$qte;
+            $QteTot+=$qte*10;
+        }
+        //echo $QteTot;die;
+        foreach($DmdDetailsCdx['reponse'] as $ProdPb) {
+            $ProdSeaC=$ProdPb['id_cadeaux'];
 
-    //echo'<pre>';print_r($_SESSION['bonusPoints']);die;
-    $_SESSION['PbUser']=$Dmd['id_demandeur'];
-    $_SESSION['ProdPbCmd']=null;
-    //$_SESSION['CdxCmd']=null;
-$DmdDetailsProd=get('*','grm_cadeaux_demander',array('id_demande='=>$id,'type_cdx='=>2));
-$DmdDetailsCdx=get('*','grm_cadeaux_demander',array('id_demande='=>$id,'type_cdx='=>1));
-    $QteTot=0;
-    foreach($DmdDetailsProd['reponse'] as $ProdPb) {
-        $ProdSeaC=$ProdPb['id_cadeaux'];
-        $qte=$ProdPb['qte'];
-        $_SESSION['ProdPbCmd'][$ProdSeaC]=$qte;
-        $QteTot+=$qte*10;
-    }
-    foreach($DmdDetailsCdx['reponse'] as $ProdPb) {
-        $ProdSeaC=$ProdPb['id_cadeaux'];
-        $qte=$ProdPb['qte'];
-        $_SESSION['CdxCmd'][$ProdSeaC]=$qte;
-        $pbV=getinfo($ProdSeaC,'grm_gift','point_bonus');
-        $QteTot+=$qte*$pbV;
-    }
-    $_SESSION['TotalCdx']=$QteTot;
+            $qte=$ProdPb['qte'];
+            $_SESSION['CdxCmd'][$ProdSeaC]=$qte;
+            $pbV=getinfo($ProdSeaC,'grm_gift','point_bonus');
+            //
+            $QteTot+=$qte*$pbV;
 
-endif;
+        }
+
+        $_SESSION['TotalCdx']=$QteTot;
+        //echo $_SESSION['TotalCdx'];die;
+
+    endif;
+}
+
 $IdSup=filter_input(INPUT_GET,'IdSup',FILTER_VALIDATE_INT);
 if($IdSup){
+    $id= filter_input(INPUT_GET,'idDemande',FILTER_VALIDATE_INT);
     $ProdSup=filter_input(INPUT_GET,'prod',FILTER_VALIDATE_INT);
-    if($ProdSup){
-         $TotSup=$_SESSION['ProdPbCmd'][$IdSup];
-        unset($_SESSION['ProdPbCmd'][$IdSup]);
-        $_SESSION['TotalCdx']=$_SESSION['TotalCdx']-($TotSup*$pb['value']);
-       redirect('DmdPb&id='.$id);
-    }else{
+    if($ProdSup) {
         $TotSup=$_SESSION['ProdPbCmd'][$IdSup];
+        unset($_SESSION['ProdPbCmd'][$IdSup]);
+        $_SESSION['TotalCdx']=$_SESSION['TotalCdx']-($TotSup*10);
+        redirect('DmdPb&idDemande='.$id.'&edit=1');
+    } else {
+        $TotSup=$_SESSION['CdxCmd'][$IdSup];
         unset($_SESSION['CdxCmd'][$IdSup]);
         $pbV=getinfo($IdSup,'grm_gift','point_bonus');
         $_SESSION['TotalCdx']=$_SESSION['TotalCdx']-($TotSup*$pbV);
-         redirect('DmdPb&id='.$id);
+        redirect('DmdPb&idDemande='.$id.'&edit=1');
     }
 }
-
+//echo $_SESSION['TotPoint'];die;
 ?>
 <section class="content-header">
     <h4>Demande de spécifique pour <?= getinfo($_SESSION['PbClient'],'prospect' ,'Nom').' '.getinfo($_SESSION['PbClient'],'prospect' ,'Prenom') ?> Par  : <?= getinfo($_SESSION['PbUser'],'users' ,'Nom').' '.getinfo($_SESSION['PbUser'],'users' ,'Prenom') ?> </h4>
@@ -99,14 +112,17 @@ if($IdSup){
                     <li><b>Nouveau : </b> <t id="PointVal"><?=$_SESSION['Point']?></t></li>
                     <li><b>Total : </b> <t id="PointValTot"><?=$_SESSION['TotPoint']?></t></li>
                 </ul>
+                <label>Observation Client :</label>
+                <small><?=$Dmd['observation_client'];?></small>
                 <div class="form-group">
                     <label>Observation Administrateur : </label>
                     <textarea class="form-control" name="observation_client" id="ObsAdm" rows="2"><?=$_SESSION['ObsAdmin'] ?></textarea>
                 </div>
                 <div class="form-group">
                     <input type="hidden" name="totalPoint" value="<?=$_SESSION['TotPoint'] ?>" id="TotPoint" >
-                    <input type="hidden" name="client" value="<?=$_SESSION['PbClient']?>" id="client" >
+                    <input type="hidden" name="client" value="<?=$_SESSION['PbClient'];?>" id="client" >
                     <input type="hidden" name="user" value="<?=$_SESSION['PbUser']?>" id="user" >
+                    <input type="hidden" name="idDemande" value="<?=$id?>" id="idDemande" >
                     <div class="form-group">
                         <label>Remise par : </label>
                         <select class="form-control" name="id_remise" id="id_remise"  >
@@ -123,14 +139,14 @@ if($IdSup){
                         </select>
                     </div>
                     <label>Nombre de points bonus : </label>
-                    <div>
+                    <div id="pbByDeleg">
                         <?php
 
                         $Pbs = get("*",'grm_pb_type',array('etat='=>1));
                         foreach ($_SESSION['bonusPoints'] as $pbx): ?>
                             <br>
                             <label>Point bonus de valeur : <?=$pbx['pb']?></label>
-                            <input type="number" value="<?=$pbx['valeur'] ?>"  class="form-control pb_calcule"   placeholder="Points cadeaux"  readonly  />
+                            <input type="number" value="<?=$pbx['valeur'] ?>"  class="form-control pb_calcule"   placeholder="Points cadeaux" pbVal="<?=$pbx['pb']?>" readonly  />
                         <?
                         endforeach;
                         ?>
@@ -143,7 +159,7 @@ if($IdSup){
                         foreach ($Pbs['reponse'] as $pbx): ?>
                             <br>
                             <label>Point bonus de valeur : <?=$pbx['value']?></label>
-                            <input type="number" value="<?=$_SESSION['Point'.$pbx['id']] ?>" name="point_bonus<?=$pbx['id']?>" min="1" style="1" id="PintC<?=$pbx['id']?>" class="form-control pb_calcule" onchange="AddPoint('PintC<?=$pbx['id']?>')" placeholder="Points cadeaux réel" pbVal="<?=$pbx['value']?>" rel="<?=$pbx['id']?>"   />
+                            <input type="number" value="<?=$_SESSION['Point'.$pbx['id']] ?>" name="point_bonus<?=$pbx['id']?>" min="1" style="1" id="PintC<?=$pbx['id']?>" class="form-control pb_calcule" onchange="AddPoint('PintC<?=$pbx['id']?>')" placeholder="Points cadeaux réel" pbVal="<?=$pbx['value']?>" rel="<?=$pbx['id']?>" value="<?=$_SESSION['Point'.$pbx['id']] ?>"  />
                         <?
                         endforeach;
                         ?>
@@ -242,7 +258,7 @@ if($IdSup){
                     <?  endforeach; endif;?>
                 </table>
                 <br/>
-                <a href="../../index.php" class="btn btn-danger pull-left">
+                <a href="DmdPb&annuler=1" class="btn btn-danger pull-left">
                     Annuler
                 </a>
                 <a href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb()">Finaliser</a>

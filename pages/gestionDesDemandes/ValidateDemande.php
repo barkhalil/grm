@@ -5,6 +5,7 @@
  * Date: 30/10/2016
  * Time: 23:24
  */
+//echo '<pre>';print_r($_POST);die;
 $id=filter_input(INPUT_GET,'idDemande',FILTER_VALIDATE_INT);
 if(!$id){
     $_SESSION['msg'] = "Missing Id !!";
@@ -19,7 +20,7 @@ $Gifts=get("*",'grm_cadeaux_demander',array('id_demande='=>$id));
 if(filter_input(0,'Add',257)):
 // 1er test si ensemble de ponts des produits <= total point
     $Products=filter_input(INPUT_POST,'prodValue',FILTER_DEFAULT,FILTER_REQUIRE_ARRAY);
-    $TotalClientsPoints=filter_input(0,'totalPoint',FILTER_DEFAULT);
+    //$TotalClientsPoints=filter_input(0,'totalPoint',FILTER_DEFAULT);
     $TotPoints=0;
     if(count($Products)>0){
         foreach ($Products as $key => $value):
@@ -28,31 +29,16 @@ if(filter_input(0,'Add',257)):
             $TotPoints+=$point;
         endforeach;
     }
-
-    if($TotalClientsPoints!=0 && $TotalClientsPoints!="NaN" && $TotalClientsPoints<$TotPoints){
-        // !! erreur quantité suppèrieur aux points de le clents :
-        $_SESSION['msg'] = "Quantité*points Bonus est suppèrieur aux points bonus du clents!!";
-        $_SESSION['type'] = "alert-warning";
-    }else{
-        $restPoints=$TotalClientsPoints-$TotPoints;
-        // 2 étape (ajouter la demande et ajouter les produists :
-        // etat ==> il faut trouver solution pour etat des echantillant
-        if($TotalClientsPoints==0){
-            $etat=4;
-        }else{
-            $etat=3;
-        }
         $dataDemande= array(
-            'point_bonus_reel'=>filter_input(0,'point_bonus_reel',FILTER_DEFAULT), 
             'id_remise'=>filter_input(0,'id_remise',FILTER_DEFAULT),
-            'rest_point'=>$restPoints,
             'oberservation_admin'=>filter_input(0,'oberservation_admin',FILTER_SANITIZE_STRING),
             'date_validation'=>date("Y-m-d"),
-            'etat'=>$etat,
+            'etat'=>4,
             'modifier_par'=>$_SESSION['user']['id']
         );
         $IdDEmande=update($id,$dataDemande,'grm_demande_cadeaux');
         if($IdDEmande ){
+            //echo '<pre>';print_r($Products);die;
             foreach ($Gifts['reponse'] as $keyG):
                 delete($keyG['id'],'grm_cadeaux_demander');
             endforeach;
@@ -61,21 +47,21 @@ if(filter_input(0,'Add',257)):
                     add(array(
                         'id_demande'=>$id,
                         'id_cadeaux'=>$key,
-                        'qte'=>$value
+                        'qte'=>$value,
+                        'type_cdx'=>0,
                     ), 'grm_cadeaux_demander');
                 //update stock : deminution seul cas c'est pour produits id 322 ==> produits echantillant cadeaux :p
                 if($key!=322) $Gcc->DimStock($key,$value);
                 else $Gcc->DimStock(filter_input(0,'cadeauxPRod',257),$value);
                 endforeach;
             }
-
         }
         $_SESSION['msg'] = "Votre demande est sauvegarder";
         $_SESSION['type'] = "alert-success";
-        redirect('Liste&idDel='.$DemandeDet['id_demandeur']);
-    }
-
-
+        if($DemandeDet['famille']==4)
+            redirect('listeDemandeOrdonnancier');
+        else
+            redirect('listeDemandeVitrine');
 endif;
 
 
@@ -103,11 +89,6 @@ endif;
                 <div class="form-group">
                     <label>Demander par : </label>
                     <?= getinfo($DemandeDet['id_demandeur'],'users' ,'Nom').' '.getinfo($DemandeDet['id_demandeur'],'users' ,'Prenom') ?>
-                </div>
-                <div class="form-group">
-                    <label>Nombre de points bonus : </label>
-                    <?=$DemandeDet['point_bonus']?>
-
                 </div>
             </div>
                 </div>
@@ -154,14 +135,14 @@ endif;
                         $NewOrd=1;
                     }
                 ?>
-                    <div class="form-group" id="<?=$Prod['id']?>">
+                    <div class="form-group" id="<?=$Prod['id_cadeaux']?>">
                    <label>
                         <a href="javascript:void(0)" onclick="RemouveDiv('<?=$Prod['id_cadeaux']?>')" class="btn btn-danger">
                             <i class="fa fa-trash"></i>
                         </a>
                        <?=getinfo($Prod['id_cadeaux'],'grm_gift' ,'titre')?><br/> Quantité :
 
-                        </label>
+                    </label>
                     <input type="number" name="prodValue[<?=$Prod['id_cadeaux']?>]" value="<?=$Prod['qte']?>"  min="1" class="form-control QteProd" onchange="VerifyPoints()">
                   <?  if(getinfo($Prod['id_cadeaux'],'grm_gift' ,'serialisable')==1 ){ ?>
                     <div id="prodSerie'+prod+'">
@@ -179,7 +160,7 @@ endif;
                 <h4>Information Livraison</h4>
                 <div class="form-group">
                     <label>Livrer par : </label>
-                    <select class="form-control" name="id_remise" >
+                    <select class="form-control" name="id_remise" required >
                         <option value=""> Par utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users');
@@ -191,10 +172,6 @@ endif;
                         <? endforeach; ?>
 
                     </select>
-                </div>
-                <div class="form-group">
-                    <label>Nombre de points bonus reel  : </label>
-                    <input type="number" value="" name="point_bonus_reel" id="PintC" class="form-control" required onchange="AddPoint('PintC')" min="0">
                 </div>
                 <div class="form-group">
                     <label>Observation administration : </label>

@@ -7,6 +7,7 @@ include 'ProsFunctions.php';
 include 'DelFunctions.php';
 include 'Ventes.php';
 include 'Products.php';
+include 'PointsBonus.php';
 
 include_once 'src/QrCode.php';
 require_once 'passwordLib.php';
