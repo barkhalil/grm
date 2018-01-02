@@ -70,6 +70,8 @@ $ActivePage=explode('/',$Pga);
                     <li><a href="<?=WEBRoot?>/gestionDesDemandes/Liste">Demandes cadeaux</a></li>
                     <li><a href="<?=WEBRoot?>/gestionDesDemandes/listeDemandeVitrine">Demandes vitrine</a></li>
                     <li><a href="<?=WEBRoot?>/gestionDesDemandes/listeDemandeOrdonnancier">Demandes ordonnancier</a></li>
+                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/dmdPromotionnel">Demandes promotionnel</a></li>
+                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/listedmdEchantiants">Demandes échantillant</a></li>
                 </ul>
             </li>
             <li class="<?if($ActivePage[0]=="fournisseur") echo 'active'?>">

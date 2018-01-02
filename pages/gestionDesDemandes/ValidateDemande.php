@@ -15,6 +15,11 @@ if(!$id){
 
 $Demande=get('*','grm_demande_cadeaux',array('id='=>$id));
 $DemandeDet=$Demande['reponse'][0];
+if($DemandeDet['famille']==4 && $DemandeDet['etat']>=4)
+    redirect('listeDemandeOrdonnancier');
+if($DemandeDet['famille']==2 && $DemandeDet['etat']>=4)
+    redirect('listeDemandeVitrine');
+
 $Gifts=get("*",'grm_cadeaux_demander',array('id_demande='=>$id));
 //print_r($Gifts);
 if(filter_input(0,'Add',257)):
@@ -31,7 +36,7 @@ if(filter_input(0,'Add',257)):
     }
         $dataDemande= array(
             'id_remise'=>filter_input(0,'id_remise',FILTER_DEFAULT),
-            'oberservation_admin'=>filter_input(0,'oberservation_admin',FILTER_SANITIZE_STRING),
+            'oberservation_admin'=>filter_input(0,'observation_admin',FILTER_SANITIZE_STRING),
             'date_validation'=>date("Y-m-d"),
             'etat'=>4,
             'modifier_par'=>$_SESSION['user']['id']
@@ -100,9 +105,6 @@ endif;
                 <ul>
                     <li><b>Prospect : </b> <?= getinfo($DemandeDet['id_pros'],'prospect' ,'Nom').' '.getinfo($DemandeDet['id_pros'],'prospect' ,'Prenom') ?></li>
                     <li><b>Secteur IMS : </b><?=getinfo( getinfo($DemandeDet['id_pros'],'prospect' ,'gouvernorat'),'gouvernerat' ,'nom' ) ?></li>
-                    <li><b>Ancien Point : </b> <t id="PointValIni"><?= $StdFunctions->getAllPoint($DemandeDet['id_pros']); ?></t></li>
-                    <li><b>Nouveau Point : </b> <t id="PointVal"></t></li>
-                    <li><b>Total Point : </b> <t id="PointValTot"></t></li>
 
                 </ul>
                 <input type="hidden" name="totalPoint" value="0" id="TotPoint" >
