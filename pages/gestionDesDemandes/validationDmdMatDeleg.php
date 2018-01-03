@@ -2,21 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: nagui
- * Date: 02/01/18
- * Time: 16:23
+ * Date: 03/01/18
+ * Time: 11:40
  */
 $id=filter_input(INPUT_GET,'idDemande',FILTER_VALIDATE_INT);
 if(!$id){
     $_SESSION['msg'] = "Missing Id !!";
     $_SESSION['type'] = "alert-danger";
-    redirect('listedmdEchantiants');
+    redirect('listeDmdMaterelDeleg');
 }
 
-$Demande=get('*','echant_demander',array('id='=>$id));
+$Demande=get('*','materiel_deleg',array('id='=>$id));
 $DemandeDet=$Demande['reponse'][0];
 if($DemandeDet['etat']>=1)
-    redirect('listedmdEchantiants');
-$Gifts=get("*",'echant_prod',array('id_echant='=>$id));
+    redirect('listeDmdMaterelDeleg');
+$Gifts=get("*",'materiel_deleg_details',array('id_dmd='=>$id));
 //print_r($Gifts);
 if(filter_input(0,'Add',257)):
 // 1er test si ensemble de ponts des produits <= total point
@@ -25,28 +25,28 @@ if(filter_input(0,'Add',257)):
         'observation_admin'=>filter_input(0,'observation_admin',FILTER_SANITIZE_STRING),
         'date_validation'=>date("Y-m-d"),
         'etat'=>1,
-        'valider_par'=>$_SESSION['user']['id']
+        'id_validateur'=>$_SESSION['user']['id']
     );
-    $IdDEmande=update($id,$dataDemande,'echant_demander');
+    $IdDEmande=update($id,$dataDemande,'materiel_deleg');
     if($IdDEmande ){
         //echo '<pre>';print_r($Products);die;
         foreach ($Gifts['reponse'] as $keyG):
-            delete($keyG['id'],'echant_prod');
+            delete($keyG['id'],'materiel_deleg_details');
         endforeach;
         if(count($Products)>0){
             foreach ($Products as $key => $value):
                 add(array(
-                    'id_echant'=>$id,
+                    'id_dmd'=>$id,
                     'id_prod'=>$key,
                     'qte'=>$value,
-                ), 'echant_prod');
+                ), 'materiel_deleg_details');
                 $Gcc->DimStock($key,$value);
             endforeach;
         }
     }
     $_SESSION['msg'] = "Votre demande est sauvegarder";
     $_SESSION['type'] = "alert-success";
-    redirect('listedmdEchantiants');
+    redirect('listeDmdMaterelDeleg');
 endif;
 ?>
 <section class="content-header">
@@ -66,7 +66,11 @@ endif;
                     </div>
                     <div class="form-group">
                         <label>Demander par : </label>
-                        <?= getinfo($DemandeDet['par'],'users' ,'Nom').' '.getinfo($DemandeDet['par'],'users' ,'Prenom') ?>
+                        <?= getinfo($DemandeDet['id_deleg'],'users' ,'Nom').' '.getinfo($DemandeDet['id_deleg'],'users' ,'Prenom') ?>
+                    </div>
+                    <div class="form-group">
+                        <label>Observation : </label>
+                        <?= $DemandeDet['observation']; ?>
                     </div>
                 </div>
             </div>
@@ -75,17 +79,25 @@ endif;
 
                 <div class="box box-comment box-body">
                     <div class="form-group">
-                        <label for="gamme">Gamme :</label>
-                        <select id="gamme" name="gamme" class="form-control" onchange="GetProdListeforEdit()">
+                        <label>Les produits disponible : </label>
+                        <select class="form-control select2" name="cadeaux" id="ProdSelect" onchange="AddPRod(1)">
                             <option value="">Choix</option>
-                            <?php $Gammes=get("*",'prod_categorie');
-                            foreach ($Gammes['reponse'] as $gamme): ?>
-                                <option value="<?=$gamme['id']?>"><?=$gamme['nom']?></option>
-                            <?endforeach;?>
-                        </select>
-                    </div>
-                    <div id="ProdACmd"></div>
+                            <?
+                            $ListeGift = get('*', 'grm_gift',array(
+                                'dispo =' => 1,
+                                'qte >=' => 1,
+                                'famille = '=>6
+                            ));
+                            foreach ($ListeGift['reponse'] as $Gift):
+                                ?>
+                                <option value="<?= $Gift['id'] ?>" rel="<?= $Gift['serialisable'] ?>" bonus="<?=$Gift['point_bonus']?>" >
+                                    <?= $Gift['titre'] . ' Points : ' . $Gift['point_bonus'] ?>
+                                </option>
+                            <? endforeach; ?>
 
+                        </select>
+
+                    </div>
                     <div id="ProdListeINp">
                         <?
                         foreach($Gifts['reponse'] as $Prod):

@@ -55,9 +55,7 @@ if(filter_input(0,'Add',257)):
                         'qte'=>$value,
                         'type_cdx'=>0,
                     ), 'grm_cadeaux_demander');
-                //update stock : deminution seul cas c'est pour produits id 322 ==> produits echantillant cadeaux :p
-                if($key!=322) $Gcc->DimStock($key,$value);
-                else $Gcc->DimStock(filter_input(0,'cadeauxPRod',257),$value);
+                    $Gcc->DimStock($key,$value);
                 endforeach;
             }
         }
@@ -116,11 +114,12 @@ endif;
                         $ListeGift = get('*', 'grm_gift',array(
                             'dispo =' => 1,
                             'qte >=' => 1,
+                            'famille = '=>$DemandeDet['famille']
                         ));
                         foreach ($ListeGift['reponse'] as $Gift):
                             ?>
-                  <option value="<?= $Gift['id'] ?>" rel="<?= $Gift['serialisable'] ?>" bonus="<?=$Gift['point_bonus']?>" >
-                      <?= $Gift['titre'] . ' Points : ' . $Gift['point_bonus'] ?>
+                  <option value="<?= $Gift['id'] ?>" rel="<?= $Gift['serialisable'] ?>" >
+                      <?= $Gift['titre'];?>
                   </option>
                         <? endforeach; ?>
 
@@ -128,15 +127,7 @@ endif;
 
                 </div>
                 <div id="ProdListeINp">
-                <?
-                $NewOrd=0;
-                foreach($Gifts['reponse'] as $Prod):
-                  //  echo $Prod['id'];
-                    if($Prod['id_cadeaux']==322){
-                    //add new liste for prod stock
-                        $NewOrd=1;
-                    }
-                ?>
+                <? foreach($Gifts['reponse'] as $Prod): ?>
                     <div class="form-group" id="<?=$Prod['id_cadeaux']?>">
                    <label>
                         <a href="javascript:void(0)" onclick="RemouveDiv('<?=$Prod['id_cadeaux']?>')" class="btn btn-danger">
@@ -175,31 +166,12 @@ endif;
 
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Observation administration : </label>
-                    <textarea class="form-control" name="observation_admin" rows="4"></textarea>
-                </div>
-                <? if($NewOrd): ?>
                     <div class="form-group">
-                        <label>Le produits à diminuer du stock : </label>
-                        <select class="form-control select2" name="cadeauxPRod" id="ProdS" required>
-                            <option value="">Choix</option>
-                            <?
-                            $ListeGift = get('*', 'grm_gift',array(
-                                'dispo =' => 1,
-                                'qte >=' => 1,
-                            ));
-                            foreach ($ListeGift['reponse'] as $Gift):
-                                ?>
-                                <option value="<?= $Gift['id'] ?>" ><?= $Gift['titre']?></option>
-                            <? endforeach; ?>
-
-                        </select>
-
+                        <label>Observation administration : </label>
+                        <textarea class="form-control" name="observation_admin" rows="4"></textarea>
                     </div>
-                <? endif; ?>
                 </div>
-                </div>
+            </div>
             <div class="col-md-12">
                 <div class="box box-info box-footer">
 

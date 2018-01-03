@@ -7,6 +7,8 @@
  */
 //ALTER TABLE `promo_demander` ADD `date_livraison` DATE NULL DEFAULT NULL AFTER `sysDate`;
 //ALTER TABLE `promo_demander` ADD `observation_admin` VARCHAR(255) NULL DEFAULT NULL AFTER `etat`;
+unset($_SESSION['PromoCmd']);
+unset($_SESSION['delegue']);
 $idDemandeau=filter_input(INPUT_GET,'idDel',257);
 $link="&idDel=$idDemandeau";
 $Limite=filter_input(INPUT_GET,'d',257);
@@ -37,7 +39,11 @@ if($idDemandeau) {
 //echo '<pre>';print_r($Cadeaux);die;
 ?>
 <section class="content-header">
-    <h1>Liste demandes produits promotionnel</h1>
+    <h1 class="pull-left">Liste demandes produits promotionnel</h1>
+    <a href="<?=WEBRoot?>/demande/materielPromotionnel" class="btn btn-primary pull-right">
+        Ajouter
+    </a>
+    <div class="clearfix"></div>
 </section><!-- Main content -->
 <section class="content">
     <div class="row">
@@ -111,7 +117,7 @@ if($idDemandeau) {
                                             <i class="fa fa-train"></i>
                                         </a>
                                     <?endif;?>
-                                    <a href="printDoc&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
+                                    <a href="printDocPromo&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
                                         <i class="fa fa-print"></i>
                                     </a>
                                 <?endif;?>
@@ -138,13 +144,9 @@ if($idDemandeau) {
         </div>
 
         <div class="col-md-7">
-
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-
                 <? pagination($Cadeaux['total'], 30, WEBRoot . "/gift/Liste".$link."&d=", ""); ?>
-
             </div>
-
         </div>
 
     </div>
