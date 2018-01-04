@@ -5,10 +5,6 @@
  * Date: 02/01/18
  * Time: 12:42
  */
-//ALTER TABLE `promo_demander` ADD `date_livraison` DATE NULL DEFAULT NULL AFTER `sysDate`;
-//ALTER TABLE `promo_demander` ADD `observation_admin` VARCHAR(255) NULL DEFAULT NULL AFTER `etat`;
-unset($_SESSION['PromoCmd']);
-unset($_SESSION['delegue']);
 $idDemandeau=filter_input(INPUT_GET,'idDel',257);
 $link="&idDel=$idDemandeau";
 $Limite=filter_input(INPUT_GET,'d',257);

@@ -5,7 +5,6 @@
  * Date: 03/01/18
  * Time: 17:15
  */
-//ALTER TABLE `promo_demander` ADD `created_by` INT NULL AFTER `par`;
 session_start();
 require_once '../../Connextion.php';
 include '../../librairie/loadall.php';
@@ -27,8 +26,8 @@ if($_SESSION['PromoCmd']>0){
         );
         add($dataProd,'promo_prod');
     endforeach;
-    echo true;
-    exit;
+    unset($_SESSION['PromoCmd']);
+    unset($_SESSION['delegue']);
 }else{
     echo false;
 }

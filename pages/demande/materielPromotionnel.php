@@ -15,7 +15,7 @@ $annuler=filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT);
 if($annuler==1){
     unset($_SESSION['PromoCmd']);
     unset($_SESSION['delegue']);
-    redirect('../gestionDesDemandes/dmdPromotionnel');
+    redirect(WEBRoot.'/gestionDesDemandes/dmdPromotionnel');
 }
 ?>
 <section class="content-header">
@@ -28,7 +28,7 @@ if($annuler==1){
             <div class="box box-body box-success">
                 <form method="get" id="FormEchant">
                     <div class="form-group">
-                        <label>Pour</label>
+                        <label>Demande pour</label>
                         <select name="delegue" id="delegue" class="form-control"  required  >
                             <option value=""></option>
                             <?

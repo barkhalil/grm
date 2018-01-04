@@ -16,7 +16,7 @@ $annuler=filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT);
 if($annuler==1){
     unset($_SESSION['EchantCmd']);
     unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
-    redirect('../gestionDesDemandes/listedmdEchantiants');
+    redirect(WEBRoot.'/gestionDesDemandes/listedmdEchantiants');
 }
 $GetLastEchan=$Pro->GetUsedDmdQuota($_SESSION['user']['id']);
 if(!$GetLastEchan) $Month=date('Y-m');

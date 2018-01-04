@@ -2,14 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: nagui
- * Date: 03/01/18
- * Time: 10:09
+ * Date: 04/01/18
+ * Time: 10:33
  */
 $idDmd= filter_input(INPUT_GET,'idDemande',FILTER_VALIDATE_INT);
-$dmd=get('*','promo_demander',array('id='=>$idDmd));
+$dmd=get('*','materiel_deleg',array('id='=>$idDmd));
 //echo '<pre>';print_r($dmd);die;
-$cdx=get('*','promo_prod',array('id_promo='=>$idDmd));
-$user= get('*','users',array('id='=>$dmd['reponse'][0]['par']));
+$cdx=get('*','materiel_deleg_details',array('id_dmd='=>$idDmd));
+$user= get('*','users',array('id='=>$dmd['reponse'][0]['id_deleg']));
 $user= $user['reponse'][0];
 ?>
 <section class="content-header" style="background: #fff;">
@@ -25,18 +25,18 @@ $user= $user['reponse'][0];
                     <span style="color: #582900;">Date de validation: <small style="color: #000;"><?= $dmd['reponse'][0]['date_validation']?></small> </span><br/><br/>
                 </td>
                 <td style="vertical-align: top;">
-                    <span style="color: #582900;float: right;">Date de demande:  <small style="color: #000;"><?= $dmd['reponse'][0]['sysDate']?></small></span><br/><br/>
+                    <span style="color: #582900;float: right;">Date de demande:  <small style="color: #000;"><?= $dmd['reponse'][0]['date_dmd']?></small></span><br/><br/>
                 </td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">
                     <label style="color: #582900;">Demander par: </label> <span><?= $user['Nom'];?> <?= $user['Prenom'];?></span><br/>
-                        <label style="color: #582900;">Téléphone: </label> <span><?= $user['Tel'];?></span><br/>
-                        <label style="color: #582900;">E-MAIL: </label> <span><?= $user['Email'];?></span><br/>
-                        <label style="color: #582900;">Zone: </label> <span><?= getinfo($user['Email'],'zone','nom');?></span><br/>
-                        <label style="color: #582900;">Département: </label> <span><?= getinfo($user['departement'],'departement','nom');?></span><br/>
-                        <label style="color: #582900;">Civilité: </label> <span><?= $user['Civilite'];?></span><br/>
-                        <label ><?= getinfo($user['type'],'user_type','name')?></label> <br/>
+                    <label style="color: #582900;">Téléphone: </label> <span><?= $user['Tel'];?></span><br/>
+                    <label style="color: #582900;">E-MAIL: </label> <span><?= $user['Email'];?></span><br/>
+                    <label style="color: #582900;">Zone: </label> <span><?= getinfo($user['Email'],'zone','nom');?></span><br/>
+                    <label style="color: #582900;">Département: </label> <span><?= getinfo($user['departement'],'departement','nom');?></span><br/>
+                    <label style="color: #582900;">Civilité: </label> <span><?= $user['Civilite'];?></span><br/>
+                    <label ><?= getinfo($user['type'],'user_type','name')?></label> <br/>
                 </td>
                 <td style="vertical-align: top;float: right;">
                     <label style="color: #582900;">Date de livraison: </label> <span><?= $dmd['reponse'][0]['date_livraison']?></span><br/>
@@ -47,6 +47,10 @@ $user= $user['reponse'][0];
             <div style="width: 49%;display: inline-block;vertical-align: top;">
                 <h4 style="color: #582900;">Observation administrateur: </h4>
                 <span ><?= $dmd['reponse'][0]['observation_admin']?></span>
+            </div>
+            <div style="width: 49%;display: inline-block;vertical-align: top;">
+                <h4 style="color: #582900;">Observation Délégué: </h4>
+                <span ><?= $dmd['reponse'][0]['observation']?></span>
             </div>
         </div>
         <h2 style="text-align: center">Liste des cadeaux</h2>

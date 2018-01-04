@@ -5,8 +5,6 @@
  * Date: 03/01/18
  * Time: 11:22
  */
-//ALTER TABLE `materiel_deleg` ADD `date_livraison` DATE NULL DEFAULT NULL AFTER `date_validation`;
-//ALTER TABLE `materiel_deleg` ADD `observation_admin` VARCHAR(255) NULL DEFAULT NULL AFTER `observation`;
 $idDemandeur=filter_input(INPUT_GET,'idDel',257);
 $link="&idDel=$idDemandeur";
 $Limite=filter_input(INPUT_GET,'d',257);
@@ -28,7 +26,11 @@ if($idDemandeur) {
 //echo '<pre>';print_r($Cadeaux);die;
 ?>
 <section class="content-header">
-    <h1>Liste demandes de matériel délégué</h1>
+    <h1 class="pull-left">Liste demandes de matériel délégué</h1>
+    <a href="<?=WEBRoot?>/demande/materielsDelegues" class="btn btn-primary pull-right">
+        Ajouter
+    </a>
+    <div class="clearfix"></div>
 </section><!-- Main content -->
 <section class="content">
     <div class="row">
@@ -101,7 +103,7 @@ if($idDemandeur) {
                                             <i class="fa fa-train"></i>
                                         </a>
                                     <?endif;?>
-                                    <a href="printDocEchant&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
+                                    <a href="printDocMatDeleg&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
                                         <i class="fa fa-print"></i>
                                     </a>
                                 <?endif;?>

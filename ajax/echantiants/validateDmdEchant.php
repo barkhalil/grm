@@ -5,12 +5,11 @@
  * Date: 03/01/18
  * Time: 18:07
  */
-//ALTER TABLE `echant_demander` ADD `created_by` INT NULL AFTER `par`;
 session_start();
 require_once '../../Connextion.php';
 include '../../librairie/loadall.php';
 $MonthValue=filter_input(INPUT_POST,'MonthValue',FILTER_DEFAULT);
-if($MonthValue && $_SESSION['TotalEchant']>0){
+if($MonthValue && $_SESSION['TotalEchant']>0) {
     // ajouter la demande :
     $data=array(
         'created_by'=>$_SESSION['user']['id'],
@@ -28,8 +27,8 @@ if($MonthValue && $_SESSION['TotalEchant']>0){
         );
         add($dataProd,'echant_prod');
     endforeach;
-
-
-}else{
+    unset($_SESSION['EchantCmd']);
+    unset($_SESSION['delegue']);
+} else {
     echo false;
 }

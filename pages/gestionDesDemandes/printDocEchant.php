@@ -46,7 +46,7 @@ $user= $user['reponse'][0];
         <div style="margin-top: 15px; width: 100%;vertical-align: top;">
             <div style="width: 49%;display: inline-block;vertical-align: top;">
                 <h4 style="color: #582900;">Observation administrateur: </h4>
-                <span ><?= $dmd['reponse'][0]['oberservation_admin']?></span>
+                <span ><?= $dmd['reponse'][0]['observation_admin']?></span>
             </div>
         </div>
         <h2 style="text-align: center">Liste des cadeaux</h2>
