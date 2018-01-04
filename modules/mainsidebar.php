@@ -54,18 +54,25 @@ $ActivePage=explode('/',$Pga);
 
                 </ul>
             </li>
-            <li class="treeview <?if($ActivePage[0]=="gift") echo 'active'?>">
+            <li class="treeview <?if($ActivePage[0]=="gift" || $ActivePage[0]=="Bonus") echo 'active'?>">
                 <a href="#"><i class="fa fa-codepen"></i> <span>Gestion des articles</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="<?=WEBRoot?>/Bonus/Liste">Demande Cadeaux</a></li>
                     <li><a href="<?=WEBRoot?>/gift/Liste">Autre demandes</a></li>
                     <li><a href="<?=WEBRoot?>/gift/ListeCadeaux">Liste des articles</a></li>
                     <li><a href="<?=WEBRoot?>/gift/AddCadeaux">Ajouter un article</a></li>
                     <li><a href="<?=WEBRoot?>/gift/Quota">Quota</a></li>
-
                     <!--<li><a href="<?=WEBRoot?>/gift/AddDemande">Ajouter une demande</a></li>-->
-
-
+                </ul>
+            </li>
+            <li class="treeview <?if($ActivePage[0]=="gestionDesDemandes") echo 'active'?>">
+                <a href="#"><i class="fa fa-codepen"></i> <span>Gestion des demandes</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/Liste">Demandes cadeaux</a></li>
+                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/listeDemandeVitrine">Demandes vitrine</a></li>
+                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/listeDemandeOrdonnancier">Demandes ordonnancier</a></li>
+                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/dmdPromotionnel">Matériel promotionnel</a></li>
+                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/listedmdEchantiants">Demandes échantillant</a></li>
+                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/listeDmdMaterelDeleg">Matériel délégué</a></li>
                 </ul>
             </li>
             <li class="<?if($ActivePage[0]=="fournisseur") echo 'active'?>">

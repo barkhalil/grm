@@ -8,7 +8,14 @@
  */
 // @ tester pour effacer cette class !!!!!!!!!
 class ProsFunctions {
-
+    function GetUsedDmdQuota($idDem){
+        global $PDO;
+        $Sql="Select echant_demander.pour as month From echant_demander WHERE par = $idDem AND etat >=0 ORDER BY id DESC LIMIT 1 ";
+        $stmt=$PDO->prepare($Sql);
+        $stmt->execute();
+        $res=$stmt->fetch(PDO::FETCH_OBJ)->month;
+        return $res ? $res : false;
+    }
     public function getUserSections(){
         // get user sections :
         $Sections=array();
