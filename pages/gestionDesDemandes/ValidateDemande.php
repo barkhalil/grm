@@ -15,6 +15,11 @@ if(!$id){
 
 $Demande=get('*','grm_demande_cadeaux',array('id='=>$id));
 $DemandeDet=$Demande['reponse'][0];
+if($DemandeDet['famille']==4 && $DemandeDet['etat']>=4)
+    redirect('listeDemandeOrdonnancier');
+if($DemandeDet['famille']==2 && $DemandeDet['etat']>=4)
+    redirect('listeDemandeVitrine');
+
 $Gifts=get("*",'grm_cadeaux_demander',array('id_demande='=>$id));
 //print_r($Gifts);
 if(filter_input(0,'Add',257)):
@@ -31,7 +36,7 @@ if(filter_input(0,'Add',257)):
     }
         $dataDemande= array(
             'id_remise'=>filter_input(0,'id_remise',FILTER_DEFAULT),
-            'oberservation_admin'=>filter_input(0,'oberservation_admin',FILTER_SANITIZE_STRING),
+            'oberservation_admin'=>filter_input(0,'observation_admin',FILTER_SANITIZE_STRING),
             'date_validation'=>date("Y-m-d"),
             'etat'=>4,
             'modifier_par'=>$_SESSION['user']['id']
@@ -50,9 +55,7 @@ if(filter_input(0,'Add',257)):
                         'qte'=>$value,
                         'type_cdx'=>0,
                     ), 'grm_cadeaux_demander');
-                //update stock : deminution seul cas c'est pour produits id 322 ==> produits echantillant cadeaux :p
-                if($key!=322) $Gcc->DimStock($key,$value);
-                else $Gcc->DimStock(filter_input(0,'cadeauxPRod',257),$value);
+                    $Gcc->DimStock($key,$value);
                 endforeach;
             }
         }
@@ -100,9 +103,6 @@ endif;
                 <ul>
                     <li><b>Prospect : </b> <?= getinfo($DemandeDet['id_pros'],'prospect' ,'Nom').' '.getinfo($DemandeDet['id_pros'],'prospect' ,'Prenom') ?></li>
                     <li><b>Secteur IMS : </b><?=getinfo( getinfo($DemandeDet['id_pros'],'prospect' ,'gouvernorat'),'gouvernerat' ,'nom' ) ?></li>
-                    <li><b>Ancien Point : </b> <t id="PointValIni"><?= $StdFunctions->getAllPoint($DemandeDet['id_pros']); ?></t></li>
-                    <li><b>Nouveau Point : </b> <t id="PointVal"></t></li>
-                    <li><b>Total Point : </b> <t id="PointValTot"></t></li>
 
                 </ul>
                 <input type="hidden" name="totalPoint" value="0" id="TotPoint" >
@@ -114,11 +114,12 @@ endif;
                         $ListeGift = get('*', 'grm_gift',array(
                             'dispo =' => 1,
                             'qte >=' => 1,
+                            'famille = '=>$DemandeDet['famille']
                         ));
                         foreach ($ListeGift['reponse'] as $Gift):
                             ?>
-                  <option value="<?= $Gift['id'] ?>" rel="<?= $Gift['serialisable'] ?>" bonus="<?=$Gift['point_bonus']?>" >
-                      <?= $Gift['titre'] . ' Points : ' . $Gift['point_bonus'] ?>
+                  <option value="<?= $Gift['id'] ?>" rel="<?= $Gift['serialisable'] ?>" >
+                      <?= $Gift['titre'];?>
                   </option>
                         <? endforeach; ?>
 
@@ -126,15 +127,7 @@ endif;
 
                 </div>
                 <div id="ProdListeINp">
-                <?
-                $NewOrd=0;
-                foreach($Gifts['reponse'] as $Prod):
-                  //  echo $Prod['id'];
-                    if($Prod['id_cadeaux']==322){
-                    //add new liste for prod stock
-                        $NewOrd=1;
-                    }
-                ?>
+                <? foreach($Gifts['reponse'] as $Prod): ?>
                     <div class="form-group" id="<?=$Prod['id_cadeaux']?>">
                    <label>
                         <a href="javascript:void(0)" onclick="RemouveDiv('<?=$Prod['id_cadeaux']?>')" class="btn btn-danger">
@@ -173,31 +166,12 @@ endif;
 
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Observation administration : </label>
-                    <textarea class="form-control" name="observation_admin" rows="4"></textarea>
-                </div>
-                <? if($NewOrd): ?>
                     <div class="form-group">
-                        <label>Le produits à diminuer du stock : </label>
-                        <select class="form-control select2" name="cadeauxPRod" id="ProdS" required>
-                            <option value="">Choix</option>
-                            <?
-                            $ListeGift = get('*', 'grm_gift',array(
-                                'dispo =' => 1,
-                                'qte >=' => 1,
-                            ));
-                            foreach ($ListeGift['reponse'] as $Gift):
-                                ?>
-                                <option value="<?= $Gift['id'] ?>" ><?= $Gift['titre']?></option>
-                            <? endforeach; ?>
-
-                        </select>
-
+                        <label>Observation administration : </label>
+                        <textarea class="form-control" name="observation_admin" rows="4"></textarea>
                     </div>
-                <? endif; ?>
                 </div>
-                </div>
+            </div>
             <div class="col-md-12">
                 <div class="box box-info box-footer">
 

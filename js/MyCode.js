@@ -470,7 +470,20 @@ function GetProdListe(){
         data:{Gammeid:gamme},
         url:url+'/ajax/Bonus/prodListe.php',
         success:function (data) {
-
+            $("#ProdACmd").html(data);
+            $('#ProdSeaC').select2();
+            $('#BtnCmd').show()
+        }
+    })
+}
+function GetProdListeforEdit(){
+    var gamme = $("#gamme").val();
+    if(!gamme) return false;
+    $.ajax({
+        type:'POST',
+        data:{Gammeid:gamme},
+        url:url+'/ajax/validationDmd/prodListe.php',
+        success:function (data) {
             $("#ProdACmd").html(data);
             $('#ProdSeaC').select2();
             $('#BtnCmd').show()
@@ -479,7 +492,7 @@ function GetProdListe(){
 }
 
 function RediPage(id){
-    window.location='DmdPb&id='+id;
+    window.location='dmdAvecPBonus&id='+id;
 }
 function ShowDiv(id) {
     $("#cadx").hide();
@@ -560,3 +573,146 @@ function FinalisationPb() {
 
     })
 }
+
+function SelectProd() {
+    var famille = $("#FamillesProd").val();
+    var bonusP =$("#PintC").val();
+    if(famille==1 && (bonusP=="" || bonusP==0)){
+        MSg('Merci de ajouter les points bonus ou choisir une autre famille','alert-danger');
+        return false;
+    }
+    if(famille==3){
+        MSg('Vous ne pouvez plus faire de Echantillat par porspect','alert-danger');
+        return false;
+    }
+    // test quota if has quota or not :
+    $("#ProdListeINp").html('');
+    $.ajax({
+        url: url + "/ajax/ProdInfos.php",
+        type: "POST",
+        data: ({
+            famille: famille
+        }),
+        dataType: 'html',
+        success: function (result) {
+            $("#ProdInfos").html(result);
+            $("#ProdSelect").select2();
+        }
+    });
+}
+function AddPRodDemande(admin) {
+    var prod = $("#ProdSelect").val();
+    var prodName = $("#ProdSelect :selected").text();
+    var prodSerialisable = $("#ProdSelect :selected").attr('rel');
+    var prodbonus = $("#ProdSelect :selected").attr('bonus');
+    var TotalPoint = $("#TotPoint").val();
+    console.log(prodSerialisable);
+    console.log(prodbonus);
+    var divApp = $("#ProdListeINp");
+    if (prodbonus != "" && TotalPoint < prodbonus && TotalPoint == "") {
+        alert('Point Bonus insufisante ');
+        return false;
+    }
+    if (prod != "") {
+        $("#" + prod).remove();
+
+        divApp.append('<div class="form-group" id="' + prod + '"> ' +
+            '<label>' +
+            '<a href="#" onclick="RemouveDiv(' + prod + ')" class="btn btn-danger"><i class="fa fa-trash"></i></a> '
+            + prodName + '<br/> Quantité : ' +
+
+            '</label>' +
+            '<input type="number" name="prodValue[' + prod + ']" value="1"  min="1" class="form-control QteProd" onchange="VerifyPoints()">');
+        if (prodSerialisable == 1 && admin == 1) {
+            divApp.append('<div id="prodSerie' + prod + '">' +
+                '<label>Numero de Série</label>' +
+                '<textarea name="Series" class="form-control"></textarea>' +
+                '</div>');
+        }
+        divApp.append('</div>');
+    }
+}
+$('#BtnPromo').click(function () {
+    // add to cmd liste by add to sessions :
+    var ProdSeaC= $("#ProdSeaC").val();
+    var qte= $("#qte").val();
+    var type=$('#uType').val();
+    var delegue=$('#delegue').val();
+    if(ProdSeaC !='' && qte>=1 && delegue!=''){
+        $.ajax({
+            type:'POST',
+            url:url+'/ajax/promo/addPromoSession.php',
+            data:{ProdSeaC:ProdSeaC,qte:qte,type:type,delegue:delegue},
+            success:function (data) {
+                $("#ListeProdSessions").html(data);
+            },
+            error:function () {
+                MSg('Une erreur c\'est produits ','alert-danger')
+            }
+        });
+    }else {
+        MSg('Merci de bien saisir les données','alert-warning');
+    }
+});
+$('#ListeProdSessions').on('click','#BtnValiderPromo',function () {
+// appeler la page qui gère l'ajout des :
+
+    $.ajax({
+        type:'POST',
+        url:url+'/ajax/promo/validateListePromo.php',
+        data:{MonthValue:1},
+        success:function (data) {
+            MSg('Votre demande est enregister ','alert-success');
+            window.location ='../gestionDesDemandes/dmdPromotionnel';
+        },
+        error:function () {
+            MSg('Une erreur c\'est produits ','alert-danger')
+        }
+    });
+});
+$('#BtnEchant').click(function () {
+    // add to cmd liste by add to sessions :
+    var ProdSeaC= $("#ProdSeaC").val();
+    var qte= $("#qte").val();
+    var type=$('#uType').val();
+    var delegue=$('#delegue').val();
+
+    if(ProdSeaC !='' && qte>=1){
+        $.ajax({
+            type:'POST',
+            url:url+'/ajax/echantiants/addEchantSession.php',
+            data:{ProdSeaC:ProdSeaC,qte:qte,type:type,delegue:delegue},
+            success:function (data) {
+                $("#ListeProdSessions").html(data);
+            },
+            error:function () {
+                MSg('Une erreur c\'est produits ','alert-danger')
+            }
+        });
+    }else {
+        MSg('Merci de bien saisir les données','alert-warning');
+    }
+});
+$('#ListeProdSessions').on('click','#BtnValiderEchant',function () {
+// appeler la page qui gère l'ajout des :
+    var MonthValue=$('#MonthValue').val();
+    console.log('datte',MonthValue);
+    if(MonthValue){
+        $.ajax({
+            type:'POST',
+            url:url+'/ajax/echantiants/validateDmdEchant.php',
+            data:{MonthValue:MonthValue},
+            success:function (data) {
+                MSg('Votre demande est enregister ','alert-success');
+                window.location ='../gestionDesDemandes/listedmdEchantiants';
+
+            },
+            error:function () {
+                MSg('Une erreur c\'est produits ','alert-danger')
+            }
+        });
+    }else{
+        MSg('Date incorrect ','alert-danger')
+
+    }
+});
