@@ -9,6 +9,7 @@ if(location.host=="grm.vital-crm.tn:10"){
 }else{
    // var url = f + s + "/GrmProject";
     var url = f + s + "/grm";
+
 }
 //console.log(url);
 function MSg(msg, type) {
@@ -704,7 +705,7 @@ $('#ListeProdSessions').on('click','#BtnValiderEchant',function () {
             data:{MonthValue:MonthValue},
             success:function (data) {
                 MSg('Votre demande est enregister ','alert-success');
-                window.location ='../gestionDesDemandes/listedmdEchantiants';
+                window.location ='../gestionDesDemandes/listedmdEchantillons';
 
             },
             error:function () {

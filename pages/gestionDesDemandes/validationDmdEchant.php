@@ -9,13 +9,13 @@ $id=filter_input(INPUT_GET,'idDemande',FILTER_VALIDATE_INT);
 if(!$id){
     $_SESSION['msg'] = "Missing Id !!";
     $_SESSION['type'] = "alert-danger";
-    redirect('listedmdEchantiants');
+    redirect('listedmdEchantillons');
 }
 
 $Demande=get('*','echant_demander',array('id='=>$id));
 $DemandeDet=$Demande['reponse'][0];
 if($DemandeDet['etat']>=1)
-    redirect('listedmdEchantiants');
+    redirect('listedmdEchantillons');
 $Gifts=get("*",'echant_prod',array('id_echant='=>$id));
 //print_r($Gifts);
 if(filter_input(0,'Add',257)):
@@ -46,7 +46,7 @@ if(filter_input(0,'Add',257)):
     }
     $_SESSION['msg'] = "Votre demande est sauvegarder";
     $_SESSION['type'] = "alert-success";
-    redirect('listedmdEchantiants');
+    redirect('listedmdEchantillons');
 endif;
 ?>
 <section class="content-header">
@@ -95,7 +95,7 @@ endif;
                                     <a href="javascript:void(0)" onclick="RemouveDiv('<?=$Prod['id_prod']?>')" class="btn btn-danger">
                                         <i class="fa fa-trash"></i>
                                     </a>
-                                    <?=getinfo($Prod['id_prod'],'grm_gift' ,'titre')?><br/> Quantité :
+                                    <?=getinfo($Prod['id_prod'],'products' ,'name')?><br/> Quantité :
 
                                 </label>
                                 <input type="number" name="prodValue[<?=$Prod['id_prod']?>]" value="<?=$Prod['qte']?>"  min="1" class="form-control QteProd" onchange="VerifyPoints()">

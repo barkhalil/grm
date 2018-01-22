@@ -13,7 +13,7 @@ $user= get('*','users',array('id='=>$dmd['reponse'][0]['par']));
 $user= $user['reponse'][0];
 ?>
 <section class="content-header" style="background: #fff;">
-    <h1 class="pull-left"> Cadeaux demandés : </h1>
+    <h1 class="pull-left"> Matériel promotionnel : </h1>
     <button type="button" id="BtnToPrint" value="1" onclick="PrintDiv()" class="btn btn-facebook pull-right">Imprimer <i class="fa fa-print"></i></button>
     <div class="clearfix"></div>
 </section><!-- Main content -->
@@ -65,8 +65,7 @@ $user= $user['reponse'][0];
                 </td>
             </tr>
         </table>
-
-        <h2 style="text-align: center">Liste des cadeaux</h2>
+        <h2 style="text-align: center">Matériel promotionnel</h2>
         <table style="border: 1px solid #999; width: 100%;">
             <thead>
             <tr>

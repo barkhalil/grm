@@ -20,6 +20,7 @@ class PointsBonus {
             unset($_SESSION['TotalCdx']);
             unset($_SESSION['ProdPbCmd']);
             unset($_SESSION['CdxCmd']);
+            unset($_SESSION['firsttime']);
             foreach ($Pbs['reponse'] as $pB) {
                 unset($_SESSION['Point'.$pB['id']]);
             }

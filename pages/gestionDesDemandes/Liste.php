@@ -87,7 +87,7 @@ if($idDemandeau) {
                                     echo "Pointer";
                                 }elseif($cdt['etat']==2){
                                     echo "Points insufissant, avec reste =  ".$cdt['rest_point'];
-                                }elseif($cdt['etat']==3){
+                                }elseif($cdt['etat']==4){
                                     echo "Valider avec reste = ".$cdt['rest_point'];
                                 }else{
                                     echo "Livrer le " .$cdt['date_livraison'];
@@ -99,7 +99,12 @@ if($idDemandeau) {
                                     foreach ($ListeCadeaux['reponse'] as $prod):
                                         ?>
                                         <li>
-                                            <?= $prod['qte']?> pour <?= getinfo($prod['id_cadeaux'],'grm_gift' ,'titre') ?>
+                                            <?= $prod['qte']?> pour
+                                            <? if($prod['type_cdx']==1){
+                                             echo   getinfo($prod['id_cadeaux'],'products' ,'name');
+                                            }else{
+                                              echo  getinfo($prod['id_cadeaux'],'grm_gift' ,'titre') ;
+                                            }?>
                                         </li>
                                     <?endforeach;?>
                                 </ul>

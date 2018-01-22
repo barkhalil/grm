@@ -28,7 +28,7 @@ unset($_SESSION['EchantCmd']);
 unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
 ?>
 <section class="content-header">
-    <h1 class="pull-left">Liste demandes d'échantillant</h1>
+    <h1 class="pull-left">Demandes d'échantillons</h1>
     <a href="<?=WEBRoot?>/demande/echantiants" class="btn btn-primary pull-right">
         Ajouter
     </a>
@@ -40,7 +40,7 @@ unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
             <div class="box box-success box-body table-responsive">
                 <div class="form-group">
                     <label>Demander par : </label>
-                    <select class="form-control" name="id_demandeur" onchange="GetPage('listedmdEchantiants')" id="TypeClient" >
+                    <select class="form-control" name="id_demandeur" onchange="GetPage('listedmdEchantillons')" id="TypeClient" >
                         <option value="">Par utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users',array('active>'=>0));
@@ -81,7 +81,17 @@ unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
                                     echo "Livrer le " .$cdt['date_livraison'];
                                 }
                                 ?></td>
-
+                            <td>
+                                <ul>
+                                    <? $ListeCadeaux=get("*",'echant_prod',array('	id_echant='=>$cdt['id']));
+                                    foreach ($ListeCadeaux['reponse'] as $prod):
+                                        ?>
+                                        <li>
+                                            <?= $prod['qte']?> <?=getinfo($prod['id_prod'],'products' ,'name') ?>
+                                        </li>
+                                    <?endforeach;?>
+                                </ul>
+                            </td>
                             <td>
                                 <? if($cdt['etat']==0) :?>
                                     <a href="validationDmdEchant&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
@@ -90,7 +100,7 @@ unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
                                 <?elseif($cdt['etat']==-1):?>
                                 <?else:?>
                                     <?if($cdt['date_livraison']==NULL):?>
-                                        <a href="listedmdEchantiants<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
+                                        <a href="listedmdEchantillons<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
                                             <i class="fa fa-train"></i>
                                         </a>
                                     <?endif;?>

@@ -13,7 +13,7 @@ $user= get('*','users',array('id='=>$dmd['reponse'][0]['par']));
 $user= $user['reponse'][0];
 ?>
 <section class="content-header" style="background: #fff;">
-    <h1 class="pull-left"> Cadeaux demandés : </h1>
+    <h1 class="pull-left"> Echantillons demandés : </h1>
     <button type="button" id="BtnToPrint" value="1" onclick="PrintDiv()" class="btn btn-facebook pull-right">Imprimer <i class="fa fa-print"></i></button>
     <div class="clearfix"></div>
 </section><!-- Main content -->
@@ -58,8 +58,7 @@ $user= $user['reponse'][0];
                 </td>
             </tr>
         </table>
-
-        <h2 style="text-align: center">Liste des cadeaux</h2>
+       <h2 style="text-align: center">Liste des échantillons</h2>
         <table style="border: 1px solid #999; width: 100%;">
             <thead>
                 <tr>
@@ -73,8 +72,8 @@ $user= $user['reponse'][0];
                 <?php foreach ($cdx['reponse'] as $cd):?>
                     <tr>
                         <td style="border: 1px solid #999;padding: 10px;"><?=$cd['id'];?></td>
-                        <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_prod'],'grm_gift','titre');?></td>
-                        <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_prod'],'grm_gift','description');?></td>
+                        <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_prod'],'products','name');?></td>
+                        <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_prod'],'products','description');?></td>
                         <td style="border: 1px solid #999;padding: 10px;"><?=$cd['qte'];?></td>
                     </tr>
                 <?endforeach;?>
