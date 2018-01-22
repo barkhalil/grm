@@ -21,6 +21,28 @@ $prospect= $prospect['reponse'][0];
     <div class="box-body" style="margin-top: 100px;">
         <table style="width:  100%;">
             <tr>
+                <td colspan="2">
+                    <h1 style="display: block; text-align: center">Bon de sortie
+                        <small>N° <?=$idDmd?> / <?= $dmd['reponse'][0]['date_validation']?></small>
+                    </h1>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top;">
+
+                </td>
+                <td style="vertical-align: top;">
+                    <p style="color: #582900;float: right; text-align: center">
+                        <b>Vital</b><br/>
+                        <b>Service commercial</b><br/>
+                        Tél: 71 386 016 - 71 385 339<br/>
+                        Fax: 79396 081<br/>
+                        MF : 748728 N / A / M / 000
+                    </p>
+
+                </td>
+            </tr>
+            <tr>
                 <td style="vertical-align: top;">
                     <span style="color: #582900;">Date de validation: <small style="color: #000;"><?= $dmd['reponse'][0]['date_validation']?></small> </span><br/><br/>
                 </td>
@@ -53,16 +75,7 @@ $prospect= $prospect['reponse'][0];
                 </td>
             </tr>
         </table>
-        <div style="margin-top: 15px; width: 100%;vertical-align: top;">
-            <div style="width: 49%;display: inline-block;vertical-align: top;">
-                <h4 style="color: #582900;">Observation administrateur: </h4>
-                <span ><?= $dmd['reponse'][0]['oberservation_admin']?></span>
-            </div>
-            <div style="width: 49%;display: inline-block;">
-                <h4 style="color: #582900;">Observation client: </h4>
-                <span ><?= $dmd['reponse'][0]['observation_client']?></span>
-            </div>
-        </div>
+
         <h2 style="text-align: center">Liste des cadeaux</h2>
         <table style="border: 1px solid #999; width: 100%;">
             <thead>
@@ -83,6 +96,25 @@ $prospect= $prospect['reponse'][0];
                     </tr>
                 <?endforeach;?>
             </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div style="margin-top: 15px; width: 100%;vertical-align: top;">
+                        <div style="width: 49%;display: inline-block;vertical-align: top;">
+                            <h4 style="color: #582900;">Observation administrateur: </h4>
+                            <span ><?= $dmd['reponse'][0]['oberservation_admin']?></span>
+                        </div>
+                        <div style="width: 49%;display: inline-block;">
+                            <h4 style="color: #582900;">Observation client: </h4>
+                            <span ><?= $dmd['reponse'][0]['observation_client']?></span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span style="color: #582900;">Date de validation: <small style="color: #000;"><?= $dmd['reponse'][0]['date_validation']?></small> </span><br/><br/>
+                </td>
+            </tr>
+            </tfoot>
         </table>
 
     </div>

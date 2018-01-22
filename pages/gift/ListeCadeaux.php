@@ -82,6 +82,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'ASC'), array($Limite,
         <thead>
         <tr>
             <th>#</th>
+            <th>Ref.</th>
             <th>Titre</th>
             <th>Famille</th>
             <th>Point Bonus</th>
@@ -100,6 +101,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'ASC'), array($Limite,
             ?>
             <tr>
                 <td><?=$cade['id']?></td>
+                <td><?=$cade['code_article']?></td>
                 <td><?=$cade['titre']?></td>
                 <td><?=getinfo($cade['famille'],'grm_gift_family','nom') ?></td>
                 <td><?=$cade['point_bonus']?></td>

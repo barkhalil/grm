@@ -75,5 +75,6 @@ if($Blocid){
                 </table>
             </div>
         </div>
-    </div>
-</section> 
+    </div> 
+</section>
+

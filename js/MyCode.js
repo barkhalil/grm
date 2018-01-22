@@ -4,11 +4,11 @@
 
 var f = "http://";
 var s = location.host;
-if(location.host=="www.vital-crm.tn"){
+if(location.host=="grm.vital-crm.tn:10"){
     var url = f + s ;
 }else{
-    var url = f + s + "/GrmProject";
-    // var url = f + s + "/VitalGrm";
+   // var url = f + s + "/GrmProject";
+    var url = f + s + "/grm";
 }
 //console.log(url);
 function MSg(msg, type) {
@@ -663,7 +663,7 @@ $('#ListeProdSessions').on('click','#BtnValiderPromo',function () {
         data:{MonthValue:1},
         success:function (data) {
             MSg('Votre demande est enregister ','alert-success');
-            window.location ='../gestionDesDemandes/dmdPromotionnel';
+           // window.location ='../gestionDesDemandes/dmdPromotionnel';
         },
         error:function () {
             MSg('Une erreur c\'est produits ','alert-danger')
