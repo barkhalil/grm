@@ -7,7 +7,7 @@ var s = location.host;
 if(location.host=="www.vital-crm.tn"){
     var url = f + s ;
 }else{
-    var url = f + s + "/GrmProject";
+    var url = f + s + "/grm";
     // var url = f + s + "/VitalGrm";
 }
 //console.log(url);

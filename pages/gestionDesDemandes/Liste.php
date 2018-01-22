@@ -87,7 +87,7 @@ if($idDemandeau) {
                                     echo "Pointer";
                                 }elseif($cdt['etat']==2){
                                     echo "Points insufissant, avec reste =  ".$cdt['rest_point'];
-                                }elseif($cdt['etat']==3){
+                                }elseif($cdt['etat']==4){
                                     echo "Valider avec reste = ".$cdt['rest_point'];
                                 }else{
                                     echo "Livrer le " .$cdt['date_livraison'];
