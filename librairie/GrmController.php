@@ -8,15 +8,6 @@
  */
 // class for all Budget and control products ...
 class GrmController {
-//public global $PDO;
-
-    function __construct(){
-    }
-
-    /**
-     * @param $type
-     * @param $year
-     */
     function getBudget($type, $year){
         global $PDO;
         /** @var  $Sql */
@@ -41,5 +32,6 @@ class GrmController {
         $stmt=$PDO->prepare($Sql);
         $stmt->execute();
     }
+
 }
 $Gcc=new GrmController();

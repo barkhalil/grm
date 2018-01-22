@@ -51,7 +51,7 @@ if($annuler==1){
                             ));
                             foreach ($ListeGift['reponse'] as $Gift):
                                 ?>
-                                <option value="<?= $Gift['id'] ?>" ><?= $Gift['titre'] ?></option>
+                                <option value="<?= $Gift['id'] ?>" ><?= $Gift['code_article'].' '. $Gift['titre'] ?></option>
                             <? endforeach; ?>
 
                         </select>

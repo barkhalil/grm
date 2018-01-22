@@ -24,6 +24,8 @@ if($idDemandeau) {
     $Cadeaux=get("*",'echant_demander',NULL,'AND',array('id'=>'DESC'),array($Limite,30));
 }
 //echo '<pre>';print_r($Cadeaux);die;
+unset($_SESSION['EchantCmd']);
+unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
 ?>
 <section class="content-header">
     <h1 class="pull-left">Liste demandes d'échantillant</h1>
@@ -57,7 +59,6 @@ if($idDemandeau) {
                         <th>Date de demande</th>
                         <th>Par</th>
                         <th>Etat demande</th>
-                        <th>Cadeaux demander</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -80,17 +81,7 @@ if($idDemandeau) {
                                     echo "Livrer le " .$cdt['date_livraison'];
                                 }
                                 ?></td>
-                            <td>
-                                <ul>
-                                    <? $ListeCadeaux=get("*",'echant_prod',array('	id_echant='=>$cdt['id']));
-                                    foreach ($ListeCadeaux['reponse'] as $prod):
-                                        ?>
-                                        <li>
-                                            <?= $prod['qte']?> <?= getinfo($prod['id_echant'],'grm_gift' ,'titre') ?>
-                                        </li>
-                                    <?endforeach;?>
-                                </ul>
-                            </td>
+
                             <td>
                                 <? if($cdt['etat']==0) :?>
                                     <a href="validationDmdEchant&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">

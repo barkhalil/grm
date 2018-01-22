@@ -34,8 +34,6 @@ $ActivePage=explode('/',$Pga);
             <li class="treeview <?if($ActivePage[0]=="General") echo 'active'?>">
                 <a href="#"><i class="fa fa-codepen"></i> <span>Configuration</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="<?=WEBRoot?>/General/Budgets">Budgets</a></li>
-                    <li><a href="<?=WEBRoot?>/General/BudgetsZones">Budgets par Zone</a></li>
                     <li><a href="<?=WEBRoot?>/General/TypeDemande">Type des demandes</a></li>
                     <li><a href="<?=WEBRoot?>/General/GestionPB">Gestion PB</a></li>
 

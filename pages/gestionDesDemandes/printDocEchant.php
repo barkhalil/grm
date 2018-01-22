@@ -21,11 +21,25 @@ $user= $user['reponse'][0];
     <div class="box-body" style="margin-top: 100px;">
         <table style="width:  100%;">
             <tr>
+                <td colspan="2">
+                    <h1 style="display: block; text-align: center">Bon de sortie
+                    <small>N° <?=$idDmd?> / <?= $dmd['reponse'][0]['sysDate']?></small>
+                    </h1>
+                </td>
+            </tr>
+            <tr>
                 <td style="vertical-align: top;">
-                    <span style="color: #582900;">Date de validation: <small style="color: #000;"><?= $dmd['reponse'][0]['date_validation']?></small> </span><br/><br/>
+
                 </td>
                 <td style="vertical-align: top;">
-                    <span style="color: #582900;float: right;">Date de demande:  <small style="color: #000;"><?= $dmd['reponse'][0]['sysDate']?></small></span><br/><br/>
+                    <p style="color: #582900;float: right; text-align: center">
+                        <b>Vital</b><br/>
+                        <b>Service commercial</b><br/>
+                        Tél: 71 386 016 - 71 385 339<br/>
+                        Fax: 79396 081<br/>
+                        MF : 748728 N / A / M / 000
+                    </p>
+
                 </td>
             </tr>
             <tr>
@@ -39,16 +53,12 @@ $user= $user['reponse'][0];
                     <label ><?= getinfo($user['type'],'user_type','name')?></label> <br/>
                 </td>
                 <td style="vertical-align: top;float: right;">
+                    <span style="color: #582900;float: right;">Date de demande:  <small style="color: #000;"><?= $dmd['reponse'][0]['sysDate']?></small></span><br/><br/>
                     <label style="color: #582900;">Date de livraison: </label> <span><?= $dmd['reponse'][0]['date_livraison']?></span><br/>
                 </td>
             </tr>
         </table>
-        <div style="margin-top: 15px; width: 100%;vertical-align: top;">
-            <div style="width: 49%;display: inline-block;vertical-align: top;">
-                <h4 style="color: #582900;">Observation administrateur: </h4>
-                <span ><?= $dmd['reponse'][0]['observation_admin']?></span>
-            </div>
-        </div>
+
         <h2 style="text-align: center">Liste des cadeaux</h2>
         <table style="border: 1px solid #999; width: 100%;">
             <thead>
@@ -69,6 +79,22 @@ $user= $user['reponse'][0];
                     </tr>
                 <?endforeach;?>
             </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="2">
+                    <div style="margin-top: 15px; width: 100%;vertical-align: top;">
+                        <div style="width: 49%;display: inline-block;vertical-align: top;">
+                            <h4 style="color: #582900;">Observation administrateur: </h4>
+                            <span ><?= $dmd['reponse'][0]['observation_admin']?></span>
+                        </div>
+                    </div>
+                </td>
+                <td></td>
+                <td>
+                    <span style="color: #582900;">Date de validation: <small style="color: #000;"><?= $dmd['reponse'][0]['date_validation']?></small> </span><br/><br/>
+                </td>
+            </tr>
+            </tfoot>
         </table>
     </div>
 </section>
