@@ -5,7 +5,7 @@ class StdFunctions {
         $Date=  explode(' ', $dateTime);
         $DateD=  explode('-', $Date['0']);
         // inversser la date à afficher :p 
-        $DateRetour=$DateD['2'].'/'.$DateD['1'].'/'.$DateD['0'];
+        $DateRetour=$DateD['2'].'-'.$DateD['1'].'-'.$DateD['0'];
         return $DateRetour.' '.$Date['1'];
     }
     public function SetDate($dateTime){
