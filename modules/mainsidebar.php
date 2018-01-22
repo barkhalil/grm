@@ -71,7 +71,7 @@ $ActivePage=explode('/',$Pga);
                     <li><a href="<?=WEBRoot?>/gestionDesDemandes/listeDemandeVitrine">Demandes vitrine</a></li>
                     <li><a href="<?=WEBRoot?>/gestionDesDemandes/listeDemandeOrdonnancier">Demandes ordonnancier</a></li>
                     <li><a href="<?=WEBRoot?>/gestionDesDemandes/dmdPromotionnel">Matériel promotionnel</a></li>
-                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/listedmdEchantiants">Demandes échantillant</a></li>
+                    <li><a href="<?=WEBRoot?>/gestionDesDemandes/listedmdEchantillons">Demandes échantillons</a></li>
                     <li><a href="<?=WEBRoot?>/gestionDesDemandes/listeDmdMaterelDeleg">Matériel délégué</a></li>
                 </ul>
             </li>

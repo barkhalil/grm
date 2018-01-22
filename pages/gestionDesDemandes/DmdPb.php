@@ -13,6 +13,7 @@ if(filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT)){
     $_SESSION['ProdPbCmd']=null;
     $_SESSION['CdxCmd']=null;
     unset($_SESSION['TotalCdx']);
+    unset($_SESSION['firsttime']);
     unset($_SESSION['ProdPbCmd']);
     unset($_SESSION['CdxCmd']);
     redirect("Liste");
@@ -34,16 +35,28 @@ $edit=filter_input(INPUT_GET,'edit',FILTER_VALIDATE_INT);
 $DemandeInfo=get('*','grm_demande_cadeaux',array('id='=>$id));
 $Dmd=$DemandeInfo['reponse'][0];
 $pointsBs=explode('@_@',$Dmd['ponitsByType']);
-$sess=true;
-for($i=0;$i<count($pointsBs);$i++) {
-    //echo $pointsBs[$i];die;
-    if($_SESSION['bonusPoints'][$i]['valeur']!=$pointsBs[$i] && $_SESSION['Point'.$pointsBs[$i]]==0){
-        $sess=false;
+if(!isset($_SESSION['firsttime'])) {
+    for($i=0;$i<count($pointsBs);$i++) {
+        //echo $pointsBs[$i];die;
+        if($_SESSION['bonusPoints'][$i]['valeur']!=$pointsBs[$i] && $_SESSION['Point'.$pointsBs[$i]]==0 || $_SESSION['PbClient']!=$id){
+            $_SESSION['firsttime']='yes';
+        } else {
+            $_SESSION['firsttime']='no';
+        }
     }
 }
-if($sess=true){
-//if($_SESSION['TotPoint']==0) {
+
+if($_SESSION['firsttime']=='yes'){
     if($edit):
+        $_SESSION['Point']=0;
+        $_SESSION['TotPoint']=0;
+        $_SESSION['TotalCdx']=0;
+        $_SESSION['Obs']='';
+        $_SESSION['ProdPbCmd']=null;
+        $_SESSION['CdxCmd']=null;
+        unset($_SESSION['TotalCdx']);
+        unset($_SESSION['ProdPbCmd']);
+        unset($_SESSION['CdxCmd']);
         // récupération de la demande et ces détails :
         $DemandeInfo=get('*','grm_demande_cadeaux',array('id='=>$id));
         $Dmd=$DemandeInfo['reponse'][0];
@@ -87,6 +100,7 @@ if($sess=true){
         //echo $_SESSION['TotalCdx'];die;
 
     endif;
+    $_SESSION['firsttime']='no';
 }
 
 $IdSup=filter_input(INPUT_GET,'IdSup',FILTER_VALIDATE_INT);

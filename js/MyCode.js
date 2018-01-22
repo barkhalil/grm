@@ -704,7 +704,7 @@ $('#ListeProdSessions').on('click','#BtnValiderEchant',function () {
             data:{MonthValue:MonthValue},
             success:function (data) {
                 MSg('Votre demande est enregister ','alert-success');
-                window.location ='../gestionDesDemandes/listedmdEchantiants';
+                window.location ='../gestionDesDemandes/listedmdEchantillons';
 
             },
             error:function () {

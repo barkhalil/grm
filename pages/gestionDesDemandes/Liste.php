@@ -99,7 +99,12 @@ if($idDemandeau) {
                                     foreach ($ListeCadeaux['reponse'] as $prod):
                                         ?>
                                         <li>
-                                            <?= $prod['qte']?> pour <?= getinfo($prod['id_cadeaux'],'grm_gift' ,'titre') ?>
+                                            <?= $prod['qte']?> pour
+                                            <? if($prod['type_cdx']==1){
+                                             echo   getinfo($prod['id_cadeaux'],'products' ,'name');
+                                            }else{
+                                              echo  getinfo($prod['id_cadeaux'],'grm_gift' ,'titre') ;
+                                            }?>
                                         </li>
                                     <?endforeach;?>
                                 </ul>

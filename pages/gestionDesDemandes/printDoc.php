@@ -77,8 +77,26 @@ $prospect= $prospect['reponse'][0];
                 <?php foreach ($cdx['reponse'] as $cd):?>
                     <tr>
                         <td style="border: 1px solid #999;padding: 10px;"><?=$cd['id'];?></td>
-                        <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_cadeaux'],'grm_gift','titre');?></td>
-                        <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_cadeaux'],'grm_gift','description');?></td>
+                        <?= $prod['qte']?> pour
+                        <? if($prod['type_cdx']==1){
+                            echo   getinfo($prod['id_cadeaux'],'products' ,'name');
+                        }else{
+                            echo  getinfo($prod['id_cadeaux'],'grm_gift' ,'titre') ;
+                        }?>
+                        <td style="border: 1px solid #999;padding: 10px;">
+                            <? if($cd['type_cdx']==1){
+                                echo   getinfo($cd['id_cadeaux'],'products' ,'name');
+                            }else{
+                                echo  getinfo($cd['id_cadeaux'],'grm_gift' ,'titre') ;
+                            }?>
+                        </td>
+                        <td style="border: 1px solid #999;padding: 10px;">
+                            <? if($cd['type_cdx']==1){
+                                echo   getinfo($cd['id_cadeaux'],'products' ,'description');
+                            }else{
+                                echo  getinfo($cd['id_cadeaux'],'grm_gift' ,'description') ;
+                            }?>
+                        </td>
                         <td style="border: 1px solid #999;padding: 10px;"><?=$cd['qte'];?></td>
                     </tr>
                 <?endforeach;?>

@@ -1,0 +1,1 @@
+ALTER TABLE `materiel_deleg` ADD `materiel_deleg` INT NULL AFTER `id_deleg`;
