@@ -23,7 +23,7 @@ $prospect= $prospect['reponse'][0];
             <tr>
                 <td colspan="2">
                     <h1 style="display: block; text-align: center">Bon de sortie
-                        <small>N° <?=$idDmd?> / <?= $dmd['reponse'][0]['date_validation']?></small>
+                        <small>N° <?=$idDmd?> / <?= date('d-m-Y',strtotime($dmd['reponse'][0]['date_validation']))?></small>
                     </h1>
                 </td>
             </tr>
@@ -37,17 +37,17 @@ $prospect= $prospect['reponse'][0];
                         <b>Service commercial</b><br/>
                         Tél: 71 386 016 - 71 385 339<br/>
                         Fax: 79396 081<br/>
-                        MF : 748728 N / A / M / 000
+                        MF : 748728 N / A / M / 000<br/>
+                        Adresse: Boumhal - Tunisie
                     </p>
 
                 </td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">
-                    <span style="color: #582900;">Date de validation: <small style="color: #000;"><?= $dmd['reponse'][0]['date_validation']?></small> </span><br/><br/>
                 </td>
                 <td style="vertical-align: top;">
-                    <span style="color: #582900;float: right;">Date de demande:  <small style="color: #000;"><?= $dmd['reponse'][0]['system_date']?></small></span><br/><br/>
+                    <span style="color: #582900;float: right;">Date de bon de commande:  <small style="color: #000;"><?= $dmd['reponse'][0]['system_date']?></small></span><br/><br/>
                 </td>
             </tr>
             <tr>
@@ -70,13 +70,22 @@ $prospect= $prospect['reponse'][0];
                 </td>
                 <td style="vertical-align: top;float: right;">
                     <label style="color: #582900;">Demander par: </label> <span><?= getinfo($dmd['reponse'][0]['id_demandeur'],'users','Nom');?><?= getinfo($dmd['reponse'][0]['id_demandeur'],'users','Prenom');?></span><br/>
-                    <label style="color: #582900;">Livrer par: </label> <span><?= getinfo($dmd['reponse'][0]['id_remise'],'users','Nom');?><?= getinfo($dmd['reponse'][0]['id_remise'],'users','Prenom');?></span><br/>
-                    <label style="color: #582900;">Date de livraison: </label> <span><?= $dmd['reponse'][0]['date_livraison']?></span><br/>
+                    <label style="color: #582900;">Livrer par: </label> <span><?= getinfo($dmd['reponse'][0]['id_remise'],'users','Nom');?> <?= getinfo($dmd['reponse'][0]['id_remise'],'users','Prenom');?></span><br/>
                 </td>
             </tr>
         </table>
 
-        <h2 style="text-align: center">Liste des cadeaux</h2>
+        <h2 style="text-align: center">
+            <?if($dmd['reponse'][0]['famille']==4):
+                echo 'Demande ordonnancier';
+            elseif ($dmd['reponse'][0]['famille']==2):
+                echo 'Demande vitrine';
+            else:
+                echo 'Liste des cadeaux';
+            endif;
+            ?>
+
+        </h2>
         <table style="border: 1px solid #999; width: 100%;">
             <thead>
                 <tr>
@@ -90,8 +99,26 @@ $prospect= $prospect['reponse'][0];
                 <?php foreach ($cdx['reponse'] as $cd):?>
                     <tr>
                         <td style="border: 1px solid #999;padding: 10px;"><?=$cd['id'];?></td>
-                        <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_cadeaux'],'grm_gift','titre');?></td>
-                        <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_cadeaux'],'grm_gift','description');?></td>
+                        <?= $prod['qte']?> pour
+                        <? if($prod['type_cdx']==1){
+                            echo   getinfo($prod['id_cadeaux'],'products' ,'name');
+                        }else{
+                            echo  getinfo($prod['id_cadeaux'],'grm_gift' ,'titre') ;
+                        }?>
+                        <td style="border: 1px solid #999;padding: 10px;">
+                            <? if($cd['type_cdx']==1){
+                                echo   getinfo($cd['id_cadeaux'],'products' ,'name');
+                            }else{
+                                echo  getinfo($cd['id_cadeaux'],'grm_gift' ,'titre') ;
+                            }?>
+                        </td>
+                        <td style="border: 1px solid #999;padding: 10px;">
+                            <? if($cd['type_cdx']==1){
+                                echo   getinfo($cd['id_cadeaux'],'products' ,'description');
+                            }else{
+                                echo  getinfo($cd['id_cadeaux'],'grm_gift' ,'description') ;
+                            }?>
+                        </td>
                         <td style="border: 1px solid #999;padding: 10px;"><?=$cd['qte'];?></td>
                     </tr>
                 <?endforeach;?>

@@ -30,13 +30,18 @@ $user= $user['reponse'][0];
             </tr>
             <tr>
                 <td style="vertical-align: top;">
-                    <label style="color: #582900;">Demander par: </label> <span><?= $user['Nom'];?> <?= $user['Prenom'];?></span><br/>
+                    <label style="color: #582900;">Demandé par: </label> <span><?= $user['Nom'];?> <?= $user['Prenom'];?></span><br/>
                     <label style="color: #582900;">Téléphone: </label> <span><?= $user['Tel'];?></span><br/>
                     <label style="color: #582900;">E-MAIL: </label> <span><?= $user['Email'];?></span><br/>
-                    <label style="color: #582900;">Zone: </label> <span><?= getinfo($user['Email'],'zone','nom');?></span><br/>
-                    <label style="color: #582900;">Département: </label> <span><?= getinfo($user['departement'],'departement','nom');?></span><br/>
                     <label style="color: #582900;">Civilité: </label> <span><?= $user['Civilite'];?></span><br/>
-                    <label ><?= getinfo($user['type'],'user_type','name')?></label> <br/>
+                    <label >
+                        <?if($user['type']==3):
+                            echo 'Visiteur commercial';
+                        else:
+                            echo 'Visiteur médical';
+                        endif;
+                        ?>
+                    </label> <br/>
                 </td>
                 <td style="vertical-align: top;float: right;">
                     <label style="color: #582900;">Date de livraison: </label> <span><?= $dmd['reponse'][0]['date_livraison']?></span><br/>

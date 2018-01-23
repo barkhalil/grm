@@ -82,11 +82,11 @@ if($idDemandeur) {
                                 ?></td>
                             <td>
                                 <ul>
-                                    <? $ListeCadeaux=get("*",'materiel_deleg_details',array('	id_dmd='=>$cdt['id']));
+                                    <? $ListeCadeaux=get("*",'materiel_deleg_details',array('id_dmd='=>$cdt['id']));
                                     foreach ($ListeCadeaux['reponse'] as $prod):
                                         ?>
                                         <li>
-                                            <?= $prod['qte']?> <?= getinfo($prod['id_dmd'],'grm_gift' ,'titre') ?>
+                                            <?= $prod['qte']?> <?= getinfo($prod['id_prod'],'grm_gift' ,'titre') ?>
                                         </li>
                                     <?endforeach;?>
                                 </ul>

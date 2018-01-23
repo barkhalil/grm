@@ -32,6 +32,12 @@ class GrmController {
         $stmt=$PDO->prepare($Sql);
         $stmt->execute();
     }
+    function DimStockProd($id,$qte){
+        global $PDO;
+        $Sql="UPDATE grm_gift SET grm_gift.qte=qte-$qte , grm_gift.qte_utiliser = qte_utiliser+$qte WHERE id = $id";
+        $stmt=$PDO->prepare($Sql);
+        $stmt->execute();
+    }
 
 }
 $Gcc=new GrmController();

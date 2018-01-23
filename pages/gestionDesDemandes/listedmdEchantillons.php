@@ -3,40 +3,33 @@
  * Created by PhpStorm.
  * User: nagui
  * Date: 02/01/18
- * Time: 12:42
+ * Time: 15:50
  */
 $idDemandeau=filter_input(INPUT_GET,'idDel',257);
 $link="&idDel=$idDemandeau";
 $Limite=filter_input(INPUT_GET,'d',257);
 if(!$Limite) $Limite=0;
-$pointage=filter_input(1,'pointage',257);
-if($pointage){
-    update($pointage,array(
-        'pointage'=>1,
-        'date_pointage'=>date("Y-m-d"),
-        'etat'=>1,
-        'modifier_par'=>$_SESSION['user']['id']
-    ) ,'grm_demande_cadeaux');
-}
 $idDemLivraison=filter_input(INPUT_GET,'idDemLivraison',257);
 if($idDemLivraison){
     update($idDemLivraison,array(
         'date_livraison'=>date("Y-m-d"),
         'etat'=>2
-    ) ,'promo_demander');
+    ) ,'echant_demander');
 }
 if($idDemandeau) {
     // récupération des cadeaux demander :
-    $Cadeaux=get("*",'promo_demander',array('par='=>$idDemandeau),'AND',array('id'=>'DESC'),array($Limite,30));
+    $Cadeaux=get("*",'echant_demander',array('par='=>$idDemandeau),'AND',array('id'=>'DESC'),array($Limite,30));
 } else {
     // récupération des cadeaux demander :
-    $Cadeaux=get("*",'promo_demander',NULL,'AND',array('id'=>'DESC'),array($Limite,30));
+    $Cadeaux=get("*",'echant_demander',NULL,'AND',array('id'=>'DESC'),array($Limite,30));
 }
 //echo '<pre>';print_r($Cadeaux);die;
+unset($_SESSION['EchantCmd']);
+unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
 ?>
 <section class="content-header">
-    <h1 class="pull-left">Liste demandes produits promotionnel</h1>
-    <a href="<?=WEBRoot?>/demande/materielPromotionnel" class="btn btn-primary pull-right">
+    <h1 class="pull-left">Demandes d'échantillons</h1>
+    <a href="<?=WEBRoot?>/demande/echantiants" class="btn btn-primary pull-right">
         Ajouter
     </a>
     <div class="clearfix"></div>
@@ -47,8 +40,8 @@ if($idDemandeau) {
             <div class="box box-success box-body table-responsive">
                 <div class="form-group">
                     <label>Demander par : </label>
-                    <select class="form-control" name="id_demandeur" onchange="GetPage('dmdPromotionnel')" id="TypeClient" >
-                        <option value=""> Par utilisateur</option>
+                    <select class="form-control" name="id_demandeur" onchange="GetPage('listedmdEchantillons')" id="TypeClient" >
+                        <option value="">Par utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users',array('active>'=>0));
                         foreach ($ListeUser['reponse'] as $user):
@@ -57,7 +50,6 @@ if($idDemandeau) {
                                 echo "selected=selected";
                             } ?>><?= $user['Nom'] . ' ' . $user['Prenom'] ?></option>
                         <? endforeach; ?>
-
                     </select>
                 </div>
                 <table class="table table-bordered">
@@ -67,7 +59,6 @@ if($idDemandeau) {
                         <th>Date de demande</th>
                         <th>Par</th>
                         <th>Etat demande</th>
-                        <th>Cadeaux demander</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -92,28 +83,28 @@ if($idDemandeau) {
                                 ?></td>
                             <td>
                                 <ul>
-                                    <? $ListeCadeaux=get("*",'promo_prod',array('	id_promo='=>$cdt['id']));
+                                    <? $ListeCadeaux=get("*",'echant_prod',array('	id_echant='=>$cdt['id']));
                                     foreach ($ListeCadeaux['reponse'] as $prod):
                                         ?>
                                         <li>
-                                            <?= $prod['qte']?> <?= getinfo($prod['id_prod'],'grm_gift' ,'titre') ?>
+                                            <?= $prod['qte']?> <?=getinfo($prod['id_prod'],'products' ,'name') ?>
                                         </li>
                                     <?endforeach;?>
                                 </ul>
                             </td>
                             <td>
                                 <? if($cdt['etat']==0) :?>
-                                    <a href="validationDmdPromt&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
+                                    <a href="validationDmdEchant&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                         <i class="fa fa-check"></i>
                                     </a>
                                 <?elseif($cdt['etat']==-1):?>
                                 <?else:?>
                                     <?if($cdt['date_livraison']==NULL):?>
-                                        <a href="dmdPromotionnel<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
+                                        <a href="listedmdEchantillons<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
                                             <i class="fa fa-train"></i>
                                         </a>
                                     <?endif;?>
-                                    <a href="printDocPromo&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
+                                    <a href="printDocEchant&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
                                         <i class="fa fa-print"></i>
                                     </a>
                                 <?endif;?>
@@ -140,9 +131,13 @@ if($idDemandeau) {
         </div>
 
         <div class="col-md-7">
+
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+
                 <? pagination($Cadeaux['total'], 30, WEBRoot . "/gift/Liste".$link."&d=", ""); ?>
+
             </div>
+
         </div>
 
     </div>

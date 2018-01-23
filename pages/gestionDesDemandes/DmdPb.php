@@ -13,6 +13,7 @@ if(filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT)){
     $_SESSION['ProdPbCmd']=null;
     $_SESSION['CdxCmd']=null;
     unset($_SESSION['TotalCdx']);
+    unset($_SESSION['firsttime']);
     unset($_SESSION['ProdPbCmd']);
     unset($_SESSION['CdxCmd']);
     redirect("Liste");
@@ -31,8 +32,31 @@ $Pbs=get('*','grm_pb_type',array('etat='=>1));
 $pb=$Pbs['reponse'][0];
 $edit=filter_input(INPUT_GET,'edit',FILTER_VALIDATE_INT);
 //echo '<pre>';print_r($_SESSION);die;
-if($_SESSION['TotPoint']==0) {
+$DemandeInfo=get('*','grm_demande_cadeaux',array('id='=>$id));
+$Dmd=$DemandeInfo['reponse'][0];
+$pointsBs=explode('@_@',$Dmd['ponitsByType']);
+if(!isset($_SESSION['firsttime'])) {
+    for($i=0;$i<count($pointsBs);$i++) {
+        //echo $pointsBs[$i];die;
+        if($_SESSION['bonusPoints'][$i]['valeur']!=$pointsBs[$i] && $_SESSION['Point'.$pointsBs[$i]]==0 || $_SESSION['PbClient']!=$id){
+            $_SESSION['firsttime']='yes';
+        } else {
+            $_SESSION['firsttime']='no';
+        }
+    }
+}
+
+if($_SESSION['firsttime']=='yes'){
     if($edit):
+        $_SESSION['Point']=0;
+        $_SESSION['TotPoint']=0;
+        $_SESSION['TotalCdx']=0;
+        $_SESSION['Obs']='';
+        $_SESSION['ProdPbCmd']=null;
+        $_SESSION['CdxCmd']=null;
+        unset($_SESSION['TotalCdx']);
+        unset($_SESSION['ProdPbCmd']);
+        unset($_SESSION['CdxCmd']);
         // récupération de la demande et ces détails :
         $DemandeInfo=get('*','grm_demande_cadeaux',array('id='=>$id));
         $Dmd=$DemandeInfo['reponse'][0];
@@ -52,10 +76,10 @@ if($_SESSION['TotPoint']==0) {
         $_SESSION['PbUser']=$Dmd['id_demandeur'];
         $_SESSION['ProdPbCmd']=null;
         //$_SESSION['CdxCmd']=null;
-        $DmdDetailsProd=get('*','grm_cadeaux_demander',array('id_demande='=>$id,'type_cdx='=>2));
-        $DmdDetailsCdx=get('*','grm_cadeaux_demander',array('id_demande='=>$id,'type_cdx='=>1));
+        $DmdDetailsProd=get('*','grm_cadeaux_demander',array('id_demande='=>$id,'type_cdx='=>1));
+        $DmdDetailsCdx=get('*','grm_cadeaux_demander',array('id_demande='=>$id,'type_cdx='=>2));
         $QteTot=0;
-        //echo'<pre>';print_r($DmdDetailsProd['reponse']);die;
+        //echo'<pre>';print_r($DmdDetailsCdx['reponse']);die;
         foreach($DmdDetailsProd['reponse'] as $ProdPb) {
             $ProdSeaC=$ProdPb['id_cadeaux'];
             $qte=$ProdPb['qte'];
@@ -65,11 +89,9 @@ if($_SESSION['TotPoint']==0) {
         //echo $QteTot;die;
         foreach($DmdDetailsCdx['reponse'] as $ProdPb) {
             $ProdSeaC=$ProdPb['id_cadeaux'];
-
             $qte=$ProdPb['qte'];
             $_SESSION['CdxCmd'][$ProdSeaC]=$qte;
             $pbV=getinfo($ProdSeaC,'grm_gift','point_bonus');
-            //
             $QteTot+=$qte*$pbV;
 
         }
@@ -78,6 +100,7 @@ if($_SESSION['TotPoint']==0) {
         //echo $_SESSION['TotalCdx'];die;
 
     endif;
+    $_SESSION['firsttime']='no';
 }
 
 $IdSup=filter_input(INPUT_GET,'IdSup',FILTER_VALIDATE_INT);

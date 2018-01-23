@@ -13,7 +13,7 @@ $user= get('*','users',array('id='=>$dmd['reponse'][0]['par']));
 $user= $user['reponse'][0];
 ?>
 <section class="content-header" style="background: #fff;">
-    <h1 class="pull-left"> Cadeaux demandés : </h1>
+    <h1 class="pull-left"> Matériel promotionnel : </h1>
     <button type="button" id="BtnToPrint" value="1" onclick="PrintDiv()" class="btn btn-facebook pull-right">Imprimer <i class="fa fa-print"></i></button>
     <div class="clearfix"></div>
 </section><!-- Main content -->
@@ -29,44 +29,23 @@ $user= $user['reponse'][0];
             </tr>
             <tr>
                 <td style="vertical-align: top;">
-
+                    <label style="color: #582900;">Demandé par: </label> <span><?= $user['Civilite'].' '.$user['Nom'];?> <?= $user['Prenom'];?></span><br/>
+                    <label style="color: #582900;">Téléphone: </label> <span><?= $user['Tel'];?></span><br/>
+                    <label style="color: #582900;">E-MAIL: </label> <span><?= $user['Email'];?></span><br/>
+                    <label >Visiteur médical</label> <br/>
                 </td>
-                <td style="vertical-align: top;">
-                    <p style="color: #582900;float: right; text-align: center">
-                        <b>Vital</b><br/>
-                        <b>Service commercial</b><br/>
-                        Tél: 71 386 016 - 71 385 339<br/>
-                        Fax: 79396 081<br/>
-                        MF : 748728 N / A / M / 000
-                    </p>
-
-                </td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top;">
-                    <span style="color: #582900;">Date de validation: <small style="color: #000;"><?= $dmd['reponse'][0]['date_validation']?></small> </span><br/><br/>
-                </td>
-                <td style="vertical-align: top;">
-                    <span style="color: #582900;float: right;">Date de demande:  <small style="color: #000;"><?= $dmd['reponse'][0]['sysDate']?></small></span><br/><br/>
-                </td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top;">
-                    <label style="color: #582900;">Demander par: </label> <span><?= $user['Nom'];?> <?= $user['Prenom'];?></span><br/>
-                        <label style="color: #582900;">Téléphone: </label> <span><?= $user['Tel'];?></span><br/>
-                        <label style="color: #582900;">E-MAIL: </label> <span><?= $user['Email'];?></span><br/>
-                        <label style="color: #582900;">Zone: </label> <span><?= getinfo($user['Email'],'zone','nom');?></span><br/>
-                        <label style="color: #582900;">Département: </label> <span><?= getinfo($user['departement'],'departement','nom');?></span><br/>
-                        <label style="color: #582900;">Civilité: </label> <span><?= $user['Civilite'];?></span><br/>
-                        <label ><?= getinfo($user['type'],'user_type','name')?></label> <br/>
-                </td>
-                <td style="vertical-align: top;float: right;">
-                    <label style="color: #582900;">Date de livraison: </label> <span><?= $dmd['reponse'][0]['date_livraison']?></span><br/>
+                <td style="vertical-align: top;color: #582900;float: right; text-align: center">
+                    <b>Vital</b><br/>
+                    <b>Service commercial</b><br/>
+                    Tél: 71 386 016 - 71 385 339<br/>
+                    Fax: 79396 081<br/>
+                    MF : 748728 N / A / M / 000<br/>
+                    Adresse: Boumhal - Tunisie<br/>
+                    <span style="color: #582900;float: right;">Date de bon de commande:  <small style="color: #000;"><?= $dmd['reponse'][0]['sysDate']?></small></span>
                 </td>
             </tr>
         </table>
-
-        <h2 style="text-align: center">Liste des cadeaux</h2>
+        <h2 style="text-align: center">Matériel promotionnel</h2>
         <table style="border: 1px solid #999; width: 100%;">
             <thead>
             <tr>
