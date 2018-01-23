@@ -54,12 +54,12 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                             <input type="radio" name="type" value="1" checked>Stock
                         </label>
                         <label>
-                            <input type="radio" name="type" value="2" >DÃ©tail
+                            <input type="radio" name="type" value="2" >Détail
                         </label>
                     </div>
                     <div class="form-group">
-                        <label>Recherche par code Ã  bare</label>
-                        <input type="text" placeholder="Recherche par Code Ã  bare" name="codeB" class="form-control" autofocus autocomplete="off" id="SearchBC">
+                        <label>Recherche par code à  bare</label>
+                        <input type="text" placeholder="Recherche par Code à  bare" name="codeB" class="form-control" autofocus autocomplete="off" id="SearchBC">
                     </div>
                 </form>
             </div>
@@ -81,7 +81,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                         <input type="text" placeholder="Recherche par titre" name="title" class="form-control" autofocus autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <input type="text" placeholder="Recherche par code Ã  barre" name="bCode" class="form-control" autofocus autocomplete="off">
+                        <input type="text" placeholder="Recherche par code à  barre" name="bCode" class="form-control" autofocus autocomplete="off">
                     </div>
                     <button type="submit" value="1" name="Filter" class="btn btn-primary">Filtrer</button>
                     <a href="ListeCadeaux" class="btn btn-success">Annuler</a>
@@ -101,7 +101,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                         <th>Titre</th>
                         <th>Famille</th>
                         <th>Point Bonus</th>
-                        <th>QuantitÃ©</th>
+                        <th>Quantité</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -131,7 +131,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                                         <i class="fa fa-cart-arrow-down"></i>
                                     </a>
                                 <?endif;?>
-                                <a href="Details&id=<?=$cade['id']?>" class="btn btn-primary" data-toggle="tooltip" title="DÃ©tails">
+                                <a href="Details&id=<?=$cade['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Détails">
                                     <i class="fa fa-paperclip"></i>
                                 </a>
                                 <a href="EdtitCadeau&id=<?=$cade['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Modifier">
@@ -157,7 +157,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
 
             <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
 
-                Affichage de <?=($Limite>1) ? $Limite : 1?> Ã  <?=($Limite+30<$ListeCadeaux['total']) ? $Limite+30 : $ListeCadeaux['total']?> de <?=$ListeCadeaux['total']?> cadeaux
+                Affichage de <?=($Limite>1) ? $Limite : 1?> à  <?=($Limite+30<$ListeCadeaux['total']) ? $Limite+30 : $ListeCadeaux['total']?> de <?=$ListeCadeaux['total']?> cadeaux
 
             </div>
 

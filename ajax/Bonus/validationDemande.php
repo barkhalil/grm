@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 /**
  * Created by PhpStorm.
@@ -52,6 +53,8 @@ if($_SESSION['TotalCdx']>0){
             'type_cdx'=>1,
         );
         add($dataProd,'grm_cadeaux_demander');
+        //demiussion produits  :
+        $Gcc->DimStockProduits($key,$value);
     endforeach;
     foreach($_SESSION['CdxCmd'] as $key=>$value):
         $dataProd=array(
@@ -61,6 +64,8 @@ if($_SESSION['TotalCdx']>0){
             'type_cdx'=>2,
         );
         add($dataProd,'grm_cadeaux_demander');
+        //deminisussion cadeaux git
+        $Gcc->DimStock($key,$value);
     endforeach;
     //echo 'ok22';exit;
     $pointsBonus->viderSession();exit;
