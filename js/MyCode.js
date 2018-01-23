@@ -8,7 +8,7 @@ if(location.host=="grm.vital-crm.tn:10"){
     var url = f + s ;
 }else{
    // var url = f + s + "/GrmProject";
-    var url = f + s + "/grm";
+    var url = f + s + "/grm"; 
 
 }
 //console.log(url);
