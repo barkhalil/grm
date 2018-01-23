@@ -40,8 +40,9 @@ if(filter_input(0,'Add',257)):
                     'id_prod'=>$key,
                     'qte'=>$value,
                 ), 'echant_prod');
-                $Gcc->DimStock($key,$value);
+
             endforeach;
+
         }
     }
     $_SESSION['msg'] = "Votre demande est sauvegarder";
