@@ -26,6 +26,7 @@ if($MonthValue && $_SESSION['TotalEchant']>0) {
             'qte'=>$value
         );
         add($dataProd,'echant_prod');
+        //$Gcc->DimStockProd($key,$value);
     endforeach;
     unset($_SESSION['EchantCmd']);
     unset($_SESSION['delegue']);

@@ -51,7 +51,7 @@ if(filter_input(0,'Add',257)):
 endif;
 ?>
 <section class="content-header">
-    <h1> validation demande de produits promotionnel :  </h1>
+    <h1> validation demande de echantillons :  </h1>
 </section><!-- Main content -->
 <section class="content">
     <div class="row">
