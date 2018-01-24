@@ -19,13 +19,12 @@ if($annuler==1){
     unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
     redirect(WEBRoot.'/gestionDesDemandes/listedmdEchantillons');
 }
-$GetLastEchan=$Pro->GetUsedDmdQuota($_SESSION['user']['id']);
-if(!$GetLastEchan) $Month=date('Y-m');
-else $Month = date('Y-m', strtotime('+1 month', strtotime($GetLastEchan)));
+//$GetLastEchan=$Pro->GetUsedDmdQuota($_SESSION['user']['id']);
+echo $Month=date('Y-m-d');
 //var_dump($Month);
 ?>
 <section class="content-header">
-    <h1> Demande d'échantillant  </h1>
+    <h1> Demande d'échantillons  </h1>
 </section><!-- Main content -->
 <section class="content">
 
@@ -46,7 +45,7 @@ else $Month = date('Y-m', strtotime('+1 month', strtotime($GetLastEchan)));
                     </div>
                     <div class="form-group">
                         <label>Pour </label>
-                        <input type="month" id="MonthValue" name="pour" value="<?=$Month?>" class="form-control" readonly>
+                        <input type="date" id="MonthValue" name="pour" value="<?=$Month?>" class="form-control" readonly>
                     </div>
                     <div class="form-group">
                         <label for="gamme">Gamme :</label>

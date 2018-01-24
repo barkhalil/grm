@@ -23,7 +23,6 @@ if(!$type) {
 $Quota=getinfo($uType,'user_type','quota'); // général :
 if($ProdSeaC && $qte):
     $TotEch=$_SESSION['TotalEchant'] ? $_SESSION['TotalEchant'] : 0;
-    if($TotEch<=$Quota && $Quota >0 && $TotEch+$qte<=$Quota){
         //test si le m$eme prod ou non :
         if(isset($_SESSION['EchantCmd'][$ProdSeaC]) && $_SESSION['EchantCmd'][$ProdSeaC]>0){
             $_SESSION['TotalEchant']= $_SESSION['TotalEchant']-$_SESSION['EchantCmd'][$ProdSeaC];
@@ -36,9 +35,7 @@ if($ProdSeaC && $qte):
             $TotEch=$_SESSION['TotalEchant'];
         }
 
-    }else{
-        echo "<h2 class='bg-danger'>Max Quota est attent</h2>";
-    }
+
 
     echo "<h3>Total Qte : ".$TotEch." / $Quota </h3>";
     if(isset($_SESSION['EchantCmd']) && count($_SESSION['EchantCmd'])>0):
