@@ -40,6 +40,7 @@ if(filter_input(INPUT_POST,'addGift',FILTER_VALIDATE_INT)):
         'paht'=>filter_input(0,'paht',516),
         'pvht'=>filter_input(0,'pvht',516),
         'pvttc'=>filter_input(0,'pvttc',516),
+        'ref'=>filter_input(0,'ref',516),
         'validation'=>0,
         'system_date'=>date('Y-m-d H:s')
     );
@@ -108,6 +109,10 @@ endif;
                     <div class="form-group">
                         <label>Nouvelle Quantité : </label>
                         <input type="number" min="0" step="1" value="" name="Newqte" class="form-control" required >
+                    </div>
+                    <div class="form-group">
+                        <label>Ref.</label>
+                        <input type="text" name="ref" value="" class="form-control" required>
                     </div>
                 </div>
             </div>
