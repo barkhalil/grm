@@ -28,21 +28,20 @@ if(filter_input(0,'Add',257)):
         'valider_par'=>$_SESSION['user']['id']
     );
     $IdDEmande=update($id,$dataDemande,'echant_demander');
-    if($IdDEmande ){
+    if($IdDEmande) {
         //echo '<pre>';print_r($Products);die;
         foreach ($Gifts['reponse'] as $keyG):
             delete($keyG['id'],'echant_prod');
         endforeach;
         if(count($Products)>0){
+            //echo 'ok';
             foreach ($Products as $key => $value):
-                add(array(
-                    'id_echant'=>$id,
-                    'id_prod'=>$key,
-                    'qte'=>$value,
-                ), 'echant_prod');
-
-            endforeach;
-
+                //echo $key.' '.$value;
+                if(add(array('id_echant'=>$id,'id_prod'=>$key,'qte'=>$value,), 'echant_prod')) {
+                    //echo ' yes';
+                    $Gcc->DimStockProduits($key,$value);
+                }
+            endforeach;//die;
         }
     }
     $_SESSION['msg'] = "Votre demande est sauvegarder";
@@ -97,9 +96,9 @@ endif;
                                         <i class="fa fa-trash"></i>
                                     </a>
                                     <?=getinfo($Prod['id_prod'],'products' ,'name')?><br/> Quantité :
-
                                 </label>
-                                <input type="number" name="prodValue[<?=$Prod['id_prod']?>]" value="<?=$Prod['qte']?>"  min="1" class="form-control QteProd" onchange="VerifyPoints()">
+                                <input type="number" id="qte" name="prodValue[<?=$Prod['id_prod']?>]" value="<?=$Prod['qte']?>"  min="1" class="form-control QteProd" onchange="VerifyPoints()" onkeyup="getMAxQte()" onmouseup="getMAxQte()" idProd="<?= $Prod['id_prod']; ?>">
+                                <label class="hidden" id="errorMsgQte<?= $Prod['id_prod']; ?>"></label>
                                 <?  if(getinfo($Prod['id_prod'],'grm_gift' ,'serialisable')==1 ){ ?>
                                     <div id="prodSerie'+prod+'">
                                         <label>Numero de Série</label>
@@ -123,7 +122,7 @@ endif;
             <div class="col-md-12">
                 <div class="box box-info box-footer">
 
-                    <button type="submit" name="Add" value="1" class="btn btn-primary pull-right">Valider la  demande</button>
+                    <button type="submit" name="Add" value="1" class="btn btn-primary pull-right" id="BtnEchant">Valider la  demande</button>
 
                 </div>
             </div>
