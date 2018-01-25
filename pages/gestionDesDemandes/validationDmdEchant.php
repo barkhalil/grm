@@ -98,7 +98,7 @@ endif;
                                     <?=getinfo($Prod['id_prod'],'products' ,'name')?><br/> Quantité :
                                 </label>
                                 <input type="number" id="qte" name="prodValue[<?=$Prod['id_prod']?>]" value="<?=$Prod['qte']?>"  min="1" class="form-control QteProd" onchange="VerifyPoints()" onkeyup="getMAxQte()" onmouseup="getMAxQte()" idProd="<?= $Prod['id_prod']; ?>">
-                                <label class="hidden" id="<?= $Prod['id_prod']; ?>"></label>
+                                <label class="hidden" id="errorMsgQte<?= $Prod['id_prod']; ?>"></label>
                                 <?  if(getinfo($Prod['id_prod'],'grm_gift' ,'serialisable')==1 ){ ?>
                                     <div id="prodSerie'+prod+'">
                                         <label>Numero de Série</label>
@@ -122,7 +122,7 @@ endif;
             <div class="col-md-12">
                 <div class="box box-info box-footer">
 
-                    <button type="submit" name="Add" value="1" class="btn btn-primary pull-right">Valider la  demande</button>
+                    <button type="submit" name="Add" value="1" class="btn btn-primary pull-right" id="BtnEchant">Valider la  demande</button>
 
                 </div>
             </div>

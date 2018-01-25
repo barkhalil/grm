@@ -79,14 +79,15 @@ function AddPRod(admin) {
     }*/
     if(prod!=""){
         $("#"+prod).remove();
-
+        var theId= "prodValue"+prod;
+        var theFn = "getMAxQte('"+theId+"')";
         divApp.append('<div class="form-group" id="'+prod+'"> ' +
             '<label>'+
             '<a href="javascript:void(0)" onclick="RemouveDiv('+prod+')" class="btn btn-danger"><i class="fa fa-trash"></i></a> '
             +prodName+'<br/> Quantité : ' +
 
             '</label>' +
-            '<input type="number" name="prodValue['+prod+']" id="prodValue['+prod+']" value="1"  min="1" class="form-control QteProd" onchange="VerifyPoints(prodValue['+prod+'])" onkeyup="getMAxQte(prodValue['+prod+'])" onmouseup="getMAxQte()" idProd="'+prod+'"> <label class="hidden" id="'+prod+'"></label>' );
+            '<input type="number" name="prodValue['+prod+']" id="'+theId+'" value="1"  min="1" class="form-control QteProd"  onkeyup="'+theFn+'" onmouseup="'+theFn+'" idProd="'+prod+'"> <label class="hidden" id="errorMsgQte'+prod+'"></label>' );
         if(prodSerialisable==1 && admin==1){
             divApp.append('<div id="prodSerie'+prod+'">' +
                 '<label>Numero de Série</label>'+
@@ -479,31 +480,41 @@ function GetProdListe(){
 }
 function getMAxQte(qte){
     if (typeof qte === "undefined" || qte === null) {
-        qte = $("#qte").val();
+        qte = $("#qte");
+    } else {
+        qte=$("#"+qte);
     }
-    if($('#qte').attr('idProd')) {
-        var idProd=$('#qte').attr('idProd');
+    if(qte.attr('idProd')) {
+        var idProd=qte.attr('idProd');
     } else {
         var idProd=$("#ProdSeaC").val();
     }
     $.ajax({
         url:url+'/ajax/Bonus/getMaxQte.php',
         type:'POST',
-        data:{product:idProd,qte:qte},
+        data:{product:idProd,qte:qte.val()},
         success:function (res) {
             var data = jQuery.parseJSON(res);
             if(data.status=='success') {
                 $('#BtnEchant').removeAttr("disabled");
-                $('#errorMsgQte').addClass('hidden');
+                $('#ProdSelect').removeAttr("disabled");
+                $('#gamme').removeAttr("disabled");
+                if($('#errorMsgQte'+idProd)) {
+                    $('#errorMsgQte'+idProd).addClass('hidden');
+                } else {
+                    $('#errorMsgQte').addClass('hidden');
+                }
             } else {
                 $('#BtnEchant').attr("disabled", "disabled");
-                if('#errorMsgQte') {
-                    $('#errorMsgQte').text(data.message);
+                $('#ProdSelect').attr("disabled", "disabled");
+                $('#gamme').attr("disabled", "disabled");
+                if($('#errorMsgQte'+idProd)) {
+                    $('#errorMsgQte'+idProd).text(data.message);
+                    $('#errorMsgQte'+idProd).removeClass('hidden');
                 } else {
-                    $('#'+idProd).text(data.message);
+                    $('#errorMsgQte').text(data.message);
+                    $('#errorMsgQte').removeClass('hidden');
                 }
-
-                $('#errorMsgQte').removeClass('hidden');
             }
         }
     })
