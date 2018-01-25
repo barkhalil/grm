@@ -61,7 +61,7 @@ endif;
                 <div class="box box-success box-body">
                     <h4>Information demande</h4>
                     <div class="form-group">
-                        <label>Ref. : <?=$DemandeDet['id'].'/'.date("Y",strtotime($DemandeDet['system_date']))?></label>
+                        <label>Ref. : <?=$DemandeDet['id'].'/'.date("Y",strtotime($DemandeDet['date_dmd']))?></label>
 
                     </div>
                     <div class="form-group">

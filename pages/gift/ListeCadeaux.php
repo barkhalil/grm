@@ -119,7 +119,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                             <td><?=$cade['titre']?></td>
                             <td><?=getinfo($cade['famille'],'grm_gift_family','nom') ?></td>
                             <td><?=$cade['point_bonus']?></td>
-                            <td><?=$cade['qte']-$cade['qte_utiliser']?></td>
+                            <td><?=$cade['qte']?></td>
 
                             <td>
                                 <? if($cade['dispo']): ?>
