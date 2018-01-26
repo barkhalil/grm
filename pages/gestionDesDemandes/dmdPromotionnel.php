@@ -10,6 +10,7 @@ $link="&idDel=$idDemandeau";
 $Limite=filter_input(INPUT_GET,'d',257);
 if(!$Limite) $Limite=0;
 $pointage=filter_input(1,'pointage',257);
+$annuler=filter_input(1,'annuler',257);
 if($pointage){
     update($pointage,array(
         'pointage'=>1,
@@ -18,11 +19,26 @@ if($pointage){
         'modifier_par'=>$_SESSION['user']['id']
     ) ,'grm_demande_cadeaux');
 }
+if($annuler){
+    update($annuler,array(
+        'etat'=>-1,
+        'valider_par'=>$_SESSION['user']['id'],
+        'date_validation'=>date("Y-m-d"),
+    ) ,'promo_demander');
+}
 $idDemLivraison=filter_input(INPUT_GET,'idDemLivraison',257);
+$annuler=filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT);
 if($idDemLivraison){
     update($idDemLivraison,array(
         'date_livraison'=>date("Y-m-d"),
         'etat'=>2
+    ) ,'promo_demander');
+}
+if($annuler){
+    update($annuler,array(
+        'date_validation'=>date("Y-m-d"),
+        'valider_par'=>$_SESSION['user']['id'],
+        'etat'=>-1,
     ) ,'promo_demander');
 }
 if($idDemandeau) {
@@ -76,9 +92,7 @@ if($idDemandeau) {
                         <tr>
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['sysDate']))?></td>
                             <td><?=$cdt['sysDate'];?></td>
-                            <td><?=
-                                getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom')
-                                ?></td>
+                            <td><?=getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom');?></td>
                             <td><?
                                 if($cdt['etat']==0){
                                     echo "En cours de traitement";
@@ -93,18 +107,27 @@ if($idDemandeau) {
                             <td>
                                 <ul>
                                     <? $ListeCadeaux=get("*",'promo_prod',array('	id_promo='=>$cdt['id']));
-                                    foreach ($ListeCadeaux['reponse'] as $prod):
+                                    for($i=0;$i<3;$i++):
+                                        if($ListeCadeaux['total']<=$i) break;
                                         ?>
                                         <li>
-                                            <?= $prod['qte']?> <?= getinfo($prod['id_prod'],'grm_gift' ,'titre') ?>
+                                            <?= $ListeCadeaux['reponse'][$i]['qte']?> <?= getinfo($ListeCadeaux['reponse'][$i]['id_prod'],'grm_gift' ,'titre') ?>
                                         </li>
-                                    <?endforeach;?>
+                                    <?endfor;?>
+                                    <?if($ListeCadeaux['total']>3):?>
+                                        <li>
+                                            ...
+                                        </li>
+                                    <?endif;?>
                                 </ul>
                             </td>
                             <td>
                                 <? if($cdt['etat']==0) :?>
                                     <a href="validationDmdPromt&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                         <i class="fa fa-check"></i>
+                                    </a>
+                                    <a href="dmdPromotionnel<?=$link?>&annuler=<?=$cdt['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Annuler">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
                                 <?elseif($cdt['etat']==-1):?>
                                 <?else:?>

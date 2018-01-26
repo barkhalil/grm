@@ -11,12 +11,20 @@ $link="&idDel=$idDemandeau";
 $Limite=filter_input(INPUT_GET,'d',257);
 if(!$Limite) $Limite=0;
 $pointage=filter_input(1,'pointage',257);
+$annuler=filter_input(1,'annuler',257);
 if($pointage){
     update($pointage,array(
         'pointage'=>1,
         'date_pointage'=>date("Y-m-d"),
         'etat'=>1,
         'modifier_par'=>$_SESSION['user']['id']
+    ) ,'grm_demande_cadeaux');
+}
+if($annuler){
+    update($annuler,array(
+        'etat'=>-1,
+        'modifier_par'=>$_SESSION['user']['id'],
+        'date_validation'=>date("Y-m-d"),
     ) ,'grm_demande_cadeaux');
 }
 $idDemLivraison=filter_input(INPUT_GET,'idDemLivraison',257);
@@ -90,7 +98,7 @@ unset($_SESSION['CdxCmd']);
                                 if($cdt['etat']==0){
                                     echo "En cours de traitement";
                                 }elseif($cdt['etat']==-1){
-                                    echo "Réfuser";
+                                    echo "Refusée";
                                 }elseif($cdt['etat']==1){
                                     echo "Pointer";
                                 }elseif($cdt['etat']==2){
@@ -105,34 +113,46 @@ unset($_SESSION['CdxCmd']);
 
                                     <?
                                     $ListeCadeaux=get("*",'grm_cadeaux_demander',array('id_demande='=>$cdt['id']));
-                                    foreach ($ListeCadeaux['reponse'] as $prod):
+                                    for($i=0;$i<3;$i++):
+                                        if($ListeCadeaux['total']<=$i) break;
                                         ?>
                                         <li>
-                                            <?= $prod['qte']?> pour <?= getinfo($prod['id_cadeaux'],'grm_gift' ,'titre') ?>
+                                            <?= $ListeCadeaux['reponse'][$i]['qte']?> pour <?= getinfo($ListeCadeaux['reponse'][$i]['id_cadeaux'],'grm_gift' ,'titre') ?>
                                         </li>
-
-                                    <?endforeach;?>
+                                    <?endfor;?>
+                                    <?if($ListeCadeaux['total']>3):?>
+                                        <li>
+                                            ...
+                                        </li>
+                                    <?endif;?>
                                 </ul>
                             </td>
                             <td>
-                                <? if(!$cdt['pointage']): ?>
-                                    <a href="listeDemandeVitrine<?=$link?>&pointage=<?=$cdt['id']?>" class="btn btn-google" data-toggle="tooltip" title="Pointer">
-                                        <i class="fa fa-calculator"></i>
-                                    </a>
-                                <?else: if($cdt['etat']<2) :?>
-                                    <a href="ValidateDemande&idDemande=<?=$cdt['id']?>" class="btn btn-success" data-toggle="tooltip" title="Valider">
-                                        <i class="fa fa-check"></i>
-                                    </a>
-                                <?else:?>
-                                    <?if($cdt['date_livraison']==""):?>
-                                        <a href="listeDemandeVitrine<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
-                                            <i class="fa fa-train"></i>
+                                <? if($cdt['etat']>=0): ?>
+                                    <?if($cdt['etat']<4):?>
+                                        <a href="listeDemandeVitrine<?=$link?>&annuler=<?=$cdt['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Annuler">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
                                         </a>
                                     <?endif;?>
-                                    <a href="printDoc&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
-                                        <i class="fa fa-print"></i>
-                                    </a>
-                                <?endif;endif?>
+                                    <? if(!$cdt['pointage']): ?>
+                                        <a href="listeDemandeVitrine<?=$link?>&pointage=<?=$cdt['id']?>" class="btn btn-google" data-toggle="tooltip" title="Pointer">
+                                            <i class="fa fa-calculator"></i>
+                                        </a>
+                                    <?else: if($cdt['etat']<2) :?>
+                                        <a href="ValidateDemande&idDemande=<?=$cdt['id']?>" class="btn btn-success" data-toggle="tooltip" title="Valider">
+                                            <i class="fa fa-check"></i>
+                                        </a>
+                                    <?else:?>
+                                        <?if($cdt['date_livraison']==""):?>
+                                            <a href="listeDemandeVitrine<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
+                                                <i class="fa fa-train"></i>
+                                            </a>
+                                        <?endif;?>
+                                        <a href="printDoc&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
+                                            <i class="fa fa-print"></i>
+                                        </a>
+                                    <?endif;endif?>
+                                <?endif;?>
                             </td>
                         </tr>
                     <?endforeach;?>

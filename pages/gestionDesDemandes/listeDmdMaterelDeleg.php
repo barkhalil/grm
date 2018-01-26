@@ -10,10 +10,18 @@ $link="&idDel=$idDemandeur";
 $Limite=filter_input(INPUT_GET,'d',257);
 if(!$Limite) $Limite=0;
 $idDemLivraison=filter_input(INPUT_GET,'idDemLivraison',257);
+$annuler=filter_input(INPUT_GET,'annuler',257);
 if($idDemLivraison){
     update($idDemLivraison,array(
         'date_livraison'=>date("Y-m-d"),
         'etat'=>2
+    ) ,'materiel_deleg');
+}
+if($annuler){
+    update($annuler,array(
+        'date_validation'=>date("Y-m-d"),
+        'id_validateur'=>$_SESSION['user']['id'],
+        'etat'=>-1
     ) ,'materiel_deleg');
 }
 if($idDemandeur) {
@@ -83,18 +91,26 @@ if($idDemandeur) {
                             <td>
                                 <ul>
                                     <? $ListeCadeaux=get("*",'materiel_deleg_details',array('id_dmd='=>$cdt['id']));
-                                    foreach ($ListeCadeaux['reponse'] as $prod):
-                                        ?>
+                                    for($i=0;$i<3;$i++):
+                                        if($ListeCadeaux['total']<=$i) break;?>
                                         <li>
-                                            <?= $prod['qte']?> <?= getinfo($prod['id_prod'],'grm_gift' ,'titre') ?>
+                                            <?= $ListeCadeaux['reponse'][$i]['qte']?> <?= getinfo($ListeCadeaux['reponse'][$i]['id_prod'],'grm_gift' ,'titre') ?>
                                         </li>
-                                    <?endforeach;?>
+                                    <?endfor;?>
+                                    <?if($ListeCadeaux['total']>3):?>
+                                        <li>
+                                            ...
+                                        </li>
+                                    <?endif;?>
                                 </ul>
                             </td>
                             <td>
                                 <? if($cdt['etat']==0) :?>
                                     <a href="validationDmdMatDeleg&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                         <i class="fa fa-check"></i>
+                                    </a>
+                                    <a href="listeDmdMaterelDeleg<?=$link?>&annuler=<?=$cdt['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Annuler">
+                                        <i class="fa fa-times"></i>
                                     </a>
                                 <?elseif($cdt['etat']==-1):?>
                                 <?else:?>
