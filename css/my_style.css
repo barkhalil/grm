@@ -1,7 +1,14 @@
 .main-header .logo {
     padding: 0;
 }
-
+#dupliquerDmd .full-height {
+    max-width: 60px;
+    padding: 5px 0;
+    vertical-align: bottom;
+}
+.sameline-btns>tbody>tr>td {
+    white-space: nowrap;
+}
 body {
 }
 .fixed-width-label{

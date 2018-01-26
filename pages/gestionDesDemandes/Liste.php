@@ -92,7 +92,7 @@ if($idDemandeau) {
 
                     </select>
                 </div>
-                <table class="table table-bordered">
+                <table class="table table-bordered sameline-btns">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -151,10 +151,10 @@ if($idDemandeau) {
                             </td>
                             <td>
                                 <? if($cdt['etat']>0 || $cdt['etat']==-1):?>
-                                    <form method="post" id="dupliquerDmd" action="#">
-                                        <input onkeyup="this.value = this.value.replace(/\D/g,'')" type="text" name="idPros" style="max-width: 60px;" placeholder="ID PROS">
+                                    <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
+                                        <input onkeyup="this.value = this.value.replace(/\D/g,'')" type="text" name="idPros" placeholder="ID PROS" class="full-height">
                                         <input type="hidden" name="idDmd" value="<?=$cdt['id'];?>">
-                                        <button type="submit" class="btn btn-warning" data-toggle="tooltip" title="Dupliquer" id="dupliquer">
+                                        <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Dupliquer" id="dupliquer">
                                             <i class="fa fa-files-o" aria-hidden="true"></i>
                                         </button>
                                     </form>
