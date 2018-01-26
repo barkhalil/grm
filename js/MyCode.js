@@ -707,7 +707,7 @@ $('#ListeProdSessions').on('click','#BtnValiderPromo',function () {
         data:{MonthValue:1},
         success:function (data) {
             MSg('Votre demande est enregister ','alert-success');
-           // window.location ='../gestionDesDemandes/dmdPromotionnel';
+           window.location ='../gestionDesDemandes/dmdPromotionnel';
         },
         error:function () {
             MSg('Une erreur c\'est produits ','alert-danger')
