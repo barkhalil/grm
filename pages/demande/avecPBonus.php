@@ -188,7 +188,7 @@ if($IdSup){
                 <a href="DmdPb&annuler=1" class="btn btn-danger pull-left">
                     Annuler
                 </a>
-                <a href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb()">Finaliser</a>
+                <a href="javascript:void(0)" class="btn btn-success pull-right" onclick="validerDmdCdx()">Finaliser</a>
                 <div class="clearfix"></div>
             </div>
         </div>

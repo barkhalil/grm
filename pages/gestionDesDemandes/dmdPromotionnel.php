@@ -5,6 +5,23 @@
  * Date: 02/01/18
  * Time: 12:42
  */
+$iddeleg=filter_input(INPUT_POST,'delegue',FILTER_VALIDATE_INT);
+if($iddeleg) {
+    $idDmd=filter_input(INPUT_POST,'idDmd',FILTER_VALIDATE_INT);
+    $demande =array();
+    $demande=$demande['reponse'][0];
+    $demande['etat']=0;
+    $demande['par']=$iddeleg;
+    $demande['created_by']=1001;
+    $newDmd=add($demande,'promo_demander');
+    $cdx=get(array('id_prod','qte'),'promo_prod',array('id_promo='=>$idDmd));
+    $cdx=$cdx['reponse'];
+    foreach ($cdx as $cd) {
+        $cd['id_promo']=$newDmd;
+        add($cd,'promo_prod');
+    }
+    redirect('dmdPromotionnel');
+}
 $idDemandeau=filter_input(INPUT_GET,'idDel',257);
 $link="&idDel=$idDemandeau";
 $Limite=filter_input(INPUT_GET,'d',257);
@@ -92,7 +109,13 @@ if($idDemandeau) {
                         <tr>
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['sysDate']))?></td>
                             <td><?=$cdt['sysDate'];?></td>
-                            <td><?=getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom');?></td>
+                            <td><?php if($cdt['par']==2):
+                                    echo getinfo(63,'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
+                                else:
+                                    echo getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom');
+                                endif;
+                                ?>
+                            </td>
                             <td><?
                                 if($cdt['etat']==0){
                                     echo "En cours de traitement";
@@ -122,6 +145,20 @@ if($idDemandeau) {
                                 </ul>
                             </td>
                             <td>
+                                <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
+                                    <select name="delegue" class="form-control full-height" required style="display: inline-block" >
+                                        <option value=""></option>
+                                        <?
+                                        $users= get('*','users',array('active>='=>1),'AND');
+                                        foreach ($users['reponse'] as $user):?>
+                                            <option value="<?=$user['id']?>" <?= ($_SESSION['delegue']==$user['id'])? 'selected':''; ?>><?=$user['Nom'].' '.$user['Prenom'];?></option>
+                                        <?endforeach;?>
+                                    </select>
+                                    <input type="hidden" name="idDmd" value="<?=$cdt['id'];?>">
+                                    <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Dupliquer" id="dupliquer">
+                                        <i class="fa fa-files-o" aria-hidden="true"></i>
+                                    </button>
+                                </form>
                                 <? if($cdt['etat']==0) :?>
                                     <a href="validationDmdPromt&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                         <i class="fa fa-check"></i>

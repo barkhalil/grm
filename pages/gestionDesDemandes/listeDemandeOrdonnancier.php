@@ -5,6 +5,35 @@
  * Date: 10/11/2016
  * Time: 14:17
  */
+$idPros=filter_input(INPUT_POST,'idPros',FILTER_VALIDATE_INT);
+if($idPros) {
+    $idDmd=filter_input(INPUT_POST,'idDmd',FILTER_VALIDATE_INT);
+    $prospect=get('*','prospect',array('id='=>$idPros));
+    //echo '<pre>';print_r(get('*','prospect',array('id='=>$idPros)));die;
+    if($prospect['total']>0) {
+        $cpDmd=array();
+        //echo 'ok';die;
+        $dmd=get('*','grm_demande_cadeaux',array('id='=>$idDmd));
+        $cpDmd['famille']=$dmd['reponse'][0]['famille'];
+        $cpDmd['date_remise_point']=date('Y-m-d');
+        $cpDmd['etat']=0;
+        $cpDmd['id_pros']=$idPros;
+        $cpDmd['pointage']=0;
+        $cpDmd['id_demandeur']=$_SESSION['user']['id'];
+        $cpDmd['cree_par']=$_SESSION['user']['id'];
+        $idNewDmd=add($cpDmd,'grm_demande_cadeaux');
+        $listeCdx=get("*",'grm_cadeaux_demander',array('id_demande='=>$idDmd));
+        foreach ($listeCdx['reponse'] as $cdx) {
+            $cdx['id_demande']=$idNewDmd;
+            unset($cdx['id']);
+            add($cdx, 'grm_cadeaux_demander');
+        }
+    } else {
+        $_SESSION['msg']='Prospect inexistant';
+        $_SESSION['type']="alert-warning";
+    }
+    redirect('listeDemandeOrdonnancier');
+}
 $idDemandeau=filter_input(INPUT_GET,'idDel',257);
 $link="&idDel=$idDemandeau";
 $Limite=filter_input(INPUT_GET,'d',257);
@@ -89,8 +118,11 @@ unset($_SESSION['CdxCmd']);
                         <tr>
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['system_date']))?></td>
                             <td><?=$cdt['date_remise_point']?></td>
-                            <td><?=
-                                getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom')
+                            <td><?php if($cdt['id_demandeur']==2):
+                                    echo getinfo(63,'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
+                                    else:
+                                    echo getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
+                                endif;
                                 ?></td>
                             <td><?=getinfo($cdt['id_pros'],'prospect' ,'Nom').' '.getinfo($cdt['id_pros'],'prospect' ,'prenom')?></td>
                             <td><?
@@ -108,8 +140,6 @@ unset($_SESSION['CdxCmd']);
                                 ?></td>
                             <td>
                                 <ul>
-
-
                                     <?
                                     $ListeCadeaux=get("*",'grm_cadeaux_demander',array('id_demande='=>$cdt['id']));
                                     for($i=0;$i<3;$i++):
@@ -127,6 +157,15 @@ unset($_SESSION['CdxCmd']);
                                 </ul>
                             </td>
                             <td>
+                                <? if($cdt['etat']>0 || $cdt['etat']==-1):?>
+                                    <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
+                                        <input onkeyup="this.value = this.value.replace(/\D/g,'')" type="text" name="idPros" placeholder="ID PROS" class="full-height">
+                                        <input type="hidden" name="idDmd" value="<?=$cdt['id'];?>">
+                                        <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Dupliquer" id="dupliquer">
+                                            <i class="fa fa-files-o" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                <?endif;?>
                                 <? if($cdt['etat']>=0): ?>
                                     <?if($cdt['etat']<4):?>
                                         <a href="listeDemandeVitrine<?=$link?>&annuler=<?=$cdt['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Annuler">

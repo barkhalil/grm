@@ -11,15 +11,27 @@ if($idPros) {
     $prospect=get('*','prospect',array('id='=>$idPros));
     //echo '<pre>';print_r(get('*','prospect',array('id='=>$idPros)));die;
     if($prospect['total']>0) {
+        $cpDmd=array();
         //echo 'ok';die;
         $dmd=get('*','grm_demande_cadeaux',array('id='=>$idDmd));
-        //echo '<pre>';print_r($dmd);die;
+        $cpDmd['famille']=$dmd['reponse'][0]['famille'];
+        $cpDmd['date_remise_point']=date('Y-m-d');
+        $cpDmd['etat']=0;
+        $cpDmd['id_pros']=$idPros;
+        $cpDmd['pointage']=0;
+        $cpDmd['id_demandeur']=$_SESSION['user']['id'];
+        $cpDmd['cree_par']=$_SESSION['user']['id'];
+        $cpDmd['point_bonus']=$dmd['reponse'][0]['point_bonus'];
+        $cpDmd['ponitsByType']=$dmd['reponse'][0]['ponitsByType'];
+        $cpDmd['rest_point']=$dmd['reponse'][0]['rest_point'];
+        $cpDmd['point_bonus']=$dmd['reponse'][0]['point_bonus'];
+        /*//echo '<pre>';print_r($dmd);die;
         $demande=$dmd['reponse'][0];
         $demande['etat']=0;
         $demande['pointage']=0;
         unset($demande['id']);
-        $demande['id_pros']=$idPros;
-        $idNewDmd=add($demande,'grm_demande_cadeaux');
+        $demande['id_pros']=$idPros;*/
+        $idNewDmd=add($cpDmd,'grm_demande_cadeaux');
         $listeCdx=get("*",'grm_cadeaux_demander',array('id_demande='=>$idDmd));
         foreach ($listeCdx['reponse'] as $cdx) {
             $cdx['id_demande']=$idNewDmd;
@@ -111,9 +123,12 @@ if($idDemandeau) {
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['system_date']))?></td>
                             <td><?=$cdt['date_remise_point']?></td>
                             <td><?=$cdt['point_bonus']?></td>
-                            <td><?=
-                                getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom')
-                            ?></td>
+                            <td><?php if($cdt['id_demandeur']==2):
+                                    echo getinfo(63,'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
+                                else:
+                                    echo getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
+                                endif;
+                                ?></td>
                             <td><?=getinfo($cdt['id_pros'],'prospect' ,'Nom').' '.getinfo($cdt['id_pros'],'prospect' ,'prenom')?></td>
                             <td><?
                                 if($cdt['etat']==0){

@@ -536,7 +536,7 @@ function GetProdListeforEdit(){
 }
 
 function RediPage(id){
-    window.location='dmdAvecPBonus&id='+id;
+    window.location='avecPBonus&id='+id;
 }
 function ShowDiv(id) {
     $("#cadx").hide();
@@ -606,6 +606,23 @@ function FinalisationPb() {
             idDemande: $('#idDemande').val(),
             idRemise: $('#id_remise').val(),
             ObsAdm: $('#ObsAdm').val(),
+        },
+        success:function (data) {
+            MSg('Demande valider','alert-success');
+            window.location = 'Liste';
+        },
+        error:function () {
+            MSg('Un problème est survenu merci de refraichir la page','alert-danger');
+        }
+
+    })
+}
+function validerDmdCdx() {
+    $.ajax({
+        url:url+'/ajax/Bonus/ValidateListeBonus.php',
+        type:'POST',
+        data:{
+            obs: $('#Obs').val(),
         },
         success:function (data) {
             MSg('Demande valider','alert-success');

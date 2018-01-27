@@ -94,11 +94,8 @@ endif;
 
                     </ul>
                     <!--<label>
-                        <input type="radio" value="0" name="SansPB" checked> Sans Point bonus
-                    </label>
-                    <label>
-                        <input type="radio" value="0" name="SansPB" onchange="RediPage('<?php //echo $id;?>')"> Avec Point bonus
-                    </label>!-->
+                        <input type="radio" value="0" name="SansPB" onchange="RediPage('<?php echo $id;?>')"> Avec Point bonus
+                    </label>-->
                     <br/>
 
 
