@@ -5,6 +5,24 @@
  * Date: 03/01/18
  * Time: 11:22
  */
+$iddeleg=filter_input(INPUT_POST,'delegue',FILTER_VALIDATE_INT);
+if($iddeleg) {
+    $idDmd=filter_input(INPUT_POST,'idDmd',FILTER_VALIDATE_INT);
+    $demande =array();
+    $demande=$demande['reponse'][0];
+    $demande['etat']=0;
+    $demande['id_deleg']=$iddeleg;
+    $demande['date_dmd']=date('Y-m-d');
+    $demande['created_by']=1001;
+    $newDmd=add($demande,'materiel_deleg');
+    $cdx=get(array('id_prod','qte'),'materiel_deleg_details',array('id_dmd='=>$idDmd));
+    $cdx=$cdx['reponse'];
+    foreach ($cdx as $cd) {
+        $cd['id_dmd']=$newDmd;
+        add($cd,'materiel_deleg_details');
+    }
+    redirect('listeDmdMaterelDeleg');
+}
 $idDemandeur=filter_input(INPUT_GET,'idDel',257);
 $link="&idDel=$idDemandeur";
 $Limite=filter_input(INPUT_GET,'d',257);
@@ -73,7 +91,7 @@ if($idDemandeur) {
                     <? foreach ($Cadeaux['reponse'] as $cdt): ?>
                         <tr>
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['date_dmd']))?></td>
-                            <td><?=$cdt['sysDate'];?></td>
+                            <td><?=$cdt['date_dmd'];?></td>
                             <td><?=
                                 getinfo($cdt['id_deleg'],'users' ,'Nom').' '.getinfo($cdt['id_deleg'],'users' ,'prenom')
                                 ?></td>
@@ -105,6 +123,20 @@ if($idDemandeur) {
                                 </ul>
                             </td>
                             <td>
+                                <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
+                                    <select name="delegue" class="form-control full-height" required style="display: inline-block" >
+                                        <option value=""></option>
+                                        <?
+                                        $users= get('*','users',array('active>='=>1),'AND');
+                                        foreach ($users['reponse'] as $user):?>
+                                            <option value="<?=$user['id']?>" <?= ($_SESSION['delegue']==$user['id'])? 'selected':''; ?>><?=$user['Nom'].' '.$user['Prenom'];?></option>
+                                        <?endforeach;?>
+                                    </select>
+                                    <input type="hidden" name="idDmd" value="<?=$cdt['id'];?>">
+                                    <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Dupliquer" id="dupliquer">
+                                        <i class="fa fa-files-o" aria-hidden="true"></i>
+                                    </button>
+                                </form>
                                 <? if($cdt['etat']==0) :?>
                                     <a href="validationDmdMatDeleg&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                         <i class="fa fa-check"></i>
