@@ -78,7 +78,7 @@ if($idDemandeau) {
     $Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'point_bonus>'=>0),'AND',array('id'=>'DESC'),array($Limite,30));
 } else {
     // récupération des cadeaux demander :
-    $Cadeaux=get("*",'grm_demande_cadeaux',array('point_bonus>'=>0),'AND',array('id'=>'DESC'),array($Limite,30));
+    $Cadeaux=get("*",'grm_demande_cadeaux',array('famille='=>10),'AND',array('id'=>'DESC'),array($Limite,30));
 }
 //echo '<pre>';print_r($Cadeaux);die;
 ?>
@@ -124,7 +124,7 @@ if($idDemandeau) {
                             <td><?=$cdt['date_remise_point']?></td>
                             <td><?=$cdt['point_bonus']?></td>
                             <td><?php if($cdt['id_demandeur']==2):
-                                    echo getinfo(63,'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
+                                    echo getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
                                 else:
                                     echo getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
                                 endif;
@@ -146,7 +146,7 @@ if($idDemandeau) {
                                 }
                                 ?></td>
                             <td>
-                                <ul>
+                                <ul class="small-padding">
                                     <? $ListeCadeaux=get("*",'grm_cadeaux_demander',array('id_demande='=>$cdt['id']));
                                     for($i=0;$i<3;$i++):
                                         if($ListeCadeaux['total']<=$i) break;?>

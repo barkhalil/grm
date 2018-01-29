@@ -92,8 +92,12 @@ if($idDemandeur) {
                         <tr>
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['date_dmd']))?></td>
                             <td><?=$cdt['date_dmd'];?></td>
-                            <td><?=
-                                getinfo($cdt['id_deleg'],'users' ,'Nom').' '.getinfo($cdt['id_deleg'],'users' ,'prenom')
+                            <td>
+                                <?php if($cdt['id_deleg']==2):
+                                    echo getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
+                                else:
+                                    echo getinfo($cdt['id_deleg'],'users' ,'Nom').' '.getinfo($cdt['id_deleg'],'users' ,'prenom');
+                                endif;
                                 ?></td>
                             <td><?
                                 if($cdt['etat']==0){

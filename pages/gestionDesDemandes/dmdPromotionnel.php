@@ -95,14 +95,14 @@ if($idDemandeau) {
                 </div>
                 <table class="table table-bordered">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Date de demande</th>
-                        <th>Par</th>
-                        <th>Etat demande</th>
-                        <th>Cadeaux demander</th>
-                        <th>Action</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Date de demande</th>
+                            <th>Par</th>
+                            <th>Etat demande</th>
+                            <th>Cadeaux demander</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
                     <tbody>
                     <? foreach ($Cadeaux['reponse'] as $cdt): ?>
@@ -110,7 +110,7 @@ if($idDemandeau) {
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['sysDate']))?></td>
                             <td><?=$cdt['sysDate'];?></td>
                             <td><?php if($cdt['par']==2):
-                                    echo getinfo(63,'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
+                                    echo getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
                                 else:
                                     echo getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom');
                                 endif;

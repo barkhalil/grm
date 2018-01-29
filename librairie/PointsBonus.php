@@ -11,12 +11,14 @@ class PointsBonus {
         $Pbs=get('*','grm_pb_type',array('etat='=>1));
         if($_SESSION['PbClient']) {
             $_SESSION['Point']=0;
+            $_SESSION['newPb']=0;
             $_SESSION['TotPoint']=0;
             $_SESSION['TotalCdx']=0;
             $_SESSION['Obs']='';
             $_SESSION['ProdPbCmd']=null;
             $_SESSION['CdxCmd']=null;
             unset($_SESSION['PbClient']);
+            unset($_SESSION['cdxSansPB']);
             unset($_SESSION['TotalCdx']);
             unset($_SESSION['ProdPbCmd']);
             unset($_SESSION['CdxCmd']);

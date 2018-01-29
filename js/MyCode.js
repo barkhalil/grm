@@ -543,7 +543,10 @@ function ShowDiv(id) {
     $("#prodL").hide();
     $("#"+id).show();
 }
-function PbAdd() {
+function PbAdd(page) {
+    if (typeof page === "undefined" || page === null) {
+        page = "AddBonusSession.php";
+    }
     var TotPoint =$("#TotPoint").val();
     var ponits = new Array();
     $('#pBonus input').each(function(){
@@ -552,6 +555,7 @@ function PbAdd() {
     });
     var Point =$("#PintC").val();
     var newPb =$("#PointVal").text();
+    var cdxSansPB =$("#cdxSansPB").val();
     var type;
     var ProdSeaC;
     var qte;
@@ -575,19 +579,15 @@ function PbAdd() {
         qte=$("#qteC").val();
         prodbonus = $("#CdxSelect :selected").attr('bonus');
     }
-    if(type==2 && qte>6){
-        MSg('Max article est 6','alert-danger');
-        return false;
-    }
     if(!ProdSeaC || !qte || !client){
         MSg('Merci de choisir le produits / articles','alert-danger');
         return false;
     }else{
         //ajax pour la session.
         $.ajax({
-            url:url+'/ajax/Bonus/AddBonusSession.php',
+            url:url+'/ajax/Bonus/'+page,
             type:'POST',
-            data:{type:type,qte:qte,client:client,ProdSeaC:ProdSeaC,TotPoint:TotPoint,prodbonus:prodbonus,Point:Point,Obs:Obs,ponits:ponits,newPb:newPb,idDemande:idDemande },
+            data:{type:type,qte:qte,client:client,ProdSeaC:ProdSeaC,TotPoint:TotPoint,prodbonus:prodbonus,Point:Point,Obs:Obs,ponits:ponits,newPb:newPb,idDemande:idDemande,cdxSansPB:cdxSansPB },
             success:function (data) {
                 $("#ListeProdSessions").html(data);
             },
@@ -609,7 +609,7 @@ function FinalisationPb() {
         },
         success:function (data) {
             MSg('Demande valider','alert-success');
-            window.location = 'Liste';
+            window.location = '../gestionDesDemandes/printDoc&idDemande='+data;
         },
         error:function () {
             MSg('Un problème est survenu merci de refraichir la page','alert-danger');
@@ -626,7 +626,7 @@ function validerDmdCdx() {
         },
         success:function (data) {
             MSg('Demande valider','alert-success');
-            window.location = 'Liste';
+            window.location = '../gestionDesDemandes/Liste';
         },
         error:function () {
             MSg('Un problème est survenu merci de refraichir la page','alert-danger');
@@ -773,7 +773,6 @@ $('#ListeProdSessions').on('click','#BtnValiderEchant',function () {
             }
         });
     }else{
-        MSg('Date incorrect ','alert-danger')
-
+        MSg('Date incorrect ','alert-danger');
     }
 });

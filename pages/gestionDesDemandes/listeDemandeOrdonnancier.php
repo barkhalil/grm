@@ -119,7 +119,7 @@ unset($_SESSION['CdxCmd']);
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['system_date']))?></td>
                             <td><?=$cdt['date_remise_point']?></td>
                             <td><?php if($cdt['id_demandeur']==2):
-                                    echo getinfo(63,'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
+                                    echo getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
                                     else:
                                     echo getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
                                 endif;
