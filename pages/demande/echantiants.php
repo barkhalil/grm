@@ -20,7 +20,7 @@ if($annuler==1){
     redirect(WEBRoot.'/gestionDesDemandes/listedmdEchantillons');
 }
 //$GetLastEchan=$Pro->GetUsedDmdQuota($_SESSION['user']['id']);
-echo $Month=date('Y-m-d');
+  $Month=date('Y-m-d');
 //var_dump($Month);
 ?>
 <section class="content-header">
