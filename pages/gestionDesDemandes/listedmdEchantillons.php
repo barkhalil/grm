@@ -93,8 +93,12 @@ unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
                         <tr>
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['sysDate']))?></td>
                             <td><?=$cdt['sysDate'];?></td>
-                            <td><?=
-                                getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom')
+                            <td>
+                                <?php if($cdt['par']==2):
+                                    echo getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
+                                else:
+                                    echo getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom');
+                                endif;
                                 ?></td>
                             <td><?
                                 if($cdt['etat']==0){

@@ -198,16 +198,23 @@ if($IdSup){
                 </div>
                 <div id="prodL">
                     <div class="form-group">
-                        <label for="gamme">Gamme :</label>
-                        <select id="gamme" name="gamme" class="form-control" onchange="GetProdListe()">
-                            <option value="">Choix</option>
-                            <?php $Gammes=get("*",'prod_categorie');
-                            foreach ($Gammes['reponse'] as $gamme): ?>
-                                <option value="<?=$gamme['id']?>"><?=$gamme['nom']?></option>
-                            <?endforeach;?>
+                        <label for="ProdSeaC">Liste des produits</label>
+                        <select class="form-control select2" name="prodListe" id="ProdSeaC">
+                            <option value="">Choix du produits</option>
+                            <? $request="select products.*,products_prix.qte from products INNER JOIN products_prix ON products.id=products_prix.id_prod WHERE  products_prix.qte>0";
+                            $sql = $PDO->prepare($request);
+                            $sql->execute();
+                            $ListeProd = $sql->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($ListeProd as $prod):?>
+                                <option value="<?=$prod['id']?>"><?=$prod['title']?></option>
+                            <?php endforeach;?>
                         </select>
                     </div>
-                    <div id="ProdACmd"></div>
+                    <div class="form-group">
+                        <label for="qte">Qte</label>
+                        <input type="number" id="qte" name="qte" value="1" step="1" min="1" class="form-control" onkeyup="getMAxQte()" onmouseup="getMAxQte()">
+                        <label class="hidden" id="errorMsgQte"></label>
+                    </div>
                 </div>
                 <div id="cadx">
                     <div class="form-group">
@@ -236,7 +243,7 @@ if($IdSup){
                         <input type="number" id="qteC" name="qteC" value="1" step="1" min="1" class="form-control">
                     </div>
                 </div>
-            <button type="button" value="1" name="Add" class="btn btn-block btn-primary" onclick="PbAdd()">Ajouter</button>
+            <button type="button" value="1" name="Add" class="btn btn-block btn-primary" onclick="PbAdd('addArticles.php')">Ajouter</button>
             </form>
                 </div>
 

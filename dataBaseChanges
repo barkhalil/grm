@@ -1,1 +1,1 @@
-ALTER TABLE `materiel_deleg` ADD `materiel_deleg` INT NULL AFTER `id_deleg`;
+ALTER TABLE `grm_demande_cadeaux` ADD `isCart` INT NOT NULL DEFAULT '0' AFTER `rest_point`;
