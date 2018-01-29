@@ -18,8 +18,10 @@ $prodbonus=filter_input(INPUT_POST,'prodbonus',FILTER_VALIDATE_INT);
 $client=filter_input(INPUT_POST,'client',FILTER_VALIDATE_INT);
 $idDemande=filter_input(INPUT_POST,'idDemande',FILTER_VALIDATE_INT);
 $Obs=filter_input(INPUT_POST,'Obs',FILTER_SANITIZE_STRING);
+$cdxSansPB=filter_input(INPUT_POST,'cdxSansPB',FILTER_VALIDATE_INT);
 $Pbs=get('*','grm_pb_type',array('etat='=>1));
 $pb=$Pbs['reponse'][0];// pour avoir le nombre de point bonus par produits ==> exemple 10 point bonus par produits : qte*10
+//echo $cdxSansPB;exit;
 $Quota=$TotPoint; // général :
 foreach ($_POST['ponits'] as $key=>$valeurPb) {
     $_SESSION['Point'.$key]=$valeurPb;
@@ -29,10 +31,11 @@ $_SESSION['PbClient']=$client;
 $_SESSION['Point']=$Point;
 $_SESSION['TotPoint']=$TotPoint;
 $_SESSION['ObsAdmin']=$Obs;
+$_SESSION['cdxSansPB']=$cdxSansPB;
 $Value =$prodbonus;
 if($ProdSeaC && $qte):
     $TotEch=isset($_SESSION['TotalCdx']) ? $_SESSION['TotalCdx'] : 0;
-    if($TotEch<=$Quota && $Quota >0 && ($TotEch+$qte*$Value)<=$Quota){
+    if(($TotEch<=$Quota && $Quota >0 && ($TotEch+$qte*$Value)<=$Quota)){
         // deux session en // => Cadeaux et produits :
         if($type==1): // article
             //test si le m$eme prod ou non : // possible bug même prod !!!!
@@ -49,7 +52,7 @@ if($ProdSeaC && $qte):
         else:
             //test si le m$eme prod ou non :
             if(isset($_SESSION['ProdPbCmd'][$ProdSeaC]) && $_SESSION['ProdPbCmd'][$ProdSeaC]>0){
-                $_SESSION['TotalCdx']= $_SESSION['TotalCdx']-($_SESSION['ProdPbCmd'][$ProdSeaC]*$pb['value']);
+                $_SESSION['TotalCdx']= $_SESSION['TotalCdx']-($_SESSION['ProdPbCmd'][$ProdSeaC]*$prodbonus);
                 $_SESSION['ProdPbCmd'][$ProdSeaC]=$qte;
                 $_SESSION['TotalCdx']+=$qte*$prodbonus;
                 $TotEch=$_SESSION['TotalCdx'];
@@ -86,7 +89,7 @@ if($ProdSeaC && $qte):
                     <td><?echo getinfo($key,'products','name')?></td>
                     <td><? echo $value?></td>
                     <td>
-                        <a href="DmdPb&idDemande=<?=$idDemande?>&IdSup=<?=$key?>&prod=1" class="btn btn-danger">
+                        <a href="avecPBonus&idDemande=<?=$idDemande?>&IdSup=<?=$key?>&prod=1" class="btn btn-danger">
                             <i class="fa fa-trash"></i>
                         </a>
                     </td>
@@ -98,7 +101,7 @@ if($ProdSeaC && $qte):
                     <td><?echo getinfo($key,'grm_gift','titre')?></td>
                     <td><? echo $value?></td>
                     <td>
-                        <a href="DmdPb&idDemande=<?=$idDemande?>&IdSup=<?=$key?>" class="btn btn-danger">
+                        <a href="avecPBonus&idDemande=<?=$idDemande?>&IdSup=<?=$key?>" class="btn btn-danger">
                             <i class="fa fa-trash"></i>
                         </a>
                     </td>
@@ -106,7 +109,7 @@ if($ProdSeaC && $qte):
             <?  endforeach; endif;?>
     </table>
     <br/>
-    <a href="DmdPb&annuler=1" class="btn btn-danger pull-left">
+    <a href="avecPBonus&annuler=1" class="btn btn-danger pull-left">
         Annuler
     </a>
     <a href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb()">Finaliser</a>

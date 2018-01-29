@@ -2,20 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: nagui
- * Date: 03/01/18
- * Time: 15:59
+ * Date: 29/01/18
+ * Time: 12:09
  */
 if(filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT)){
     $_SESSION['Point']=0;
     $_SESSION['TotPoint']=0;
-    $_SESSION['newPb']=0;
     $_SESSION['TotalCdx']=0;
     $_SESSION['Obs']='';
     $_SESSION['ProdPbCmd']=null;
     $_SESSION['CdxCmd']=null;
     unset($_SESSION['TotalCdx']);
     unset($_SESSION['ProdPbCmd']);
-    unset($_SESSION['cdxSansPB']);
     unset($_SESSION['CdxCmd']);
     if($_SESSION['user']['type']<=2 || $_SESSION['user']['type']>5){
         redirect(WEBRoot."/prospects/listeAdmin");
@@ -48,14 +46,14 @@ if($IdSup){
         //echo $TotSup;die;
         unset($_SESSION['ProdPbCmd'][$IdSup]);
         $_SESSION['TotalCdx']=$_SESSION['TotalCdx']-($TotSup*$pBCadeau);
-        redirect('avecPBonus&id='.$id);
+        redirect('DmdPb&id='.$id);
     } else {
         $TotSup=$_SESSION['CdxCmd'][$IdSup];
         //echo $TotSup;die;
         unset($_SESSION['CdxCmd'][$IdSup]);
         $pbV=getinfo($IdSup,'grm_gift','point_bonus');
         $_SESSION['TotalCdx']=$_SESSION['TotalCdx']-($TotSup*10);
-        redirect('avecPBonus&id='.$id);
+        redirect('DmdPb&id='.$id);
     }
 
 
@@ -81,9 +79,7 @@ if($IdSup){
                     <div class="form-group">
                         <input type="hidden" name="totalPoint" value="<?=$_SESSION['TotPoint'] ?>" id="TotPoint" >
                         <input type="hidden" name="client" value="<?=$id?>" id="client" >
-                        <label>
-                            <input type="checkbox" name="cdxSansPB" id="cdxSansPB" value="1" <?= ($_SESSION['cdxSansPB']==1)?'checked': '';?>> Carte
-                        </label><br/>
+
                         <label>Nombre de points bonus : </label>
                         <div id="pBonus">
                             <?php
@@ -92,7 +88,7 @@ if($IdSup){
                             foreach ($Pbs['reponse'] as $pbx): ?>
                                 <br>
                                 <label>Point bonus de valeur : <?=$pbx['value']?></label>
-                                <input type="number" value="<?=$_SESSION['Point'.$pbx['id']] ?>" name="point_bonus<?=$pbx['id']?>" min="1" style="1" id="PintC<?=$pbx['id']?>" class="form-control pb_calcule" required onchange="AddPoint('PintC<?=$pbx['id']?>')" placeholder="Points cadeaux" pbVal="<?=$pbx['value']?>" rel="<?=$pbx['id']?>"/>
+                                <input type="number" value="<?=$_SESSION['Point'.$pbx['id']] ?>" name="point_bonus<?=$pbx['id']?>" min="1" style="1" id="PintC<?=$pbx['id']?>" class="form-control pb_calcule" required onchange="AddPoint('PintC<?=$pbx['id']?>')" placeholder="Points cadeaux" pbVal="<?=$pbx['value']?>" rel="<?=$pbx['id']?>"   />
                             <?
                             endforeach;
                             ?>
@@ -108,23 +104,16 @@ if($IdSup){
                     </div>
                     <div id="prodL">
                         <div class="form-group">
-                            <label for="ProdSeaC">Liste des produits</label>
-                            <select class="form-control select2" name="prodListe" id="ProdSeaC">
-                                <option value="">Choix du produits</option>
-                                <? $request="select products.*,products_prix.qte from products INNER JOIN products_prix ON products.id=products_prix.id_prod WHERE  products_prix.qte>0";
-                                $sql = $PDO->prepare($request);
-                                $sql->execute();
-                                $ListeProd = $sql->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($ListeProd as $prod):?>
-                                    <option value="<?=$prod['id']?>"><?=$prod['title']?></option>
-                                <?php endforeach;?>
+                            <label for="gamme">Gamme :</label>
+                            <select id="gamme" name="gamme" class="form-control" onchange="GetProdListe()">
+                                <option value="">Choix</option>
+                                <?php $Gammes=get("*",'prod_categorie');
+                                foreach ($Gammes['reponse'] as $gamme): ?>
+                                    <option value="<?=$gamme['id']?>"><?=$gamme['nom']?></option>
+                                <?endforeach;?>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="qte">Qte</label>
-                            <input type="number" id="qte" name="qte" value="1" step="1" min="1" class="form-control" onkeyup="getMAxQte()" onmouseup="getMAxQte()">
-                            <label class="hidden" id="errorMsgQte"></label>
-                        </div>
+                        <div id="ProdACmd"></div>
                     </div>
                     <div id="cadx">
                         <div class="form-group">
@@ -138,6 +127,8 @@ if($IdSup){
                                 $stmt=$PDO->prepare($sql);
                                 $stmt->execute();
                                 $ListeGift['reponse']=$stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
                                 foreach ($ListeGift['reponse'] as $Gift):
                                     ?>
                                     <option value="<?= $Gift['id'] ?>" rel="<?= $Gift['serialisable'] ?>" bonus="<?=$Gift['point_bonus']?>" ><?= $Gift['titre'] . ' Points : ' . $Gift['point_bonus'] ?></option>
@@ -176,7 +167,7 @@ if($IdSup){
                                 <td><?echo getinfo($key,'products','name')?></td>
                                 <td><? echo $value?></td>
                                 <td>
-                                    <a href="avecPBonus&id=<?=$id?>&IdSup=<?=$key?>&prod=1" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                    <a href="DmdPb&id=<?=$id?>&IdSup=<?=$key?>&prod=1" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         <?  endforeach; endif;?>
@@ -186,7 +177,7 @@ if($IdSup){
                                 <td><?echo getinfo($key,'grm_gift','titre')?></td>
                                 <td><? echo $value?></td>
                                 <td>
-                                    <a href="avecPBonus&id=<?=$id?>&IdSup=<?=$key?>&cdx=1" class="btn btn-danger">
+                                    <a href="DmdPb&id=<?=$id?>&IdSup=<?=$key?>&cdx=1" class="btn btn-danger">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </td>
@@ -194,10 +185,10 @@ if($IdSup){
                         <?  endforeach; endif;?>
                 </table>
                 <br/>
-                <a href="avecPBonus&annuler=1" class="btn btn-danger pull-left">
+                <a href="DmdPb&annuler=1" class="btn btn-danger pull-left">
                     Annuler
                 </a>
-                <a href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb()">Finaliser</a>
+                <a href="javascript:void(0)" class="btn btn-success pull-right" onclick="validerDmdCdx()">Finaliser</a>
                 <div class="clearfix"></div>
             </div>
         </div>
