@@ -225,7 +225,7 @@ if($idDemandeau) {
 
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
 
-                <? pagination($Cadeaux['total'], 30, WEBRoot . "/gift/Liste".$link."&d=", ""); ?>
+                <? pagination($Cadeaux['total'], 30, WEBRoot . "/gestionDesDemandes/Liste".$link."&d=", ""); ?>
 
             </div>
 
