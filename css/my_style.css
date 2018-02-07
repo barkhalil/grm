@@ -6,6 +6,11 @@
     padding: 5px 0;
     vertical-align: bottom;
 }
+#editStock .full-height {
+    max-width: 150px;
+    padding: 5px 0;
+    vertical-align: bottom;
+}
 .sameline-btns>tbody>tr>td {
     white-space: nowrap;
     padding: 8px 2px;

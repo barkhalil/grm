@@ -46,6 +46,7 @@ $ActivePage=explode('/',$Pga);
                     <li><a href="<?=WEBRoot?>/products/GestionProduits">Produits</a></li>
                     <li><a href="<?=WEBRoot?>/products/GestionPrixProduits">Prix Produits</a></li>
                     <li><a href="<?=WEBRoot?>/products/Gammes">Gamme</a></li>
+                    <li><a href="<?=WEBRoot?>/products/bonEntree">Bon d'entrée</a></li>
 
                     <!--<li><a href="<?=WEBRoot?>/gift/AddDemande">Ajouter une demande</a></li>-->
 

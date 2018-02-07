@@ -16,6 +16,14 @@ public function getPrix($prodId,$Type=1){
     return $stmt->fetch(PDO::FETCH_ASSOC);
 
 }
+public function getAll(){
+    global $PDO;
+    $Sql="SELECT * from products INNER JOIN products_prix ON products_prix.id_prod=products.id";
+    $stmt=$PDO->prepare($Sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+}
 
 
 }
