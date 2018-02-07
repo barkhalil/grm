@@ -42,5 +42,18 @@ class GrmController {
     function DimStockProd($id,$qte){
         $this->DimStockProduits($id,$qte);
     }
+    function edit_stock_gifts($id,$qte){
+        global $PDO;
+        $Sql="UPDATE grm_gift SET grm_gift.qte=qte+$qte , grm_gift.qte_utiliser = qte_utiliser-$qte WHERE id = $id";
+        $stmt=$PDO->prepare($Sql);
+        $stmt->execute();
+    }
+    function edit_stock_prods($id,$qte){
+        global $PDO;
+        $Sql = "UPDATE products_prix SET products_prix.qte=qte+$qte WHERE id_prod = $id";
+        //echo $Sql;die;
+        $stmt=$PDO->prepare($Sql);
+        $stmt->execute();
+    }
 }
 $Gcc=new GrmController();

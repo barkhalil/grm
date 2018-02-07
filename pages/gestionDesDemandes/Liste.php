@@ -50,6 +50,7 @@ $Limite=filter_input(INPUT_GET,'d',257);
 if(!$Limite) $Limite=0;
 $pointage=filter_input(1,'pointage',257);
 $annuler=filter_input(1,'annuler',257);
+$cancel=filter_input(1,'cancel',257);
 if($pointage){
     update($pointage,array(
         'pointage'=>1,
@@ -58,12 +59,30 @@ if($pointage){
         'modifier_par'=>$_SESSION['user']['id']
     ) ,'grm_demande_cadeaux');
 }
+if($cancel) {
+    $cadeauxDmd=get('*','grm_cadeaux_demander',array('id_demande='=>$cancel));
+    foreach ($cadeauxDmd['reponse'] as $cdx) {
+        if($cdx['type_cdx']==2)
+            $Gcc->edit_stock_gifts($cdx['id_cadeaux'],$cdx['qte']);
+        else
+            $Gcc->edit_stock_prods($cdx['id_cadeaux'],$cdx['qte']);
+        delete($cdx['id'],'grm_cadeaux_demander');
+    }
+    update($cancel,array(
+        'etat'=>-2,
+        'modifier_par'=>$_SESSION['user']['id'],
+        'date_validation'=>date("Y-m-d")
+    ) ,'grm_demande_cadeaux');
+    delete($cancel,'grm_demande_cadeaux');
+    redirect($_SERVER['HTTP_REFERER']);
+}
 if($annuler){
     update($annuler,array(
         'etat'=>-1,
         'modifier_par'=>$_SESSION['user']['id'],
         'date_validation'=>date("Y-m-d"),
     ) ,'grm_demande_cadeaux');
+    redirect($_SERVER['HTTP_REFERER']);
 }
 $idDemLivraison=filter_input(INPUT_GET,'idDemLivraison',257);
 if($idDemLivraison){
@@ -137,6 +156,8 @@ if($idDemandeau) {
                                     echo "Pointer";
                                 }elseif($cdt['etat']==-1){
                                     echo "Refusée";
+                                }elseif($cdt['etat']==-2){
+                                    echo "Annulée aprés validation";
                                 }elseif($cdt['etat']==2){
                                     echo "Points insufissant, avec reste =  ".$cdt['rest_point'];
                                 }elseif($cdt['etat']==4){
@@ -165,7 +186,7 @@ if($idDemandeau) {
                                 </ul>
                             </td>
                             <td>
-                                <? if($cdt['etat']>0 || $cdt['etat']==-1):?>
+                                <? if($cdt['etat']>0 || $cdt['etat']==-1 || $cdt['etat']==-2):?>
                                     <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
                                         <input onkeyup="this.value = this.value.replace(/\D/g,'')" type="text" name="idPros" placeholder="ID PROS" class="full-height">
                                         <input type="hidden" name="idDmd" value="<?=$cdt['id'];?>">
@@ -198,6 +219,11 @@ if($idDemandeau) {
                                             <i class="fa fa-print"></i>
                                         </a>
                                     <?endif;endif?>
+                                    <?if($cdt['etat']==4):?>
+                                        <a href="Liste<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    <?endif;?>
                                 <?endif;?>
                             </td>
                         </tr>

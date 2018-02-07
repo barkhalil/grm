@@ -776,3 +776,15 @@ $('#ListeProdSessions').on('click','#BtnValiderEchant',function () {
         MSg('Date incorrect ','alert-danger');
     }
 });
+$(function() {
+    $('.cancelDmd').click(function(ev) {
+        var href = $(this).attr('href');
+        if (!$('#dataConfirmModal').length) {
+            $('body').append('<div id="dataConfirmModal" class="modal" role="dialog" aria-labelledby="dataConfirmLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3 id="dataConfirmLabel">Annuler la demande</h3><br/></h3></div><div class="modal-body"><b></b></div><div class="modal-footer"><button class="btn" data-dismiss="modal" aria-hidden="true">Non</button><a class="btn btn-danger" id="dataConfirmOK">Oui</a></div></div></div></div>');
+        }
+        $('#dataConfirmModal').find('.modal-body b').empty().append($(this).attr('data-confirm'));
+        $('#dataConfirmOK').attr('href', href);
+        $('#dataConfirmModal').modal({show:true});
+        return false;
+    });
+});
