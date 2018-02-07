@@ -111,7 +111,7 @@ if($IdSup){
                             <label for="ProdSeaC">Liste des produits</label>
                             <select class="form-control select2" name="prodListe" id="ProdSeaC">
                                 <option value="">Choix du produits</option>
-                                <? $request="select products.*,products_prix.qte from products INNER JOIN products_prix ON products.id=products_prix.id_prod WHERE  products_prix.qte>0";
+                                <? $request="select products.*,products_prix.qte from products INNER JOIN products_prix ON products.id=products_prix.id_prod";
                                 $sql = $PDO->prepare($request);
                                 $sql->execute();
                                 $ListeProd = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -134,13 +134,14 @@ if($IdSup){
                                 <?
                                 // ajouter filter par famille
 
-                                $sql=" Select * from grm_gift WHERE qte >=1 and famille IN(1,3)";
+                                $sql=" Select * from grm_gift WHERE grm_gift.dispo = 1 and famille IN(1,3)";
                                 $stmt=$PDO->prepare($sql);
                                 $stmt->execute();
                                 $ListeGift['reponse']=$stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($ListeGift['reponse'] as $Gift):
                                     ?>
-                                    <option value="<?= $Gift['id'] ?>" rel="<?= $Gift['serialisable'] ?>" bonus="<?=$Gift['point_bonus']?>" ><?= $Gift['titre'] . ' Points : ' . $Gift['point_bonus'] ?></option>
+                                    <option value="<?= $Gift['id'] ?>" rel="<?= $Gift['serialisable'] ?>" bonus="<?=$Gift['point_bonus']?>" >
+                                        <?= $Gift['code_article'].' '. $Gift['titre'] . ' Points : ' . $Gift['point_bonus'] ?></option>
                                 <? endforeach; ?>
 
                             </select>
