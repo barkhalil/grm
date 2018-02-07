@@ -118,4 +118,4 @@ if($_SESSION['TotalCdx']>0){
     //redirect('printDoc&idDemande='.$idDemande);
 }else{
     echo false;
-}
+}exit;

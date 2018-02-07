@@ -187,7 +187,7 @@ unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
 
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
 
-                <? pagination($Cadeaux['total'], 30, WEBRoot . "/gift/Liste".$link."&d=", ""); ?>
+                <? pagination($Cadeaux['total'], 30, WEBRoot . "/gestionDesDemandes/listedmdEchantillons".$link."&d=", ""); ?>
 
             </div>
 

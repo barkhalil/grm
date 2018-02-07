@@ -36,6 +36,7 @@ $DemandeInfo=get('*','grm_demande_cadeaux',array('id='=>$id));
 $Dmd=$DemandeInfo['reponse'][0];
 $pointsBs=explode('@_@',$Dmd['ponitsByType']);
 if(!isset($_SESSION['firsttime'])) {
+    $_SESSION['idDmd']=$id;
     for($i=0;$i<count($pointsBs);$i++) {
         //echo $pointsBs[$i];die;
         if($_SESSION['bonusPoints'][$i]['valeur']!=$pointsBs[$i] && $_SESSION['Point'.$pointsBs[$i]]==0 || $_SESSION['PbClient']!=$id){
