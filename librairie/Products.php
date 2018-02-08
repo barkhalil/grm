@@ -18,7 +18,7 @@ public function getPrix($prodId,$Type=1){
 }
 public function getAll(){
     global $PDO;
-    $Sql="SELECT * from products INNER JOIN products_prix ON products_prix.id_prod=products.id";
+    $Sql="SELECT * from products INNER JOIN products_prix ON products_prix.id_prod=products.id ORDER BY products.name";
     $stmt=$PDO->prepare($Sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
