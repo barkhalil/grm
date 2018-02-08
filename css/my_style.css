@@ -6,7 +6,7 @@
     padding: 5px 0;
     vertical-align: bottom;
 }
-#editStock .full-height {
+.editStock .full-height {
     max-width: 150px;
     padding: 5px 0;
     vertical-align: bottom;
@@ -85,4 +85,15 @@ body {
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+#myTable .hideIt { display:none;
+}
+.loadMore {
+    cursor: pointer;
+    margin: 15px 0;
+}
+.showLess {
+    cursor: pointer;
+    margin: 15px 0;
 }

@@ -777,6 +777,39 @@ $('#ListeProdSessions').on('click','#BtnValiderEchant',function () {
     }
 });
 $(function() {
+    $('.validQte').click(function() {
+        var qte=$(this).parent('.editStock').find('.qteAdded').val();
+        var prodId=$(this).parent('.editStock').find('.qteAdded').attr('rel');
+        var prodName=$('table').find('#'+prodId).html();
+        $ancQte=$('table').find('.'+prodId).html();
+        var prodAdded='';
+        if ( $('.prodInsertListe li').length > 1 ) {
+            $('#validBnEntr').removeAttr("disabled");
+        } else {
+            $('#validBnEntr').attr('disabled',true);
+        }
+        $('#listeSubmitProds input').each(function(){
+            if($(this).attr("name")==prodId) {
+                var ancQteEntr=$('.prodInsertListe').find('.'+prodId).html();
+                $(this).val(qte);
+                $ancQte=parseInt($ancQte)-parseInt(ancQteEntr);
+                $ancQte=parseInt($ancQte)+parseInt(qte);
+                $('table').find('.'+prodId).html($ancQte);
+                $('.prodInsertListe').find('.'+prodId).html(qte);
+                $(this).parent('.editStock').find('.qteAdded').val('');
+                prodAdded=1;
+            }
+        });
+        if(prodAdded=='') {
+            $ancQte=parseInt($ancQte)+parseInt(qte);
+            $('table').find('.'+prodId).html($ancQte);
+            $(this).parent('.editStock').find('.qteAdded').val('');
+            $('#listeSubmitProds').append("<input type='hidden' value='"+qte+"' name='"+prodId+"'>");
+            $('.prodInsertListe').append('<li>'+prodName+' => La quantité entré => <span class="'+prodId+'" >'+qte+'</span></li>');
+        }
+    });
+});
+$(function() {
     $('.cancelDmd').click(function(ev) {
         var href = $(this).attr('href');
         if (!$('#dataConfirmModal').length) {
@@ -788,39 +821,78 @@ $(function() {
         return false;
     });
 });
+$(document).ready(function () {
+    size_li = $("#myTable tr").size();
+    x=3;
+    $('#myTable tr:lt('+x+')').show();
+    $('.loadAll').click(function () {
+        x= size_li-x;
+        $('#myTable tr:lt('+x+')').show();
+    });
+    $('.loadMore').click(function () {
+        x= (x+5 <= size_li) ? x+5 : size_li;
+        $('#myTable tr:lt('+x+')').show();
+    });
+    $('.showLess').click(function () {
+        if(x>=100) {
+            x=4;
+            $('#myTable tr').not(':lt('+x+')').hide();
+        } else {
+            x=(x-5<0) ? 3 : x-5;
+            $('#myTable tr').not(':lt('+x+')').hide();
+        }
+
+    });
+});
 function myFunction(id,index) {
-    if (typeof index === "undefined" || index === null) {
-        index = 0;
-    }
     // Declare variables
     var input, filter, table, tr, td, i;
     input = document.getElementById(id);
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");
     tr = table.getElementsByTagName("tr");
+
     // Loop through all table rows, and hide those who don't match the search query
     for (i = 0; i < tr.length; i++) {
-        //alert(index);
         td = tr[i].getElementsByTagName("td")[index];
         if (td) {
             if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
+                tr[i].style.display = "table-row";
             } else {
                 tr[i].style.display = "none";
             }
         }
     }
 }
-$("#idForm").submit(function(e) {
-    var url = "";
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: $("#idForm").serialize(),
-        success: function(data)
-        {
-            alert(data);
+$(function () {
+    var t = false
+    $('.qteAdded').focus(function () {
+        var $this = $(this);
+        t = setInterval(
+            function () {
+                if (($this.val() < 1 || $this.val() > 10) && $this.val().length != 0) {
+                    if ($this.val() < 1) {
+                        $this.val('')
+                    }
+                }
+            }, 50)
+    });
+    $('.qteAdded').keyup(function () {
+        if($('.qteAdded').val()!='') {
+            $('.validQte').removeAttr("disabled");
+        } else {
+            $('.validQte').attr('disabled',true);
         }
     });
-    e.preventDefault();
+    $('.qteAdded').blur(function () {
+        if (t != false) {
+            window.clearInterval(t);
+            t = false;
+        }
+        if($('.qteAdded').val()!='') {
+            $('.validQte').removeAttr("disabled");
+        } else {
+            $('.validQte').attr('disabled',true);
+        }
+    });
 });
