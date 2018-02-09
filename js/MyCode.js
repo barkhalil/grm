@@ -781,32 +781,33 @@ $(function() {
         var qte=$(this).parent('.editStock').find('.qteAdded').val();
         var prodId=$(this).parent('.editStock').find('.qteAdded').attr('rel');
         var prodName=$('table').find('#'+prodId).html();
-        $ancQte=$('table').find('.'+prodId).html();
+        //$ancQte=$('table').find('.'+prodId).html();
         var prodAdded='';
-        if ( $('.prodInsertListe li').length > 1 ) {
+        if ( $('.prodInsertListe li').length >= 0 ) {
             $('#validBnEntr').removeAttr("disabled");
         } else {
             $('#validBnEntr').attr('disabled',true);
         }
         $('#listeSubmitProds input').each(function(){
             if($(this).attr("name")==prodId) {
-                var ancQteEntr=$('.prodInsertListe').find('.'+prodId).html();
+                //var ancQteEntr=$('.prodInsertListe').find('.'+prodId).html();
                 $(this).val(qte);
-                $ancQte=parseInt($ancQte)-parseInt(ancQteEntr);
-                $ancQte=parseInt($ancQte)+parseInt(qte);
-                $('table').find('.'+prodId).html($ancQte);
+                //$ancQte=parseInt($ancQte)-parseInt(ancQteEntr);
+                //$ancQte=parseInt($ancQte)+parseInt(qte);
+                $('table').find('.'+prodId).html(qte);
                 $('.prodInsertListe').find('.'+prodId).html(qte);
-                $(this).parent('.editStock').find('.qteAdded').val('');
                 prodAdded=1;
             }
         });
+
         if(prodAdded=='') {
-            $ancQte=parseInt($ancQte)+parseInt(qte);
-            $('table').find('.'+prodId).html($ancQte);
-            $(this).parent('.editStock').find('.qteAdded').val('');
+            //$ancQte=parseInt($ancQte)+parseInt(qte);
+            $('table').find('.'+prodId).html(qte);
             $('#listeSubmitProds').append("<input type='hidden' value='"+qte+"' name='"+prodId+"'>");
             $('.prodInsertListe').append('<li>'+prodName+' => La quantité entré => <span class="'+prodId+'" >'+qte+'</span></li>');
         }
+        $(this).parent('.editStock').find('.qteAdded').val('');
+        $(this).attr('disabled',true);
     });
 });
 $(function() {
@@ -865,23 +866,23 @@ function myFunction(id,index) {
     }
 }
 $(function () {
-    var t = false
-    $('.qteAdded').focus(function () {
+    var t = false;
+    $('.qteAdded').keypress(function () {
         var $this = $(this);
         t = setInterval(
             function () {
                 if (($this.val() < 1 || $this.val() > 10) && $this.val().length != 0) {
                     if ($this.val() < 1) {
-                        $this.val('')
+                        $this.val('');
                     }
                 }
-            }, 50)
+            }, 50);
     });
     $('.qteAdded').keyup(function () {
-        if($('.qteAdded').val()!='') {
-            $('.validQte').removeAttr("disabled");
+        if($(this).val()!='') {
+            $(this).parent('.editStock').find('.validQte').removeAttr("disabled");
         } else {
-            $('.validQte').attr('disabled',true);
+            $(this).parent('.editStock').find('.validQte').attr('disabled',true);
         }
     });
     $('.qteAdded').blur(function () {
@@ -889,10 +890,33 @@ $(function () {
             window.clearInterval(t);
             t = false;
         }
-        if($('.qteAdded').val()!='') {
-            $('.validQte').removeAttr("disabled");
-        } else {
-            $('.validQte').attr('disabled',true);
-        }
     });
+    $("#validBnEntr").click(function(e) {
+        //var url = url + "/ajax/validateBnEntr.php";
+        var products = [];
+        $('#listeSubmitProds input').each(function(){
+            products.push({id: $(this).attr("name"), qte: $(this).val()});
+        });
+        //alert(products);
+        $.ajax({
+            type: "POST",
+            url: url + "/ajax/validateBnEntr.php",
+            data: {
+                products: products,
+                ref:$('input[name=ref]').val(),
+                fournisseur:$('select[name=fournisseur]').val(),
+                dateSelect:$('input[name=date]').val()
+            },
+            success: function(data) {
+                if(data=='success') {
+                    window.location=url + "/ajax/validateBnEntr.php?msg=1";
+                } else {
+                    MSg('Une erreur s\'est produite. Merci de resaisir le bon d\'entrée.','alert-danger');
+                    return false;
+                }
+            }
+        });
+        //e.preventDefault();
+    });
+
 });

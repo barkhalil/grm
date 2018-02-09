@@ -5,6 +5,10 @@
  * Date: 07/02/18
  * Time: 18:01
  */
+$submit=filter_input(INPUT_GET,'submit',FILTER_DEFAULT);
+if($submit) {
+
+}
 $products=$ProdClass->getAll();
 //echo '<pre>';print_r($products);die;
 ?>
@@ -15,7 +19,7 @@ $products=$ProdClass->getAll();
             <div class="box box-warning box-body">
                 <h3 class="" >Aprés validation aucune modification n'est autorisée</h3>
                 <h3 class="" >Avant validation aucune modification n'est réelement enregistrée</h3>
-                <form method="post">
+                <form method="post" id="submitForm">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Réference du bon d'entrée: </label>
@@ -31,9 +35,9 @@ $products=$ProdClass->getAll();
                         </div>
                         <div class="form-group" >
                             <label>Date: </label>
-                            <input type='text' id="datePicker" class="form-control" name="date" placeholder="Date..." onkeydown="return false" required/>
+                            <input type='text' id="datePicker" class="form-control" name="date" placeholder="Date..." onkeydown="return false"/>
                         </div>
-                        <input type="submit" value="Valider" class="btn btn-success btn-block" id="validBnEntr" disabled>
+                        <input type="button" value="Valider" class="btn btn-success btn-block" id="validBnEntr" disabled>
                     </div>
                     <div class="col-sm-6">
                         <h3>Liste des produits entrées</h3>
@@ -66,9 +70,10 @@ $products=$ProdClass->getAll();
                     <thead>
                         <tr>
                             <th>Code</th>
-                            <th>Désignation <i class="fa fa-sort"></i></th>
+                            <th>Désignation</th>
                             <th>Déscription</th>
                             <th>Quantité</th>
+                            <th>La quantité entré</th>
                             <th colspan="2">Action</th>
                         </tr>
                     </thead>
@@ -80,7 +85,8 @@ $products=$ProdClass->getAll();
                             <td><?=$product['code_article'];?></td>
                             <td id="<?=$product['id'];?>"><?=$product['name'];?></td>
                             <td style="white-space: normal"><?=$product['description'];?></td>
-                            <td class="<?=$product['id'];?>"><?=$product['qte'];?></td>
+                            <td class=""><?=$product['qte'];?></td>
+                            <td class="<?=$product['id'];?>"></td>
                             <td>
                                 <div class="form-group editStock">
                                     <label>La quantité:</label><br/>
