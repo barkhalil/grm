@@ -29,7 +29,6 @@ if($gamme):
     <div class="form-group">
         <label for="qte">Qte</label>
         <input type="number" id="qte" name="qte" value="1" step="1" min="1" class="form-control">
-
     </div>
 <?
 else:
