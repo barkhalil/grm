@@ -777,6 +777,48 @@ $('#ListeProdSessions').on('click','#BtnValiderEchant',function () {
     }
 });
 $(function() {
+    $('.prodInsertListe').on('click','.cancel_prod',function() {
+        //alert('ok');
+        var idProd = $(this).attr('rel');
+        $('#listeSubmitProds').find('input[name='+idProd+']').remove();
+        $('table .prodLigne').find('.'+idProd).html('');
+        $(this).parent('li').remove();
+    });
+    $('.validQte').click(function() {
+        var qte=$(this).parent('.editStock').find('.qteAdded').val();
+        var prodId=$(this).parent('.editStock').find('.qteAdded').attr('rel');
+        var prodCode=$(this).parent('.editStock').find('.qteAdded').attr('codeArticle');
+        var prodName=$('table').find('#'+prodId).html();
+        //$ancQte=$('table').find('.'+prodId).html();
+        var prodAdded='';
+        if ( $('.prodInsertListe li').length >= 0 ) {
+            $('#validBnEntr').removeAttr("disabled");
+        } else {
+            $('#validBnEntr').attr('disabled',true);
+        }
+        $('#listeSubmitProds input').each(function(){
+            if($(this).attr("name")==prodId) {
+                //var ancQteEntr=$('.prodInsertListe').find('.'+prodId).html();
+                $(this).val(qte);
+                //$ancQte=parseInt($ancQte)-parseInt(ancQteEntr);
+                //$ancQte=parseInt($ancQte)+parseInt(qte);
+                $('table').find('.'+prodId).html(qte);
+                $('.prodInsertListe').find('.'+prodId).html(qte);
+                prodAdded=1;
+            }
+        });
+
+        if(prodAdded=='') {
+            //$ancQte=parseInt($ancQte)+parseInt(qte);
+            $('table').find('.'+prodId).html(qte);
+            $('#listeSubmitProds').append("<input type='hidden' value='"+qte+"' name='"+prodId+"'>");
+            $('.prodInsertListe').append('<li>'+prodCode+' : '+prodName+' <i class="fa fa-arrow-right" aria-hidden="true"></i> <span class="'+prodId+'" > ( '+qte+' )</span> <a class="btn btn-danger cancel_prod" rel="'+prodId+'"><i class="fa fa-times" aria-hidden="true"></i></a> </li>');
+        }
+        $(this).parent('.editStock').find('.qteAdded').val('');
+        $(this).attr('disabled',true);
+    });
+});
+$(function() {
     $('.cancelDmd').click(function(ev) {
         var href = $(this).attr('href');
         if (!$('#dataConfirmModal').length) {
@@ -786,5 +828,112 @@ $(function() {
         $('#dataConfirmOK').attr('href', href);
         $('#dataConfirmModal').modal({show:true});
         return false;
+    });
+});
+$(document).ready(function () {
+    size_li = $("#myTable tr").size();
+    x=3;
+    $('#myTable tr:lt('+x+')').show();
+    $('.loadAll').click(function () {
+        x= size_li-x;
+        $('#myTable tr:lt('+x+')').show();
+    });
+    $('.loadMore').click(function () {
+        x= (x+5 <= size_li) ? x+5 : size_li;
+        $('#myTable tr:lt('+x+')').show();
+    });
+    $('.showLess').click(function () {
+        if(x>=100) {
+            x=4;
+            $('#myTable tr').not(':lt('+x+')').hide();
+        } else {
+            x=(x-5<0) ? 3 : x-5;
+            $('#myTable tr').not(':lt('+x+')').hide();
+        }
+
+    });
+});
+function myFunction(id,index) {
+    // Declare variables
+    var input, filter, table, tr, td, i;
+    input = document.getElementById(id);
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[index];
+        if (td) {
+            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "table-row";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+$(function () {
+    var t = false;
+    $('.qteAdded').keypress(function () {
+        var $this = $(this);
+        t = setInterval(
+            function () {
+                if (($this.val() < 1 || $this.val() > 10) && $this.val().length != 0) {
+                    if ($this.val() < 1) {
+                        $this.val('');
+                    }
+                }
+            }, 50);
+    });
+    $('.qteAdded').keyup(function () {
+        if($(this).val()!='') {
+            $(this).parent('.editStock').find('.validQte').removeAttr("disabled");
+        } else {
+            $(this).parent('.editStock').find('.validQte').attr('disabled',true);
+        }
+    });
+    $('.qteAdded').blur(function () {
+        if (t != false) {
+            window.clearInterval(t);
+            t = false;
+        }
+    });
+    $("#validBnEntr").click(function(e) {
+        var stopExecute=true;
+        $('#submitForm input').each(function() {
+
+            if ($(this).prop('required') && $(this).val() === '' ) {
+                //alert('ok');
+                MSg('Merci de remplire le formulaire','alert-danger');
+                stopExecute=false;
+                return false;
+            }
+        });
+        if(!stopExecute) return false;
+        var products = [];
+        $('#listeSubmitProds input').each(function(){
+            products.push({id: $(this).attr("name"), qte: $(this).val()});
+        });
+        //alert(products);
+        $.ajax({
+            type: "POST",
+            url: url + "/ajax/validateBnEntr.php",
+            data: {
+                products: products,
+                ref:$('input[name=ref]').val(),
+                fournisseur:$('select[name=fournisseur]').val(),
+                dateSelect:$('input[name=date]').val()
+            },
+            success: function(data) {
+                if(data=='success') {
+                    window.location=url + "/ajax/validateBnEntr.php?msg=1";
+                } else {
+                    MSg('Une erreur s\'est produite. Merci de resaisir le bon d\'entrée.','alert-danger');
+                    return false;
+                }
+            }
+        });
+        //e.preventDefault();
     });
 });

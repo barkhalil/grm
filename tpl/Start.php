@@ -7,6 +7,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="<?= WEBRootD ?>/bootstrap/css/bootstrap.min.css">    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/7ceb636cad.css">   <!-- Ionicons -->
     <link rel="stylesheet" href="<?= WEBRootD ?>/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="<?= WEBRootD ?>/plugins/select2/select2.min.css">
@@ -73,7 +74,10 @@
     </div>
 </div>
 <script src="<?= WEBRootD ?>/plugins/jQuery/jQuery-2.1.4.min.js"></script><!-- Bootstrap 3.3.5 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/fr.js"></script>
 <script src="<?= WEBRootD ?>/bootstrap/js/bootstrap.min.js"></script><!-- AdminLTE App -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<?= WEBRootD ?>/dist/js/app.min.js"></script>
 <script src="<?= WEBRootD ?>/plugins/fastclick/fastclick.min.js"></script>
 <script src="<?= WEBRootD ?>/plugins/slimScroll/jquery.slimscroll.min.js"></script>
@@ -96,6 +100,13 @@
     });
 </script>
 <?endif;?>
-
+<script type="text/javascript">
+    $(function () {
+        $('#datePicker').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale: 'fr'
+        });
+    });
+</script>
 </body>
 </html>

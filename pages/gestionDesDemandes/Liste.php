@@ -66,14 +66,13 @@ if($cancel) {
             $Gcc->edit_stock_gifts($cdx['id_cadeaux'],$cdx['qte']);
         else
             $Gcc->edit_stock_prods($cdx['id_cadeaux'],$cdx['qte']);
-       // delete($cdx['id'],'grm_cadeaux_demander');
     }
     update($cancel,array(
         'etat'=>-2,
         'modifier_par'=>$_SESSION['user']['id'],
         'date_validation'=>date("Y-m-d")
     ) ,'grm_demande_cadeaux');
-  //  delete($cancel,'grm_demande_cadeaux');
+
     redirect($_SERVER['HTTP_REFERER']);
 }
 if($annuler){
@@ -220,7 +219,7 @@ if($idDemandeau) {
                                             <i class="fa fa-print"></i>
                                         </a>
                                     <?endif;endif?>
-                                    <?if($cdt['etat']==4):?>
+                                    <?if($cdt['etat']>=4):?>
                                         <a href="Liste<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </a>
