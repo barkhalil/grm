@@ -66,14 +66,14 @@ if($cancel) {
             $Gcc->edit_stock_gifts($cdx['id_cadeaux'],$cdx['qte']);
         else
             $Gcc->edit_stock_prods($cdx['id_cadeaux'],$cdx['qte']);
-        delete($cdx['id'],'grm_cadeaux_demander');
+       // delete($cdx['id'],'grm_cadeaux_demander');
     }
     update($cancel,array(
         'etat'=>-2,
         'modifier_par'=>$_SESSION['user']['id'],
         'date_validation'=>date("Y-m-d")
     ) ,'grm_demande_cadeaux');
-    delete($cancel,'grm_demande_cadeaux');
+  //  delete($cancel,'grm_demande_cadeaux');
     redirect($_SERVER['HTTP_REFERER']);
 }
 if($annuler){
@@ -93,6 +93,7 @@ if($idDemLivraison){
     ) ,'grm_demande_cadeaux');
 }
 if($idDemandeau) {
+    //if($idDemandeau ==2 )
     // récupération des cadeaux demander :
     $Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'point_bonus>'=>0),'AND',array('id'=>'DESC'),array($Limite,30));
 } else {
