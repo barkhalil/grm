@@ -20,7 +20,7 @@ if($gamme):
         <select class="form-control select2" name="cadeaux" id="ProdSelect" onchange="AddPRod(1)">
             <option value="">Choix du produits</option>
             <?foreach ($ListeProd as $prod):?>
-                <option value="<?=$prod['id']?>"><?=$prod['title']?></option>
+                <option value="<?=$prod['id']?>"><?=$prod['code_article'].' '.$prod['title']?></option>
             <?php endforeach;?>
         </select>
     </div>

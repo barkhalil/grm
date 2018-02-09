@@ -47,15 +47,19 @@ if($annuler==1){
                         <label>Pour </label>
                         <input type="date" id="MonthValue" name="pour" value="<?=$Month?>" class="form-control" readonly>
                     </div>
+                    <? $ListeProd=get("*",'products');?>
                     <div class="form-group">
-                        <label for="gamme">Gamme :</label>
-                        <select id="gamme" name="gamme" class="form-control" onchange="GetProdListe()">
-                            <option value="">Choix</option>
-                            <?php $Gammes=get("*",'prod_categorie');
-                            foreach ($Gammes['reponse'] as $gamme): ?>
-                                <option value="<?=$gamme['id']?>"><?=$gamme['nom']?></option>
-                            <?endforeach;?>
+                        <label for="ProdSeaC">Liste des produits</label>
+                        <select class="form-control select2" name="prodListe" id="ProdSeaC">
+                            <option value="">Choix du produits</option>
+                            <?foreach ($ListeProd['reponse'] as $prod):?>
+                                <option value="<?=$prod['id']?>"><?=$prod['code_article'].' '.$prod['title']?></option>
+                            <?php endforeach;?>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="qte">Qte</label>
+                        <input type="number" id="qte" name="qte" value="1" step="1" min="1" class="form-control">
                     </div>
                     <div id="ProdACmd"></div>
 
