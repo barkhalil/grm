@@ -777,9 +777,17 @@ $('#ListeProdSessions').on('click','#BtnValiderEchant',function () {
     }
 });
 $(function() {
+    $('.prodInsertListe').on('click','.cancel_prod',function() {
+        //alert('ok');
+        var idProd = $(this).attr('rel');
+        $('#listeSubmitProds').find('input[name='+idProd+']').remove();
+        $('table .prodLigne').find('.'+idProd).html('');
+        $(this).parent('li').remove();
+    });
     $('.validQte').click(function() {
         var qte=$(this).parent('.editStock').find('.qteAdded').val();
         var prodId=$(this).parent('.editStock').find('.qteAdded').attr('rel');
+        var prodCode=$(this).parent('.editStock').find('.qteAdded').attr('codeArticle');
         var prodName=$('table').find('#'+prodId).html();
         //$ancQte=$('table').find('.'+prodId).html();
         var prodAdded='';
@@ -804,7 +812,7 @@ $(function() {
             //$ancQte=parseInt($ancQte)+parseInt(qte);
             $('table').find('.'+prodId).html(qte);
             $('#listeSubmitProds').append("<input type='hidden' value='"+qte+"' name='"+prodId+"'>");
-            $('.prodInsertListe').append('<li>'+prodName+' => La quantité entré => <span class="'+prodId+'" >'+qte+'</span></li>');
+            $('.prodInsertListe').append('<li>'+prodCode+' : '+prodName+' <i class="fa fa-arrow-right" aria-hidden="true"></i> <span class="'+prodId+'" > ( '+qte+' )</span> <a class="btn btn-danger cancel_prod" rel="'+prodId+'"><i class="fa fa-times" aria-hidden="true"></i></a> </li>');
         }
         $(this).parent('.editStock').find('.qteAdded').val('');
         $(this).attr('disabled',true);
@@ -892,7 +900,17 @@ $(function () {
         }
     });
     $("#validBnEntr").click(function(e) {
-        //var url = url + "/ajax/validateBnEntr.php";
+        var stopExecute=true;
+        $('#submitForm input').each(function() {
+
+            if ($(this).prop('required') && $(this).val() === '' ) {
+                //alert('ok');
+                MSg('Merci de remplire le formulaire','alert-danger');
+                stopExecute=false;
+                return false;
+            }
+        });
+        if(!stopExecute) return false;
         var products = [];
         $('#listeSubmitProds input').each(function(){
             products.push({id: $(this).attr("name"), qte: $(this).val()});
@@ -918,5 +936,4 @@ $(function () {
         });
         //e.preventDefault();
     });
-
 });

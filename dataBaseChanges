@@ -1,5 +1,3 @@
-ALTER TABLE `grm_demande_cadeaux` ADD `isCart` INT NOT NULL DEFAULT '0' AFTER `rest_point`;
-
 CREATE TABLE `crm`.`prod_ref_stck` ( `id` INT NOT NULL AUTO_INCREMENT , `reference` VARCHAR(255) NOT NULL , `fournisseur` VARCHAR(255) NOT NULL , `date_bn_entr` DATE NOT NULL , `created_by` INT NOT NULL , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 ALTER TABLE `prod_stock` ADD `idBonEnt` INT NOT NULL AFTER `id`;

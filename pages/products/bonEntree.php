@@ -5,10 +5,6 @@
  * Date: 07/02/18
  * Time: 18:01
  */
-$submit=filter_input(INPUT_GET,'submit',FILTER_DEFAULT);
-if($submit) {
-
-}
 $products=$ProdClass->getAll();
 //echo '<pre>';print_r($products);die;
 ?>
@@ -17,8 +13,6 @@ $products=$ProdClass->getAll();
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-warning box-body">
-                <h3 class="" >Aprés validation aucune modification n'est autorisée</h3>
-                <h3 class="" >Avant validation aucune modification n'est réelement enregistrée</h3>
                 <form method="post" id="submitForm">
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -90,7 +84,7 @@ $products=$ProdClass->getAll();
                             <td>
                                 <div class="form-group editStock">
                                     <label>La quantité:</label><br/>
-                                    <input onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46 || event.charCode == 0 " type="text" name="idPros" placeholder="Quantité" class="full-height qteAdded" rel="<?=$product['id'];?>">
+                                    <input onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46 || event.charCode == 0 " type="text" name="idPros" placeholder="Quantité" class="full-height qteAdded" rel="<?=$product['id'];?>" codeArticle="<?=$product['code_article'];?>">
                                     <button class="btn btn-success validQte" disabled>VALIDER</button>
                                 </div>
                             </td>

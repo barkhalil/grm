@@ -97,3 +97,10 @@ body {
     cursor: pointer;
     margin: 15px 0;
 }
+.cancel_prod {
+    padding: 5px 10px;
+    border-radius: 2px;
+}
+.prodInsertListe li {
+    margin-bottom: 11px;
+}
