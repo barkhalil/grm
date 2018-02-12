@@ -5,6 +5,18 @@
  * Date: 03/01/18
  * Time: 11:22
  */
+$cancel=filter_input(1,'cancel',257);
+if($cancel) {
+    $dmd=$cancelDmds->cancelMatDGDmd($cancel);
+    if($dmd) {
+        redirect($_SERVER['HTTP_REFERER']);
+    } else {
+        $_SESSION['msg']='Une erreur s\'est produite';
+        $_SESSION['type']="alert-warning";
+    }
+
+}
+
 $iddeleg=filter_input(INPUT_POST,'delegue',FILTER_VALIDATE_INT);
 if($iddeleg) {
     $idDmd=filter_input(INPUT_POST,'idDmd',FILTER_VALIDATE_INT);
@@ -148,8 +160,7 @@ if($idDemandeur) {
                                     <a href="listeDmdMaterelDeleg<?=$link?>&annuler=<?=$cdt['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Annuler">
                                         <i class="fa fa-times"></i>
                                     </a>
-                                <?elseif($cdt['etat']==-1):?>
-                                <?else:?>
+                                <?elseif($cdt['etat']>=1):?>
                                     <?if($cdt['date_livraison']==NULL):?>
                                         <a href="listeDmdMaterelDeleg<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
                                             <i class="fa fa-train"></i>
@@ -157,6 +168,9 @@ if($idDemandeur) {
                                     <?endif;?>
                                     <a href="printDocMatDeleg&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
                                         <i class="fa fa-print"></i>
+                                    </a>
+                                    <a href="listeDmdMaterelDeleg<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
                                 <?endif;?>
                             </td>
