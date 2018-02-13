@@ -49,7 +49,7 @@ $user= $user['reponse'][0];
         <table style="border: 1px solid #999; width: 100%;">
             <thead>
                 <tr>
-                    <th style="border: 1px solid #999;padding: 10px">#</th>
+                    <th style="border: 1px solid #999;padding: 10px">Code</th>
                     <th style="border: 1px solid #999;padding: 10px">Cadeaux</th>
                     <th style="border: 1px solid #999;padding: 10px">Déscription</th>
                     <th style="border: 1px solid #999;padding: 10px">Quantité</th>
@@ -58,7 +58,7 @@ $user= $user['reponse'][0];
             <tbody>
                 <?php foreach ($cdx['reponse'] as $cd):?>
                     <tr>
-                        <td style="border: 1px solid #999;padding: 10px;"><?=$cd['id'];?></td>
+                        <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_prod'],'products','code_article');?></td>
                         <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_prod'],'products','name');?></td>
                         <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_prod'],'products','description');?></td>
                         <td style="border: 1px solid #999;padding: 10px;"><?=$cd['qte'];?></td>
