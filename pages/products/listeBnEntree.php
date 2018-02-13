@@ -7,7 +7,39 @@
  */
 $Limite=filter_input(INPUT_GET,'d',257);
 if(!$Limite) $Limite=0;
-$bnsEntr=get('*','prod_ref_stock',NULL,'AND',array('created_at'=>'DESC'),array($Limite,30));
+$submitSearch=filter_input(INPUT_GET,'submitSearch',FILTER_DEFAULT);
+if($submitSearch) {
+    $dateBn=filter_input(INPUT_GET,'dateBn',FILTER_DEFAULT);
+    $ref=filter_input(INPUT_GET,'ref',FILTER_DEFAULT);
+    $userInser=filter_input(INPUT_GET,'user',FILTER_VALIDATE_INT);
+    $where=array();
+    if($dateBn) {
+        $dateBn = str_replace('/', '-', $dateBn);
+        $dateBn= date('Y-m-d', strtotime($dateBn));
+        $where["date_bn_entr ="]="'".$dateBn."'";//echo $dateBn;die;
+        //$link.="&dateBn=$dateBn";
+    }
+    if($ref) {
+        $where['reference like']='%'.$ref.'%';
+        //$link.="&ref=$ref";
+    }
+    if($userInser) {
+        $where['created_by=']=$userInser;
+        //$link.="&user=$userInser";
+    }
+    //echo '<pre>';print_r($where);die;
+    if($where) {
+        $bnsEntr=get('*','prod_ref_stock',$where,'AND',array('created_at'=>'DESC'),array($Limite,30));
+    } else {
+        $bnsEntr=get('*','prod_ref_stock',NULL,'AND',array('created_at'=>'DESC'),array($Limite,30));
+    }
+
+    //echo'<pre>';print_r($bnsEntr);die;
+} else {
+    $bnsEntr=get('*','prod_ref_stock',NULL,'AND',array('created_at'=>'DESC'),array($Limite,30));
+}
+//echo'<pre>';print_r($bnsEntr);die;
+$users=get('*','users',array('active>'=>0),'AND',array('Nom'=>'DESC'));
 ?>
 <section class="content-header">
     <h1 class="pull-left">Bons d'entrée</h1>
@@ -19,14 +51,48 @@ $bnsEntr=get('*','prod_ref_stock',NULL,'AND',array('created_at'=>'DESC'),array($
 <section class="content">
     <div class="row">
         <div class="col-md-12">
-            <div class="box box-success box-body table-responsive">
-                <div class="form-group">
-                </div>
+            <div class="box box-success box-body">
+                <form class="" action="listeBnEntree" method="get">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Date de Bon</label>
+                            <?php
+                            if($dateBn) {
+                                $dateBn= date('d-m-Y', strtotime($dateBn));
+                                $dateBn = str_replace('-', '/', $dateBn);
+                            }
+                            ?>
+                            <input type='text' id="datePicker" class="form-control" name="dateBn" placeholder="Date..." onkeydown="return false" value="<?=($dateBn)?$dateBn:'';?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Référence de Bon</label>
+                            <input value="<?=($ref)?$ref:''; ?>" type='text'  class="form-control" name="ref" placeholder="Référence..."/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Saisie par:</label>
+                            <select class="form-control" name="user">
+                                <option value="">Saisie par...</option>
+                                <?foreach ($users['reponse'] as $user):?>
+                                    <option <?=($userInser==$user['id'])?'selected':''; ?> value="<?=$user['id'];?>"><?=$user['Nom'].' '.$user['Prenom'];?></option>
+                                <?endforeach;?>
+                            </select>
+                        </div>
+                        <br/>
+                        <div class="form-group">
+                            <input type="submit" value="Filtrer" class="btn btn-primary" name="submitSearch" >
+                            <a href="listeBnEntree" class="btn btn-danger">Annuler</a>
+                        </div>
+
+                    </div>
+
+                </form>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Code</th>
-                            <th>Réference</th>
+                            <th>Référence</th>
                             <th>Date</th>
                             <th>Date de saisie</th>
                             <th>Par</th>
@@ -38,8 +104,14 @@ $bnsEntr=get('*','prod_ref_stock',NULL,'AND',array('created_at'=>'DESC'),array($
                         <tr>
                             <td><?='BN'.$bn['id'].'/'.date('Y',strtotime($bn['created_at']));?></td>
                             <td><?=$bn['reference'];?></td>
-                            <td><?=$bn['date_bn_entr'];?></td>
-                            <td><?=$bn['created_at'];?></td>
+                            <td><?php
+                                $dateBn= date('d-m-Y', strtotime($bn['date_bn_entr']));
+                                $dateBn = str_replace('-', '/', $dateBn);
+                                echo $dateBn;?></td>
+                            <td><?php
+                                $dateInsert= date('d-m-Y', strtotime($bn['created_at']));
+                                $dateInsert = str_replace('-', '/', $dateInsert);
+                                echo $dateInsert;?></td>
                             <td><?=getinfo($bn['created_by'],'users','Nom').' '.getinfo($bn['created_by'],'users','Prenom');?></td>
                             <td>
                                 <a href="deytailBnEntr&idBn=<?=$bn['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Visualiser">
@@ -68,10 +140,12 @@ $bnsEntr=get('*','prod_ref_stock',NULL,'AND',array('created_at'=>'DESC'),array($
         </div>
 
         <div class="col-md-7">
+            <?$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            ?>
 
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
 
-                <? pagination($bnsEntr['total'], 30, WEBRoot . "/products/listeBnEntree".$link."&d=", ""); ?>
+                <? pagination($bnsEntr['total'], 30, $actual_link."&d=", ""); ?>
 
             </div>
 
