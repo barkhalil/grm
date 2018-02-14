@@ -937,3 +937,13 @@ $(function () {
         //e.preventDefault();
     });
 });
+$(document).ready(function() {
+    var referrer =  document.referrer;
+    $('<input>').attr({
+        type: 'hidden',
+        id: 'referrer',
+        name: 'referrer',
+        value: referrer
+    }).appendTo('form');
+    //alert(referrer);
+});

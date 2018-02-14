@@ -3,3 +3,6 @@ CREATE TABLE `crm`.`prod_ref_stck` ( `id` INT NOT NULL AUTO_INCREMENT , `referen
 ALTER TABLE `prod_stock` ADD `idBonEnt` INT NOT NULL AFTER `id`;
 
 ALTER TABLE `prod_stock` CHANGE `fournisseur` `fournisseur` VARCHAR(255) NOT NULL;
+
+ALTER TABLE `grm_stock` ADD `created_by` INT NOT NULL DEFAULT '2' AFTER `fournisseur`;
+ALTER TABLE `grm_fournisseur` ADD `etat` INT NOT NULL DEFAULT '1' AFTER `system_date`;

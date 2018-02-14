@@ -141,7 +141,8 @@ if($idDemandeau) {
                                 else:
                                     echo getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
                                 endif;
-                                ?></td>
+                                ?>
+                            </td>
                             <td><?=getinfo($cdt['id_pros'],'prospect' ,'Nom').' '.getinfo($cdt['id_pros'],'prospect' ,'prenom')?></td>
                             <td><?
                                 if($cdt['etat']==0){

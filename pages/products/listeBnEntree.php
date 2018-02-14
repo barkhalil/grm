@@ -16,7 +16,7 @@ if($submitSearch) {
     if($dateBn) {
         $dateBn = str_replace('/', '-', $dateBn);
         $dateBn= date('Y-m-d', strtotime($dateBn));
-        $where["date_bn_entr ="]="'".$dateBn."'";//echo $dateBn;die;
+        $where["date_bn_entr ="]=$dateBn;//echo $dateBn;die;
         //$link.="&dateBn=$dateBn";
     }
     if($ref) {
@@ -39,7 +39,7 @@ if($submitSearch) {
     $bnsEntr=get('*','prod_ref_stock',NULL,'AND',array('created_at'=>'DESC'),array($Limite,30));
 }
 //echo'<pre>';print_r($bnsEntr);die;
-$users=get('*','users',array('active>'=>0),'AND',array('Nom'=>'DESC'));
+$users=get('*','grm_users',array('active>'=>0),'AND',array('Nom'=>'DESC'));
 ?>
 <section class="content-header">
     <h1 class="pull-left">Bons d'entrée</h1>
@@ -52,8 +52,7 @@ $users=get('*','users',array('active>'=>0),'AND',array('Nom'=>'DESC'));
     <div class="row">
         <div class="col-md-12">
             <div class="box box-success box-body">
-                <form class="" action="listeBnEntree" method="get">
-                    <div class="col-sm-6">
+                <form class="form-inline" action="listeBnEntree" method="get">
                         <div class="form-group">
                             <label>Date de Bon</label>
                             <?php
@@ -68,8 +67,6 @@ $users=get('*','users',array('active>'=>0),'AND',array('Nom'=>'DESC'));
                             <label>Référence de Bon</label>
                             <input value="<?=($ref)?$ref:''; ?>" type='text'  class="form-control" name="ref" placeholder="Référence..."/>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
                         <div class="form-group">
                             <label>Saisie par:</label>
                             <select class="form-control" name="user">
@@ -79,15 +76,11 @@ $users=get('*','users',array('active>'=>0),'AND',array('Nom'=>'DESC'));
                                 <?endforeach;?>
                             </select>
                         </div>
-                        <br/>
                         <div class="form-group">
                             <input type="submit" value="Filtrer" class="btn btn-primary" name="submitSearch" >
                             <a href="listeBnEntree" class="btn btn-danger">Annuler</a>
                         </div>
-
-                    </div>
-
-                </form>
+                </form><br/>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -112,9 +105,9 @@ $users=get('*','users',array('active>'=>0),'AND',array('Nom'=>'DESC'));
                                 $dateInsert= date('d-m-Y', strtotime($bn['created_at']));
                                 $dateInsert = str_replace('-', '/', $dateInsert);
                                 echo $dateInsert;?></td>
-                            <td><?=getinfo($bn['created_by'],'users','Nom').' '.getinfo($bn['created_by'],'users','Prenom');?></td>
+                            <td><?=getinfo($bn['created_by'],'grm_users','Nom').' '.getinfo($bn['created_by'],'grm_users','Prenom');?></td>
                             <td>
-                                <a href="deytailBnEntr&idBn=<?=$bn['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Visualiser">
+                                <a href="detailsBnEntr&idBn=<?=$bn['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Visualiser">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </a>
                             </td>

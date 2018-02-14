@@ -3,6 +3,8 @@
  * ajouter un cadeau
  */
 $id=filter_input(1,'id',FILTER_VALIDATE_INT);
+$referrer=filter_input(INPUT_POST,'referrer',FILTER_DEFAULT);
+//echo $referrer;die;
 $serCh=false;
 if(!$id){
     //pas d'id test s'i c'est un text  :
@@ -10,7 +12,7 @@ if(!$id){
     if(!$id){
         $_SESSION['msg'] = "Le produits rechercher est introuvable";
         $_SESSION['type'] = "alert-danger";
-        redirect('../gift/ListeCadeaux');
+        redirect($referrer);
     }else{
         $serCh=true;
     }
@@ -26,38 +28,42 @@ if(!$serCh ){ // id int
     if(count($CadeauxDetails)<=0){
         $_SESSION['msg'] = "Article non Trouver !!";
         $_SESSION['type'] = "alert-danger";
-         redirect('../gift/ListeCadeaux');
+         redirect($referrer);
     }
     $id=$CadeauxDetails['id'];
 }
 if(filter_input(INPUT_POST,'addGift',FILTER_VALIDATE_INT)):
     $newQte=filter_input(0,'Newqte',257);
-    $data=array(
-        'qte'=>filter_input(0,'Newqte',257),
-        'qte_ex'=>$CadeauxDetails['qte'],
-        'prod'=>$id,
-        'fournisseur'=>filter_input(0,'four',257),
-        'paht'=>filter_input(0,'paht',516),
-        'pvht'=>filter_input(0,'pvht',516),
-        'pvttc'=>filter_input(0,'pvttc',516),
-        'ref'=>filter_input(0,'ref',516),
-        'validation'=>0,
-        'system_date'=>date('Y-m-d H:s')
-    );
-$idStock=add($data,'grm_stock');
-    if($idStock){
-        $_SESSION['msg'] = "Stock et prix ajouter";
-        $_SESSION['type'] = "alert-success";
-        //update stock prod promotionnel :
-        $valIni=$CadeauxDetails['qte'];
-        $valFinal = $newQte + $valIni;
-        update(
-                $id,array('qte'=>$valFinal),'grm_gift'
+    if(filter_input(0,'Newqte',257)>0) {
+        $data=array(
+            'qte'=>filter_input(0,'Newqte',257),
+            'qte_ex'=>$CadeauxDetails['qte'],
+            'prod'=>$id,
+            'fournisseur'=>filter_input(0,'four',257),
+            'paht'=>filter_input(0,'paht',516),
+            'pvht'=>filter_input(0,'pvht',516),
+            'pvttc'=>filter_input(0,'pvttc',516),
+            'ref'=>filter_input(0,'ref',516),
+            'validation'=>0,
+            'system_date'=>date('Y-m-d H:s')
         );
-        redirect('../gift/ListeCadeaux');
-    }else{
-        $_SESSION['msg'] = "problème erreur mochkla wa 7lili";
-        $_SESSION['type'] = "alert-danger";
+        $idStock=add($data,'grm_stock');
+        if($idStock){
+            $_SESSION['msg'] = "Stock et prix ajouter";
+            $_SESSION['type'] = "alert-success";
+            //update stock prod promotionnel :
+            $valIni=$CadeauxDetails['qte'];
+            $valFinal = $newQte + $valIni;
+            update(
+                $id,array('qte'=>$valFinal),'grm_gift'
+            );
+            redirect('../gift/ListeCadeaux');
+        }else{
+            $_SESSION['msg'] = "problème erreur mochkla wa 7lili";
+            $_SESSION['type'] = "alert-danger";
+        }
+    } else {
+        redirect($referrer);
     }
 endif;
 
@@ -140,12 +146,10 @@ endif;
                         <label>Fournisseur</label>
                         <select name="four" class="form-control" required>
                             <option value="">Liste</option>
-                            <? $four=get('*','grm_fournisseur');
+                            <? $four=get('*','grm_fournisseur',array('etat>'=>0));
                             foreach ($four['reponse'] as $Fourni):
                                 ?>
-                                <option value="<?=$Fourni['id']?>" <?
-                                if($Fourni['id']==40) echo "selected='selected'"
-                                ?>> <?=$Fourni['code']?></option>
+                                <option value="<?=$Fourni['id']?>" > <?=$Fourni['code']?></option>
                             <?endforeach;?>
                         </select>
                     </div>
@@ -158,6 +162,7 @@ endif;
                 <div class="box box-danger">
                     <br/>
                     <button type="submit" value="1" name="addGift" class="btn btn-github pull-right pad"> Ajouter </button>
+                    <a href="#" class="btn btn-danger pull-left pad" onclick="history.go(-1);"> Annuler </a>
                     <br/><div class="clearfix"></div><br/>
                 </div></div>
 
