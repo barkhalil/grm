@@ -939,11 +939,15 @@ $(function () {
 });
 $(document).ready(function() {
     var referrer =  document.referrer;
-    $('<input>').attr({
-        type: 'hidden',
-        id: 'referrer',
-        name: 'referrer',
-        value: referrer
-    }).appendTo('form');
+
+    if($("form").hasClass("returPage")) {
+        $('<input>').attr({
+            type: 'hidden',
+            id: 'referrer',
+            name: 'referrer',
+            value: referrer
+        }).appendTo('form');
+    }
+
     //alert(referrer);
 });

@@ -73,7 +73,7 @@ endif;
 </section><!-- Main content -->
 <section class="content">
     <div class="row">
-        <form method="post" class=" ">
+        <form method="post" class="returPage">
 
             <div class="col-md-4 ">
                 <div class="box box-primary box-body">

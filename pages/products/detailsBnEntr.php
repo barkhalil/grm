@@ -13,6 +13,7 @@ $products=get('*','prod_stock',array('	idBonEnt='=>$idBn));
 <section class="content-header" style="background: #fff;">
     <h1 class="pull-left"> Bons d'entrée: </h1>
     <button type="button" id="BtnToPrint" value="1" onclick="PrintDiv()" class="btn btn-facebook pull-right">Imprimer <i class="fa fa-print"></i></button>
+    <a href="#" class="btn bg-maroon pull-right" style="margin-right: 15px" onclick="history.go(-1);"> <i class="glyphicon glyphicon-backward"></i> Retour </a>
     <div class="clearfix"></div>
 </section><!-- Main content -->
 <section class="content" id="DivToPrint" style="background: #fff;">

@@ -15,7 +15,9 @@ $Cadeaux=get("*",'grm_gift',array('id='=>$id));
 $CadeauxDetails=$Cadeaux['reponse'][0]; 
 ?>
 <section class="content-header">
+    <a href="#" class="btn bg-maroon pull-right" onclick="history.go(-1);"> <i class="glyphicon glyphicon-backward"></i> Retour </a>
     <h1> Produit :  <?=$CadeauxDetails['titre']?></h1>
+
 </section><!-- Main content -->
 <section class="content">
     <div class="row">

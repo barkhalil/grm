@@ -12,6 +12,7 @@ $where=NULL;
 if($submitSearch) {
     $dateBn=filter_input(INPUT_GET,'dateBn',FILTER_DEFAULT);
     $ref=filter_input(INPUT_GET,'ref',FILTER_DEFAULT);
+    $userInser=filter_input(INPUT_GET,'user',FILTER_VALIDATE_INT);
     $where=array();
     if($dateBn) {
         $dateBn = str_replace('/', '-', $dateBn);
@@ -20,6 +21,9 @@ if($submitSearch) {
     }
     if($ref) {
         $where['ref like']='"%'.$ref.'%"';
+    }
+    if($userInser) {
+        $where['created_by=']=$userInser;
     }
     //echo'<pre>';print_r($bnsEntr);die;
 }
@@ -120,12 +124,15 @@ $users=get('*','grm_users',array('active>'=>0),'AND',array('Nom'=>'DESC'));
 
         <div class="col-md-7">
             <?$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            if(isset($_GET['d'])) {
+                $link=explode('&',$actual_link);
+                unset($link[count($link)-1]);
+                $actual_link=implode('&',$link);
+            }
             ?>
 
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-
                 <? pagination(count($bnsEntr), 30, $actual_link."&d=", ""); ?>
-
             </div>
 
         </div>

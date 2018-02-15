@@ -134,12 +134,15 @@ $users=get('*','grm_users',array('active>'=>0),'AND',array('Nom'=>'DESC'));
 
         <div class="col-md-7">
             <?$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            if(isset($_GET['d'])) {
+                $link=explode('&',$actual_link);
+                unset($link[count($link)-1]);
+                $actual_link=implode('&',$link);
+            }
             ?>
 
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-
                 <? pagination($bnsEntr['total'], 30, $actual_link."&d=", ""); ?>
-
             </div>
 
         </div>
