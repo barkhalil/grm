@@ -19,6 +19,7 @@ $client=filter_input(INPUT_POST,'client',FILTER_VALIDATE_INT);
 $idDemande=filter_input(INPUT_POST,'idDemande',FILTER_VALIDATE_INT);
 $Obs=filter_input(INPUT_POST,'Obs',FILTER_SANITIZE_STRING);
 $cdxSansPB=filter_input(INPUT_POST,'cdxSansPB',FILTER_VALIDATE_INT);
+$delegue=filter_input(INPUT_POST,'delegue',FILTER_VALIDATE_INT);
 $Pbs=get('*','grm_pb_type',array('etat='=>1));
 $pb=$Pbs['reponse'][0];// pour avoir le nombre de point bonus par produits ==> exemple 10 point bonus par produits : qte*10
 //echo $cdxSansPB;exit;
@@ -27,6 +28,7 @@ foreach ($_POST['ponits'] as $key=>$valeurPb) {
     $_SESSION['Point'.$key]=$valeurPb;
 }
 $_SESSION['newPb']=$newPb;
+$_SESSION['delegue']=$delegue;
 $_SESSION['PbClient']=$client;
 $_SESSION['Point']=$Point;
 $_SESSION['TotPoint']=$TotPoint;

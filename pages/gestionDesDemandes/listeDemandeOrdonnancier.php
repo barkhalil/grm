@@ -5,6 +5,18 @@
  * Date: 10/11/2016
  * Time: 14:17
  */
+$cancel=filter_input(1,'cancel',257);
+if($cancel) {
+    $dmd=$cancelDmds->cancelVitrOrdnDmd($cancel);
+    if($dmd) {
+        redirect($_SERVER['HTTP_REFERER']);
+    } else {
+        $_SESSION['msg']='Une erreur s\'est produite';
+        $_SESSION['type']="alert-warning";
+    }
+
+}
+
 $idPros=filter_input(INPUT_POST,'idPros',FILTER_VALIDATE_INT);
 if($idPros) {
     $idDmd=filter_input(INPUT_POST,'idDmd',FILTER_VALIDATE_INT);
@@ -87,9 +99,9 @@ unset($_SESSION['CdxCmd']);
         <div class="col-md-12">
             <div class="box box-success box-body table-responsive">
                 <div class="form-group">
-                    <label>Demander par : </label>
+                    <label>Demande pour : </label>
                     <select class="form-control" name="id_demandeur" onchange="GetPage('listeDemandeOrdonnancier')" id="TypeClient" >
-                        <option value=""> Par utilisateur</option>
+                        <option value=""> Pour utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users',array('active>'=>0));
                         foreach ($ListeUser['reponse'] as $user):
@@ -106,7 +118,7 @@ unset($_SESSION['CdxCmd']);
                     <tr>
                         <th>#</th>
                         <th>date remise</th>
-                        <th>Demandeur</th>
+                        <th>Délégué</th>
                         <th>Pour : </th>
                         <th>Etat demande</th>
                         <th>Cadeaux demander</th>
@@ -132,6 +144,8 @@ unset($_SESSION['CdxCmd']);
                                     echo "Refusée";
                                 }elseif($cdt['etat']==1){
                                     echo "Pointer";
+                                }elseif($cdt['etat']==-2){
+                                    echo "Annulée aprés validation";
                                 }elseif($cdt['etat']==2){
                                     echo "Points insufissant, avec reste =  ".$cdt['rest_point'];
                                 }else{
@@ -157,7 +171,7 @@ unset($_SESSION['CdxCmd']);
                                 </ul>
                             </td>
                             <td>
-                                <? if($cdt['etat']>0 || $cdt['etat']==-1):?>
+                                <? if($cdt['etat']>0 || $cdt['etat']==-1 || $cdt['etat']==-2):?>
                                     <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
                                         <input onkeyup="this.value = this.value.replace(/\D/g,'')" type="text" name="idPros" placeholder="ID PROS" class="full-height">
                                         <input type="hidden" name="idDmd" value="<?=$cdt['id'];?>">
@@ -190,6 +204,11 @@ unset($_SESSION['CdxCmd']);
                                             <i class="fa fa-print"></i>
                                         </a>
                                     <?endif;endif?>
+                                    <?if($cdt['etat']>=4):?>
+                                        <a href="listeDemandeOrdonnancier<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    <?endif;?>
                                 <?endif;?>
                             </td>
                         </tr>

@@ -16,7 +16,7 @@ $products=$ProdClass->getAll();
                 <form method="post" id="submitForm">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Réference du bon d'entrée: </label>
+                            <label>Référence du bon d'entrée: </label>
                             <input type="text" placeholder="Réference..." class="form-control" name="ref"  required>
                         </div>
                         <div class="form-group" >

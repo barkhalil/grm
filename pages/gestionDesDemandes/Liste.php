@@ -60,20 +60,14 @@ if($pointage){
     ) ,'grm_demande_cadeaux');
 }
 if($cancel) {
-    $cadeauxDmd=get('*','grm_cadeaux_demander',array('id_demande='=>$cancel));
-    foreach ($cadeauxDmd['reponse'] as $cdx) {
-        if($cdx['type_cdx']==2)
-            $Gcc->edit_stock_gifts($cdx['id_cadeaux'],$cdx['qte']);
-        else
-            $Gcc->edit_stock_prods($cdx['id_cadeaux'],$cdx['qte']);
+    $dmd=$cancelDmds->cancelCdxDmd($cancel);
+    if($dmd) {
+        redirect($_SERVER['HTTP_REFERER']);
+    } else {
+        $_SESSION['msg']='Une erreur s\'est produite';
+        $_SESSION['type']="alert-warning";
     }
-    update($cancel,array(
-        'etat'=>-2,
-        'modifier_par'=>$_SESSION['user']['id'],
-        'date_validation'=>date("Y-m-d")
-    ) ,'grm_demande_cadeaux');
 
-    redirect($_SERVER['HTTP_REFERER']);
 }
 if($annuler){
     update($annuler,array(
@@ -109,9 +103,9 @@ if($idDemandeau) {
         <div class="col-md-12">
             <div class="box box-success box-body table-responsive">
                 <div class="form-group">
-                    <label>Demander par : </label>
+                    <label>Demande pour : </label>
                     <select class="form-control" name="id_demandeur" onchange="GetPage('Liste')" id="TypeClient" >
-                        <option value=""> Par utilisateur</option>
+                        <option value=""> Pour utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users',array('active>'=>0));
                         foreach ($ListeUser['reponse'] as $user):
@@ -129,7 +123,7 @@ if($idDemandeau) {
                         <th>#</th>
                         <th>date remise</th>
                         <th>Point remis</th>
-                        <th>Demandeur</th>
+                        <th>Délégué</th>
                         <th>Pour : </th>
                         <th>Etat demande</th>
                         <th>Cadeaux demander</th>
@@ -147,7 +141,8 @@ if($idDemandeau) {
                                 else:
                                     echo getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
                                 endif;
-                                ?></td>
+                                ?>
+                            </td>
                             <td><?=getinfo($cdt['id_pros'],'prospect' ,'Nom').' '.getinfo($cdt['id_pros'],'prospect' ,'prenom')?></td>
                             <td><?
                                 if($cdt['etat']==0){

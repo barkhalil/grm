@@ -5,6 +5,18 @@
  * Date: 03/01/18
  * Time: 11:22
  */
+$cancel=filter_input(1,'cancel',257);
+if($cancel) {
+    $dmd=$cancelDmds->cancelMatDGDmd($cancel);
+    if($dmd) {
+        redirect($_SERVER['HTTP_REFERER']);
+    } else {
+        $_SESSION['msg']='Une erreur s\'est produite';
+        $_SESSION['type']="alert-warning";
+    }
+
+}
+
 $iddeleg=filter_input(INPUT_POST,'delegue',FILTER_VALIDATE_INT);
 if($iddeleg) {
     $idDmd=filter_input(INPUT_POST,'idDmd',FILTER_VALIDATE_INT);
@@ -63,9 +75,9 @@ if($idDemandeur) {
         <div class="col-md-12">
             <div class="box box-success box-body table-responsive">
                 <div class="form-group">
-                    <label>Demander par : </label>
+                    <label>Demande pour : </label>
                     <select class="form-control" name="id_demandeur" onchange="GetPage('listeDmdMaterelDeleg')" id="TypeClient" >
-                        <option value="">Par utilisateur</option>
+                        <option value="">Pour utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users',array('active>'=>0));
                         foreach ($ListeUser['reponse'] as $user):
@@ -81,6 +93,7 @@ if($idDemandeur) {
                     <tr>
                         <th>#</th>
                         <th>Date de demande</th>
+                        <th>Pour</th>
                         <th>Par</th>
                         <th>Etat demande</th>
                         <th>Cadeaux demander</th>
@@ -93,12 +106,18 @@ if($idDemandeur) {
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['date_dmd']))?></td>
                             <td><?=$cdt['date_dmd'];?></td>
                             <td>
-                                <?php if($cdt['id_deleg']==2):
-                                    echo getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
-                                else:
+                                <?php
                                     echo getinfo($cdt['id_deleg'],'users' ,'Nom').' '.getinfo($cdt['id_deleg'],'users' ,'prenom');
+                                ?>
+                            </td>
+                            <td>
+                                <?php if($cdt['par']!=$cdt['created_by']):
+                                    echo getinfo($cdt['created_by'],'grm_users' ,'Nom').' '.getinfo($cdt['created_by'],'grm_users' ,'prenom').' (compte GRM)';
+                                else:
+                                    echo getinfo($cdt['created_by'],'users' ,'Nom').' '.getinfo($cdt['created_by'],'users' ,'prenom');
                                 endif;
-                                ?></td>
+                                ?>
+                            </td>
                             <td><?
                                 if($cdt['etat']==0){
                                     echo "En cours de traitement";
@@ -148,8 +167,7 @@ if($idDemandeur) {
                                     <a href="listeDmdMaterelDeleg<?=$link?>&annuler=<?=$cdt['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Annuler">
                                         <i class="fa fa-times"></i>
                                     </a>
-                                <?elseif($cdt['etat']==-1):?>
-                                <?else:?>
+                                <?elseif($cdt['etat']>=1):?>
                                     <?if($cdt['date_livraison']==NULL):?>
                                         <a href="listeDmdMaterelDeleg<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
                                             <i class="fa fa-train"></i>
@@ -157,6 +175,9 @@ if($idDemandeur) {
                                     <?endif;?>
                                     <a href="printDocMatDeleg&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
                                         <i class="fa fa-print"></i>
+                                    </a>
+                                    <a href="listeDmdMaterelDeleg<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
                                 <?endif;?>
                             </td>

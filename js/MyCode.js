@@ -554,6 +554,7 @@ function PbAdd(page) {
         ponits[id] = $(this).val();
     });
     var Point =$("#PintC").val();
+    var delegue =$("#delegue").val();
     var newPb =$("#PointVal").text();
     var cdxSansPB =$("#cdxSansPB").val();
     var type;
@@ -579,7 +580,7 @@ function PbAdd(page) {
         qte=$("#qteC").val();
         prodbonus = $("#CdxSelect :selected").attr('bonus');
     }
-    if(!ProdSeaC || !qte || !client){
+    if(!ProdSeaC || !qte || !client || !delegue){
         MSg('Merci de choisir le produits / articles','alert-danger');
         return false;
     }else{
@@ -587,7 +588,7 @@ function PbAdd(page) {
         $.ajax({
             url:url+'/ajax/Bonus/'+page,
             type:'POST',
-            data:{type:type,qte:qte,client:client,ProdSeaC:ProdSeaC,TotPoint:TotPoint,prodbonus:prodbonus,Point:Point,Obs:Obs,ponits:ponits,newPb:newPb,idDemande:idDemande,cdxSansPB:cdxSansPB },
+            data:{type:type,qte:qte,client:client,ProdSeaC:ProdSeaC,TotPoint:TotPoint,prodbonus:prodbonus,Point:Point,Obs:Obs,ponits:ponits,newPb:newPb,idDemande:idDemande,cdxSansPB:cdxSansPB,delegue:delegue },
             success:function (data) {
                 $("#ListeProdSessions").html(data);
             },
@@ -936,4 +937,18 @@ $(function () {
         });
         //e.preventDefault();
     });
+});
+$(document).ready(function() {
+    var referrer =  document.referrer;
+
+    if($("form").hasClass("returPage")) {
+        $('<input>').attr({
+            type: 'hidden',
+            id: 'referrer',
+            name: 'referrer',
+            value: referrer
+        }).appendTo('form');
+    }
+
+    //alert(referrer);
 });

@@ -9,6 +9,7 @@ if(filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT)){
     $_SESSION['Point']=0;
     $_SESSION['TotPoint']=0;
     $_SESSION['newPb']=0;
+    $_SESSION['delegue']=0;
     $_SESSION['TotalCdx']=0;
     $_SESSION['Obs']='';
     $_SESSION['ProdPbCmd']=null;
@@ -74,6 +75,17 @@ if($IdSup){
                         <li><b>Nouveau : </b> <t id="PointVal"><?=$_SESSION['newPb']?></t></li>
                         <li><b>Total : </b> <t id="PointValTot"><?=$_SESSION['TotPoint']?></t></li>
                     </ul>
+                    <div class="form-group">
+                        <label for="delegue">Demande Pour :</label>
+                        <select name="delegue" id="delegue" class="form-control"  required  >
+                            <option value="">Pour</option>
+                            <?
+                            $users= get('*','users',array('active>='=>1),'AND');
+                            foreach ($users['reponse'] as $user):?>
+                                <option value="<?=$user['id']?>" <?= ($_SESSION['delegue']==$user['id'])? 'selected':''; ?>> <?=$user['Nom'].' '.$user['Prenom'];?></option>
+                            <?endforeach;?>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label>Observation prospect : </label>
                         <textarea class="form-control" name="observation_client" id="Obs" rows="4"><?=$_SESSION['Obs'] ?></textarea>

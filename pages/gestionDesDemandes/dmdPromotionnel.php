@@ -5,6 +5,17 @@
  * Date: 02/01/18
  * Time: 12:42
  */
+$cancel=filter_input(1,'cancel',257);
+if($cancel) {
+    $dmd=$cancelDmds->cancelVitrOrdnDmd($cancel);
+    if($dmd) {
+        redirect($_SERVER['HTTP_REFERER']);
+    } else {
+        $_SESSION['msg']='Une erreur s\'est produite';
+        $_SESSION['type']="alert-warning";
+    }
+
+}
 $iddeleg=filter_input(INPUT_POST,'delegue',FILTER_VALIDATE_INT);
 if($iddeleg) {
     $idDmd=filter_input(INPUT_POST,'idDmd',FILTER_VALIDATE_INT);
@@ -79,9 +90,9 @@ if($idDemandeau) {
         <div class="col-md-12">
             <div class="box box-success box-body table-responsive">
                 <div class="form-group">
-                    <label>Demander par : </label>
+                    <label>Demande pour : </label>
                     <select class="form-control" name="id_demandeur" onchange="GetPage('dmdPromotionnel')" id="TypeClient" >
-                        <option value=""> Par utilisateur</option>
+                        <option value=""> Pour utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users',array('active>'=>0));
                         foreach ($ListeUser['reponse'] as $user):
@@ -98,6 +109,7 @@ if($idDemandeau) {
                         <tr>
                             <th>#</th>
                             <th>Date de demande</th>
+                            <th>Pour</th>
                             <th>Par</th>
                             <th>Etat demande</th>
                             <th>Cadeaux demander</th>
@@ -109,10 +121,16 @@ if($idDemandeau) {
                         <tr>
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['sysDate']))?></td>
                             <td><?=$cdt['sysDate'];?></td>
-                            <td><?php if($cdt['par']==2):
-                                    echo getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
+                            <td>
+                                <?php
+                                echo getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom');
+                                ?>
+                            </td>
+                            <td>
+                                <?php if($cdt['par']!=$cdt['created_by']):
+                                    echo getinfo($cdt['created_by'],'grm_users' ,'Nom').' '.getinfo($cdt['created_by'],'grm_users' ,'prenom').' (compte GRM)';
                                 else:
-                                    echo getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom');
+                                    echo getinfo($cdt['created_by'],'users' ,'Nom').' '.getinfo($cdt['created_by'],'users' ,'prenom');
                                 endif;
                                 ?>
                             </td>
@@ -121,6 +139,8 @@ if($idDemandeau) {
                                     echo "En cours de traitement";
                                 }elseif($cdt['etat']==1){
                                     echo "Valider";
+                                }elseif($cdt['etat']==-2){
+                                    echo "Annulée aprés validation";
                                 }elseif($cdt['etat']==-1){
                                     echo "Annuler";
                                 }else{
@@ -166,8 +186,7 @@ if($idDemandeau) {
                                     <a href="dmdPromotionnel<?=$link?>&annuler=<?=$cdt['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Annuler">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
-                                <?elseif($cdt['etat']==-1):?>
-                                <?else:?>
+                                <?elseif($cdt['etat']>=1):?>
                                     <?if($cdt['date_livraison']==NULL):?>
                                         <a href="dmdPromotionnel<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
                                             <i class="fa fa-train"></i>
@@ -175,6 +194,9 @@ if($idDemandeau) {
                                     <?endif;?>
                                     <a href="printDocPromo&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
                                         <i class="fa fa-print"></i>
+                                    </a>
+                                    <a href="dmdPromotionnel<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
                                 <?endif;?>
                             </td>
