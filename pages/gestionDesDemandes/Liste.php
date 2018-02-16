@@ -103,9 +103,9 @@ if($idDemandeau) {
         <div class="col-md-12">
             <div class="box box-success box-body table-responsive">
                 <div class="form-group">
-                    <label>Demander par : </label>
+                    <label>Demande pour : </label>
                     <select class="form-control" name="id_demandeur" onchange="GetPage('Liste')" id="TypeClient" >
-                        <option value=""> Par utilisateur</option>
+                        <option value=""> Pour utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users',array('active>'=>0));
                         foreach ($ListeUser['reponse'] as $user):
@@ -123,7 +123,7 @@ if($idDemandeau) {
                         <th>#</th>
                         <th>date remise</th>
                         <th>Point remis</th>
-                        <th>Demandeur</th>
+                        <th>Délégué</th>
                         <th>Pour : </th>
                         <th>Etat demande</th>
                         <th>Cadeaux demander</th>

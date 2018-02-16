@@ -25,7 +25,7 @@ if(!$idDemande) {
         // ajouter la demande :
         $data = array(
             'id_pros' => $_SESSION['PbClient'],
-            'id_demandeur' => $_SESSION['user']['id'],
+            'id_demandeur' => $_SESSION['delegue'],
             'pointage' => 1,
             'date_pointage'=>date('Y-m-d'),
             'point_bonus' => $_SESSION['TotPoint'],//rest !!!

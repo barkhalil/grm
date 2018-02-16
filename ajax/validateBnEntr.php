@@ -24,7 +24,7 @@ $dateSelect= date('Y-m-d', strtotime($dateSelect));
 if($msg) {
     $_SESSION['msg'] = "Bon d'entrée enregistré";
     $_SESSION['type'] ="alert-success";
-    redirect('../products/bonEntree');
+    redirect('../products/listeBnEntree');
 }
 $bonDEntr=array(
     'fournisseur'=>$fournisseur,

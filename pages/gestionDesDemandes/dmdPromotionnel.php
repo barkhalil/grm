@@ -90,9 +90,9 @@ if($idDemandeau) {
         <div class="col-md-12">
             <div class="box box-success box-body table-responsive">
                 <div class="form-group">
-                    <label>Demander par : </label>
+                    <label>Demande pour : </label>
                     <select class="form-control" name="id_demandeur" onchange="GetPage('dmdPromotionnel')" id="TypeClient" >
-                        <option value=""> Par utilisateur</option>
+                        <option value=""> Pour utilisateur</option>
                         <?
                         $ListeUser = get('*', 'users',array('active>'=>0));
                         foreach ($ListeUser['reponse'] as $user):
@@ -109,6 +109,7 @@ if($idDemandeau) {
                         <tr>
                             <th>#</th>
                             <th>Date de demande</th>
+                            <th>Pour</th>
                             <th>Par</th>
                             <th>Etat demande</th>
                             <th>Cadeaux demander</th>
@@ -120,10 +121,16 @@ if($idDemandeau) {
                         <tr>
                             <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['sysDate']))?></td>
                             <td><?=$cdt['sysDate'];?></td>
-                            <td><?php if($cdt['par']==2):
-                                    echo getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
+                            <td>
+                                <?php
+                                echo getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom');
+                                ?>
+                            </td>
+                            <td>
+                                <?php if($cdt['par']!=$cdt['created_by']):
+                                    echo getinfo($cdt['created_by'],'grm_users' ,'Nom').' '.getinfo($cdt['created_by'],'grm_users' ,'prenom').' (compte GRM)';
                                 else:
-                                    echo getinfo($cdt['par'],'users' ,'Nom').' '.getinfo($cdt['par'],'users' ,'prenom');
+                                    echo getinfo($cdt['created_by'],'users' ,'Nom').' '.getinfo($cdt['created_by'],'users' ,'prenom');
                                 endif;
                                 ?>
                             </td>
