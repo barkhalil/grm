@@ -7,8 +7,8 @@
  */
 $refBn= filter_input(INPUT_GET,'refBn',FILTER_DEFAULT);
 //echo '<pre>';print_r($_GET);die;
-$where=array('ref='=>$refBn);
-$bnsEntr=$giftStock->getAllBnEntree($where);
+$where=array('ref= "'=>$refBn.'"');
+$bnsEntr=$giftStock->getBnEntr($refBn);
 //echo '<pre>';print_r($bnsEntr);die;
 ?>
 <section class="content-header" style="background: #fff;">
@@ -44,10 +44,10 @@ $bnsEntr=$giftStock->getAllBnEntree($where);
                     <?php $bnDetails=explode('//',$article['champs']);
                         //echo '<pre>';print_r($bnDetails);die;
                     ?>
-                    <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($bnDetails[2],'grm_gift','code_article');?></td>
-                    <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($bnDetails[2],'grm_gift','titre');?></td>
-                    <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($bnDetails[2],'grm_gift','description');?></td>
-                    <td style="border: 1px solid #999;padding: 10px;"><?=$bnDetails[3];?></td>
+                    <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($article['prod'],'grm_gift','code_article');?></td>
+                    <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($article['prod'],'grm_gift','titre');?></td>
+                    <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($article['prod'],'grm_gift','description');?></td>
+                    <td style="border: 1px solid #999;padding: 10px;"><?=$article['qte'];?></td>
                 </tr>
             <?endforeach;?>
             </tbody>
