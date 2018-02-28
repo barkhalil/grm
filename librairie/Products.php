@@ -7,6 +7,13 @@
  * Time: 00:02
  */
 class Products{
+    public function getProdAlert(){
+        global $PDO;
+        $Sql="SELECT * FROM products JOIN products_prix ON products.id=products_prix.id_prod WHERE products_prix.qte<=0";
+        $stmt=$PDO->prepare($Sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function getPrix($prodId,$Type=1){
         global $PDO;
         $Sql="SELECT * FROM products_prix WHERE products_prix.id_prod  = $prodId and type = $Type";

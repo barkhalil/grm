@@ -104,3 +104,11 @@ body {
 .prodInsertListe li {
     margin-bottom: 11px;
 }
+.alert-bloc td {
+    word-wrap: break-word;
+    max-width: 60px;
+}
+.alert-bloc {
+    max-height: 300px;
+    overflow-y: scroll;
+}
