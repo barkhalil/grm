@@ -134,15 +134,19 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                                 <a href="Details&id=<?=$cade['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Détails">
                                     <i class="fa fa-paperclip"></i>
                                 </a>
-                                <a href="EdtitCadeau&id=<?=$cade['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Modifier">
-                                    <i class="fa fa-pencil-square-o"></i>
-                                </a>
+                                <? if($_SESSION['user']['type']<=102): ?>
+                                    <a href="EdtitCadeau&id=<?=$cade['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Modifier">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </a>
+                                <?endif;?>
                                 <a href="../fournisseur/addStocks&id=<?=$cade['id']?>" class="btn btn-flat" data-toggle="tooltip" title="Ajouter au stock">
                                     <i class="fa fa-truck" aria-hidden="true"></i>
                                 </a>
-                                <a href="ListeCadeaux&idToSup=<?=$cade['id']?>" class="btn btn-danger" data-toggle="tooltip" title="Supprimer">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                <? if($_SESSION['user']['type']<=102): ?>
+                                    <a href="ListeCadeaux&idToSup=<?=$cade['id']?>" class="btn btn-danger" data-toggle="tooltip" title="Supprimer">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                <?endif;?>
                             </td>
                         </tr>
                     <?endforeach;?>

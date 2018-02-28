@@ -580,7 +580,11 @@ function PbAdd(page) {
         qte=$("#qteC").val();
         prodbonus = $("#CdxSelect :selected").attr('bonus');
     }
-    if(!ProdSeaC || !qte || !client || !delegue){
+    if(!delegue){
+        MSg('Merci de choisir l\'utilisateur','alert-danger');
+        return false;
+    }
+    if(!ProdSeaC || !qte || !client ){
         MSg('Merci de choisir le produits / articles','alert-danger');
         return false;
     }else{

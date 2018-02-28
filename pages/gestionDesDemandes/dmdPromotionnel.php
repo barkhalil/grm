@@ -80,9 +80,11 @@ if($idDemandeau) {
 ?>
 <section class="content-header">
     <h1 class="pull-left">Liste demandes produits promotionnel</h1>
-    <a href="<?=WEBRoot?>/demande/materielPromotionnel" class="btn btn-primary pull-right">
-        Ajouter
-    </a>
+    <?if($_SESSION['user']['type']<=102):?>
+        <a href="<?=WEBRoot?>/demande/materielPromotionnel" class="btn btn-primary pull-right">
+            Ajouter
+        </a>
+    <?endif;?>
     <div class="clearfix"></div>
 </section><!-- Main content -->
 <section class="content">
@@ -165,6 +167,7 @@ if($idDemandeau) {
                                 </ul>
                             </td>
                             <td>
+                                <? if(($cdt['etat']!=0) && ($_SESSION['user']['type']<=102)):?>
                                 <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
                                     <select name="delegue" class="form-control full-height" required style="display: inline-block" >
                                         <option value=""></option>
@@ -179,7 +182,8 @@ if($idDemandeau) {
                                         <i class="fa fa-files-o" aria-hidden="true"></i>
                                     </button>
                                 </form>
-                                <? if($cdt['etat']==0) :?>
+                                <?endif;?>
+                                <? if($cdt['etat']==0 && $_SESSION['user']['type']<=102) :?>
                                     <a href="validationDmdPromt&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                         <i class="fa fa-check"></i>
                                     </a>
@@ -195,9 +199,11 @@ if($idDemandeau) {
                                     <a href="printDocPromo&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
                                         <i class="fa fa-print"></i>
                                     </a>
-                                    <a href="dmdPromotionnel<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                    </a>
+                                    <?if($_SESSION['user']['type']<=102):?>
+                                        <a href="dmdPromotionnel<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    <?endif;?>
                                 <?endif;?>
                             </td>
                         </tr>

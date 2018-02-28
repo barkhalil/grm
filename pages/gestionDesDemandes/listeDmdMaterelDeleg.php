@@ -65,9 +65,11 @@ if($idDemandeur) {
 ?>
 <section class="content-header">
     <h1 class="pull-left">Liste demandes de matériel délégué</h1>
-    <a href="<?=WEBRoot?>/demande/materielsDelegues" class="btn btn-primary pull-right">
-        Ajouter
-    </a>
+    <?if($_SESSION['user']['type']<=102):?>
+        <a href="<?=WEBRoot?>/demande/materielsDelegues" class="btn btn-primary pull-right">
+            Ajouter
+        </a>
+    <?endif;?>
     <div class="clearfix"></div>
 </section><!-- Main content -->
 <section class="content">
@@ -146,21 +148,23 @@ if($idDemandeur) {
                                 </ul>
                             </td>
                             <td>
-                                <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
-                                    <select name="delegue" class="form-control full-height" required style="display: inline-block" >
-                                        <option value=""></option>
-                                        <?
-                                        $users= get('*','users',array('active>='=>1),'AND');
-                                        foreach ($users['reponse'] as $user):?>
-                                            <option value="<?=$user['id']?>" <?= ($_SESSION['delegue']==$user['id'])? 'selected':''; ?>><?=$user['Nom'].' '.$user['Prenom'];?></option>
-                                        <?endforeach;?>
-                                    </select>
-                                    <input type="hidden" name="idDmd" value="<?=$cdt['id'];?>">
-                                    <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Dupliquer" id="dupliquer">
-                                        <i class="fa fa-files-o" aria-hidden="true"></i>
-                                    </button>
-                                </form>
-                                <? if($cdt['etat']==0) :?>
+                                <? if(($cdt['etat']!=0) && ($_SESSION['user']['type']<=102)):?>
+                                    <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
+                                        <select name="delegue" class="form-control full-height" required style="display: inline-block" >
+                                            <option value=""></option>
+                                            <?
+                                            $users= get('*','users',array('active>='=>1),'AND');
+                                            foreach ($users['reponse'] as $user):?>
+                                                <option value="<?=$user['id']?>" <?= ($_SESSION['delegue']==$user['id'])? 'selected':''; ?>><?=$user['Nom'].' '.$user['Prenom'];?></option>
+                                            <?endforeach;?>
+                                        </select>
+                                        <input type="hidden" name="idDmd" value="<?=$cdt['id'];?>">
+                                        <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Dupliquer" id="dupliquer">
+                                            <i class="fa fa-files-o" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                <?endif;?>
+                                <? if($cdt['etat']==0 && $_SESSION['user']['type']<=102) :?>
                                     <a href="validationDmdMatDeleg&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                         <i class="fa fa-check"></i>
                                     </a>
@@ -176,9 +180,11 @@ if($idDemandeur) {
                                     <a href="printDocMatDeleg&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
                                         <i class="fa fa-print"></i>
                                     </a>
-                                    <a href="listeDmdMaterelDeleg<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                    </a>
+                                    <?if($_SESSION['user']['type']<=102):?>
+                                        <a href="listeDmdMaterelDeleg<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    <?endif;?>
                                 <?endif;?>
                             </td>
                         </tr>
