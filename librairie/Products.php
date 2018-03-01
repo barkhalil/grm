@@ -9,7 +9,7 @@
 class Products{
     public function getProdAlert(){
         global $PDO;
-        $Sql="SELECT * FROM products JOIN products_prix ON products.id=products_prix.id_prod WHERE products_prix.qte<=0";
+        $Sql="SELECT * FROM products JOIN products_prix ON products.id=products_prix.id_prod WHERE products_prix.qte<=qte_alerte AND qte_alerte IS NOT NULL";
         $stmt=$PDO->prepare($Sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
