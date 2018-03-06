@@ -171,7 +171,7 @@ unset($_SESSION['CdxCmd']);
                                 </ul>
                             </td>
                             <td>
-                                <? if($cdt['etat']>0 || $cdt['etat']==-1 || $cdt['etat']==-2):?>
+                                <? if(($cdt['etat']!=0) && ($_SESSION['user']['type']<=102)):?>
                                     <form method="post" id="dupliquerDmd" action="#" style="display: inline-block;">
                                         <input onkeyup="this.value = this.value.replace(/\D/g,'')" type="text" name="idPros" placeholder="ID PROS" class="full-height">
                                         <input type="hidden" name="idDmd" value="<?=$cdt['id'];?>">
@@ -181,20 +181,20 @@ unset($_SESSION['CdxCmd']);
                                     </form>
                                 <?endif;?>
                                 <? if($cdt['etat']>=0): ?>
-                                    <?if($cdt['etat']<4):?>
+                                    <?if($cdt['etat']<4 && $_SESSION['user']['type']<=102):?>
                                         <a href="listeDemandeVitrine<?=$link?>&annuler=<?=$cdt['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Annuler">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </a>
                                     <?endif;?>
-                                    <? if(!$cdt['pointage']): ?>
+                                    <? if(!$cdt['pointage'] && $_SESSION['user']['type']<=102): ?>
                                         <a href="listeDemandeOrdonnancier<?=$link?>&pointage=<?=$cdt['id']?>" class="btn btn-google" data-toggle="tooltip" title="Pointer">
                                             <i class="fa fa-calculator"></i>
                                         </a>
-                                    <?else: if($cdt['etat']<2) :?>
+                                    <?else: if($cdt['etat']<2 && $_SESSION['user']['type']<=102) :?>
                                         <a href="ValidateDemande&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                             <i class="fa fa-check"></i>
                                         </a>
-                                    <?else:?>
+                                    <?elseif($cdt['etat']>2):?>
                                         <?if($cdt['date_livraison']==""):?>
                                             <a href="listeDemandeOrdonnancier<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
                                                 <i class="fa fa-train"></i>
@@ -204,7 +204,7 @@ unset($_SESSION['CdxCmd']);
                                             <i class="fa fa-print"></i>
                                         </a>
                                     <?endif;endif?>
-                                    <?if($cdt['etat']>=4):?>
+                                    <?if($cdt['etat']>=4 && $_SESSION['user']['type']<=102):?>
                                         <a href="listeDemandeOrdonnancier<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </a>
