@@ -42,7 +42,7 @@ $bnsEntr=$giftStock->getAllBnEntree($where);
             <?php foreach ($bnsEntr as $article):?>
                 <tr>
                     <?php $bnDetails=explode('//',$article['champs']);
-                        //echo '<pre>';print_r($bnDetails);die;
+                     // echo '<pre>';print_r($bnDetails);die;
                     ?>
                     <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($bnDetails[2],'grm_gift','code_article');?></td>
                     <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($bnDetails[2],'grm_gift','titre');?></td>

@@ -26,7 +26,7 @@ class GiftStock extends GrmController {
             ));
             $condition=' AND '.$conditions;
         }
-        $Sql="SELECT ref,GROUP_CONCAT(id,'//',system_date,'//',prod,'//',qte,'//',created_by) as champs FROM grm_stock WHERE ref IS NOT NULL $condition GROUP BY ref ";
+        $Sql="SELECT ref,system_date,GROUP_CONCAT(id,'//',system_date,'//',prod,'//',qte,'//',created_by) as champs FROM grm_stock WHERE ref IS NOT NULL $condition GROUP BY ref ";
         if($limit) {
             $Sql.="LIMIT $limit,$offset";
         }
