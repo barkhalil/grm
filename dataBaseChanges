@@ -6,3 +6,6 @@ ALTER TABLE `prod_stock` CHANGE `fournisseur` `fournisseur` VARCHAR(255) NOT NUL
 
 ALTER TABLE `grm_stock` ADD `created_by` INT NOT NULL DEFAULT '2' AFTER `fournisseur`;
 ALTER TABLE `grm_fournisseur` ADD `etat` INT NOT NULL DEFAULT '1' AFTER `system_date`;
+
+01-03-18
+ALTER TABLE `products_prix` ADD `qte_alerte` INT NULL DEFAULT NULL AFTER `qte`;
