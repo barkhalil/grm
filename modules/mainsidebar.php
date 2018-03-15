@@ -14,11 +14,10 @@ $ActivePage=explode('/',$Pga);
             <li class="header">Menu</li>
             <!-- Optionally, you can add icons to the links -->
             <li class="<?if($ActivePage[0]=="default") echo 'active'?>"><a href="<?=WEBRoot?>"><i class="fa fa-dashboard"></i> <span>Tableau de Bord</span></a></li>
+            <li class=" <?if($ActivePage[0]=="prospects") echo 'active'?>">
+                <a href="<?=WEBRoot?>/prospects/listeAdmin"><i class="fa fa-users"></i> <span>Prospect</span> </a>
+            </li>
             <? if($_SESSION['user']['type']<=102): ?>
-                <li class=" <?if($ActivePage[0]=="prospects") echo 'active'?>">
-                    <a href="<?=WEBRoot?>/prospects/listeAdmin"><i class="fa fa-users"></i> <span>Prospect</span> </a>
-
-                </li>
                 <li class="treeview <?if($ActivePage[0]=="admin") echo 'active'?>">
                     <a href="#"><i class="fa fa-adn"></i> <span>Administrateur</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
@@ -42,9 +41,11 @@ $ActivePage=explode('/',$Pga);
             <li class="treeview <?if($ActivePage[0]=="products") echo 'active'?>">
                 <a href="#"><i class="fa fa-codepen"></i> <span>Gestion des produits</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="<?=WEBRoot?>/products/GestionProduits">Produits</a></li>
-                    <li><a href="<?=WEBRoot?>/products/GestionPrixProduits">Prix Produits</a></li>
-                    <li><a href="<?=WEBRoot?>/products/Gammes">Gamme</a></li>
+                    <? if($_SESSION['user']['type']<=102): ?>
+                        <li><a href="<?=WEBRoot?>/products/GestionProduits">Produits</a></li>
+                        <li><a href="<?=WEBRoot?>/products/GestionPrixProduits">Prix Produits</a></li>
+                        <li><a href="<?=WEBRoot?>/products/Gammes">Gamme</a></li>
+                    <?endif;?>
                     <li><a href="<?=WEBRoot?>/products/bonEntree">Bon d'entrée</a></li>
                     <li><a href="<?=WEBRoot?>/products/listeBnEntree">Liste des bons d'entrée</a></li>
 

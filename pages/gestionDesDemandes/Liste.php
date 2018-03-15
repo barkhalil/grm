@@ -191,29 +191,29 @@ if($idDemandeau) {
                                     </form>
                                 <?endif;?>
                                 <? if($cdt['etat']>=0): ?>
-                                    <? //if($_SESSION['user']['type']<=102): ?>
                                     <?if($cdt['etat']<4 && $_SESSION['user']['type']<=102):?>
                                         <a href="Liste<?=$link?>&annuler=<?=$cdt['id']?>" class="btn btn-warning" data-toggle="tooltip" title="Annuler">
                                              <i class="fa fa-times" aria-hidden="true"></i>
                                         </a>
                                     <?endif;?>
                                     <? if(!$cdt['pointage'] && $_SESSION['user']['type']<=102): ?>
-                                    <a href="Liste<?=$link?>&pointage=<?=$cdt['id']?>" class="btn btn-google" data-toggle="tooltip" title="Pointer">
-                                        <i class="fa fa-calculator"></i>
-                                    </a>
+                                        <a href="Liste<?=$link?>&pointage=<?=$cdt['id']?>" class="btn btn-google" data-toggle="tooltip" title="Pointer">
+                                            <i class="fa fa-calculator"></i>
+                                        </a>
                                     <?else: if($cdt['etat']<2 && $_SESSION['user']['type']<=102) :?>
                                         <a href="DmdPb&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                             <i class="fa fa-check"></i>
                                         </a>
-                                        <?elseif($cdt['etat']>2):?>
+                                    <?endif;?>
+                                    <?if($cdt['etat']>2):?>
                                         <?if($cdt['date_livraison']==""):?>
-                                        <a href="Liste<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
-                                            <i class="fa fa-train"></i>
-                                        </a>
+                                            <a href="Liste<?=$link?>&idDemLivraison=<?=$cdt['id']?>" class="btn btn-instagram" data-toggle="tooltip" title="Livraison">
+                                                <i class="fa fa-train"></i>
+                                            </a>
                                         <?endif;?>
-                                        <a href="printDoc&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
-                                            <i class="fa fa-print"></i>
-                                        </a>
+                                    <a href="printDoc&idDemande=<?=$cdt['id']?>" class="btn btn-primary" data-toggle="tooltip" title="Imprimer">
+                                        <i class="fa fa-print"></i>
+                                    </a>
                                     <?endif;endif?>
                                     <?if($cdt['etat']>=4 && $_SESSION['user']['type']<=102):?>
                                         <a href="Liste<?=$link?>&cancel=<?=$cdt['id']?>" class="btn btn-warning cancelDmd" data-toggle="tooltip" title="Annuler" data-confirm="Attention vous ne pouvez pas valider la demande aprés l'annulation. Etes-vous sûr de vouloir annulé cette demande?">
