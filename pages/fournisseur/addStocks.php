@@ -40,6 +40,7 @@ if(filter_input(INPUT_POST,'addGift',FILTER_VALIDATE_INT)):
             'qte_ex'=>$CadeauxDetails['qte'],
             'prod'=>$id,
             'fournisseur'=>filter_input(0,'four',257),
+            'created_by'=>$_SESSION['user']['id'],
             'paht'=>filter_input(0,'paht',516),
             'pvht'=>filter_input(0,'pvht',516),
             'pvttc'=>filter_input(0,'pvttc',516),

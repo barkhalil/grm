@@ -67,11 +67,9 @@ unset($_SESSION['TotalEchant']);$_SESSION['TotalEchant']=0;
 ?>
 <section class="content-header">
     <h1 class="pull-left">Demandes d'échantillons</h1>
-    <?if($_SESSION['user']['type']<=102):?>
-        <a href="<?=WEBRoot?>/demande/echantiants" class="btn btn-primary pull-right">
-            Ajouter
-        </a>
-    <?endif;?>
+    <a href="<?=WEBRoot?>/demande/echantiants" class="btn btn-primary pull-right">
+        Ajouter
+    </a>
     <div class="clearfix"></div>
 </section><!-- Main content -->
 <section class="content">

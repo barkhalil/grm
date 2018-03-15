@@ -80,11 +80,9 @@ if($idDemandeau) {
 ?>
 <section class="content-header">
     <h1 class="pull-left">Liste demandes produits promotionnel</h1>
-    <?if($_SESSION['user']['type']<=102):?>
-        <a href="<?=WEBRoot?>/demande/materielPromotionnel" class="btn btn-primary pull-right">
-            Ajouter
-        </a>
-    <?endif;?>
+    <a href="<?=WEBRoot?>/demande/materielPromotionnel" class="btn btn-primary pull-right">
+        Ajouter
+    </a>
     <div class="clearfix"></div>
 </section><!-- Main content -->
 <section class="content">
