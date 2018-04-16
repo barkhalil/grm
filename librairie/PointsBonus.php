@@ -28,5 +28,66 @@ class PointsBonus {
             }
         }
     }
+    public function AllPBpros($limit=NULL,$offset=NULL,$gvrn=NULL,$deleg=NULL,$from=NULL,$to=NULL) {
+        global $PDO;
+        $totalPB=array();
+        $allPointBonus=0;
+        //$pointBS=array();
+        $request="SELECT DISTINCT(id_pros),pointsRealByType as totalPointBonus,id_demandeur,date_validation FROM `grm_demande_cadeaux` JOIN prospect ON grm_demande_cadeaux.id_pros=prospect.id
+  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE prospect.id=grm_demande_cadeaux.id_pros ";
+        if($gvrn) {
+            $request.=" AND gouvernerat.id=$gvrn";
+        }
+        if($deleg) {
+            $request.=" AND grm_demande_cadeaux.id_demandeur=$deleg";
+        }
+        if($from && $to) {
+            $request.=" AND grm_demande_cadeaux.date_validation BETWEEN '$from' AND '$to'";
+        }
+        $stmt=$PDO->prepare($request);
+        $stmt->execute();
+        $total=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt=$PDO->prepare($request);
+        $stmt->execute();
+        $prospects=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($prospects as $prospect) {
+            $sql="SELECT *,pointsRealByType as totalPointBonus FROM `grm_demande_cadeaux` WHERE id_pros=".$prospect['id_pros'];
+            $stmt=$PDO->prepare($sql);
+            $stmt->execute();
+            $pointBS=$stmt->fetchAll(PDO::FETCH_ASSOC);
+            $totalPointBonus=0;
+            foreach ($pointBS as $poinPros) {
+                if($poinPros['totalPointBonus']!='')
+                    $totalPointBonus+=array_sum(explode('@_@',$poinPros['totalPointBonus']));
+                else
+                    $totalPointBonus+=array_sum(explode('@_@',$poinPros['ponitsByType']));
+            }
+            $allPointBonus+=$totalPointBonus;
+        }
+        $request.=" ORDER BY gouvernerat.nom LIMIT $limit OFFSET $offset";
+        //echo $request;die;
+        $stmt=$PDO->prepare($request);
+        $stmt->execute();
+        $prospects=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($prospects as $prospect) {
+            $sql="SELECT *,pointsRealByType as totalPointBonus FROM `grm_demande_cadeaux` WHERE id_pros=".$prospect['id_pros'];
+            $stmt=$PDO->prepare($sql);
+            $stmt->execute();
+            $pointBS=$stmt->fetchAll(PDO::FETCH_ASSOC);
+            $totalPointBonus=0;
+            foreach ($pointBS as $poinPros) {
+                if($poinPros['totalPointBonus']!='')
+                    $totalPointBonus+=array_sum(explode('@_@',$poinPros['totalPointBonus']));
+                else
+                    $totalPointBonus+=array_sum(explode('@_@',$poinPros['ponitsByType']));
+            }
+            $prospect['totalPointBonus']=$totalPointBonus;
+            $totalPB[]=$prospect;
+        }
+        $totalPB['reponse']=$totalPB;
+        $totalPB['total']=count($total);
+        $totalPB['totalPointBonus']=$allPointBonus;
+        return $totalPB;
+    }
 }
 $pointsBonus= new PointsBonus();

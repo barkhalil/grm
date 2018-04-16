@@ -107,6 +107,23 @@
             locale: 'fr'
         });
     });
+    $(function () {
+        $('#from').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale: 'fr'
+        });
+        $('#to').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale: 'fr',
+            useCurrent: false //Important! See issue #1075
+        });
+        $("#from").on("dp.change", function (e) {
+            $('#to').data("DateTimePicker").minDate(e.date);
+        });
+        $("#to").on("dp.change", function (e) {
+            $('#from').data("DateTimePicker").maxDate(e.date);
+        });
+    });
 </script>
 </body>
 </html>
