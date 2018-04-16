@@ -88,6 +88,14 @@ $ActivePage=explode('/',$Pga);
                     </a>
                 </li>
             <?endif;?>
+            <? if($_SESSION['user']['type']<=101): ?>
+                <li class="<?if($ActivePage[0]=="Bonus") echo 'active'?>">
+                    <a href="<?=WEBRoot?>/Bonus/listePointsBonus">
+                    <i class="fa fa-gift" aria-hidden="true"></i>
+                        Liste des points bonus
+                    </a>
+                </li>
+            <?endif;?>
            <!-- <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>-->
         </ul><!-- /.sidebar-menu -->
     </section>
