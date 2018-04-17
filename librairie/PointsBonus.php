@@ -52,8 +52,8 @@ class PointsBonus {
         if($from && $to) {
             $request.=" AND grm_demande_cadeaux.date_validation BETWEEN '$from' AND '$to'";
         }
-        //$request.=" GROUP BY grm_demande_cadeaux.id_pros";//echo $request;die;
-        $stmt=$PDO->prepare($request);
+        $sql=$request." GROUP BY grm_demande_cadeaux.id_pros";//echo $request;die;
+        $stmt=$PDO->prepare($sql);
         $stmt->execute();
         $total=$stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt=$PDO->prepare($request);
