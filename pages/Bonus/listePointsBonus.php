@@ -9,12 +9,13 @@
 $Limite=filter_input(INPUT_GET,'d',257);
 if(!$Limite) $Limite=0;
 $users=get('*','users',array('active='=>1),'AND',array('Nom'=>'ASC'));
-$sectrs=get('*','gouvernerat');
-$deleg=$gouver=$from=$to=NULL;
+$sectrs=get('*','gouvernerat',NULL,'AND',array('nom'=>'ASC'));
+$deleg=$gouver=$from=$to=$isCart=NULL;
 $deleg=filter_input(INPUT_GET,'user',FILTER_VALIDATE_INT);
 $gouver=filter_input(INPUT_GET,'secteur',FILTER_VALIDATE_INT);
 $from=filter_input(INPUT_GET,'from',FILTER_DEFAULT);
 $to=filter_input(INPUT_GET,'to',FILTER_DEFAULT);
+$isCart=filter_input(INPUT_GET,'iscart',FILTER_DEFAULT);//echo $isCart;die;
 if($from && $to) {
     $from = str_replace('/', '-', $from);
     $from= date('Y-m-d', strtotime($from));
@@ -22,7 +23,7 @@ if($from && $to) {
     $to= date('Y-m-d', strtotime($to));
 }
 //echo $from.' '.$to;
-$pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to);
+$pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to,$isCart);
 //echo '<pre>';print_r($pointsBs);die;
 ?>
 <section class="content-header">
@@ -80,6 +81,10 @@ $pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to);
                                 </span>
                             </div>
                         </div>
+                        <span id="persoCheck">
+                            <input type="checkbox" id="iscart" name="iscart" <?=($isCart)?'checked':''; ?>>
+                            <label for="iscart">Carte bon</label>
+                        </span>
                         <div class="form-group">
                             <input type="submit" value="Filtrer" class="btn btn-primary" name="submitSearch" >
                             <a href="listePointsBonus" class="btn btn-danger">Annuler</a>
@@ -104,7 +109,7 @@ $pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to);
                             <tr>
                                 <td><?= getinfo($pros['reponse'][0]['gouvernorat'],'gouvernerat','nom')?></td>
                                 <td><?=$pros['reponse'][0]['id'].' '.$pros['reponse'][0]['nom'].' '.$pros['reponse'][0]['prenom'];?></td>
-                                <td><?=getinfo($pbs['id_demandeur'],'users','Nom').' '.getinfo($pbs['id_demandeur'],'users','Prenom');?></td>
+                                <td><?=($pbs['grmuser'])?getinfo($pbs['id_demandeur'],'grm_users','Nom').' '.getinfo($pbs['id_demandeur'],'grm_users','Prenom'):getinfo($pbs['id_demandeur'],'users','Nom').' '.getinfo($pbs['id_demandeur'],'users','Prenom');?></td>
                                 <td><?php
                                     $datepb= date('d-m-Y', strtotime($pbs['date_validation']));
                                     $datepb = str_replace('-', '/', $datepb);
