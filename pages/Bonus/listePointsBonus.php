@@ -130,7 +130,7 @@ $pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to,$isCart);
             <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
 
                 Affichage de <?= ($Limite > 1) ? $Limite : 1 ?>
-                à <?= ($Limite + 30 < count($pointsBs)) ? $Limite + 30 : count($pointsBs) ?>
+                à <?= ($Limite + 30 < $pointsBs['total']) ? $Limite + 30 : $pointsBs['total']; echo ' de '.$pointsBs['total'].' lignes.'?>
 
             </div>
 

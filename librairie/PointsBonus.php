@@ -33,70 +33,88 @@ class PointsBonus {
         $totalPB=array();
         $allPointBonus=0;
         //$pointBS=array();
-        $request="SELECT DISTINCT(id_pros),pointsRealByType as totalPointBonus,id_demandeur,date_validation,grmuser FROM `grm_demande_cadeaux` JOIN prospect ON grm_demande_cadeaux.id_pros=prospect.id
-  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE prospect.id=grm_demande_cadeaux.id_pros ";
+        $request="SELECT DISTINCT(id_pros),point_bonus_reel as totalPointBonus,id_demandeur,date_validation,grmuser FROM `grm_demande_cadeaux` JOIN prospect ON grm_demande_cadeaux.id_pros=prospect.id
+  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros!=1 AND id_pros!=2 AND date_validation IS NOT NULL";
+        $cnditions="";
         if($gvrn) {
-            $request.=" AND gouvernerat.id=$gvrn";
+            $cnditions.=" AND gouvernerat.id=$gvrn";
         }
         if($deleg) {
             if($deleg==63)
-                $request.=" AND (grm_demande_cadeaux.id_demandeur=2 OR grm_demande_cadeaux.id_demandeur=$deleg)";
+                $cnditions.=" AND (grm_demande_cadeaux.id_demandeur=2 OR grm_demande_cadeaux.id_demandeur=$deleg)";
             else
-                $request.=" AND grm_demande_cadeaux.id_demandeur=$deleg";
+                $cnditions.=" AND grm_demande_cadeaux.id_demandeur=$deleg";
         }
         if($isCart) {
-            $request.=" AND grm_demande_cadeaux.isCart=1";
+            $cnditions.=" AND grm_demande_cadeaux.isCart=1";
         } else {
-            $request.=" AND (grm_demande_cadeaux.isCart=0 OR grm_demande_cadeaux.isCart IS NULL)";
+            $cnditions.=" AND (grm_demande_cadeaux.isCart=0 OR grm_demande_cadeaux.isCart IS NULL)";
         }
         if($from && $to) {
-            $request.=" AND grm_demande_cadeaux.date_validation BETWEEN '$from' AND '$to'";
+            $cnditions.=" AND grm_demande_cadeaux.date_validation BETWEEN '$from' AND '$to'";
         }
-        $sql=$request." GROUP BY grm_demande_cadeaux.id_pros";//echo $request;die;
-        $stmt=$PDO->prepare($sql);
+        $request.=$cnditions;
+        $request=$request." GROUP BY grm_demande_cadeaux.id_pros";//echo $request;die;
+        /*$stmt=$PDO->prepare($request);
         $stmt->execute();
-        $total=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        $total=$stmt->fetchAll(PDO::FETCH_ASSOC);*/
         $stmt=$PDO->prepare($request);
         $stmt->execute();
         $prospects=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        $total=count($prospects);
         //Calculer la totaliter des points bonus sans limite
         foreach ($prospects as $prospect) {
-            $sql="SELECT *,pointsRealByType as totalPointBonus FROM `grm_demande_cadeaux` WHERE id_pros=".$prospect['id_pros'];
+            $sql="SELECT *,	point_bonus_reel as totalPointBonus FROM `grm_demande_cadeaux` JOIN prospect ON grm_demande_cadeaux.id_pros=prospect.id
+  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros=".$prospect['id_pros']." AND date_validation IS NOT NULL".$cnditions;
             $stmt=$PDO->prepare($sql);
             $stmt->execute();
             $pointBS=$stmt->fetchAll(PDO::FETCH_ASSOC);
-            $totalPointBonus=0;
+            //$totalPointBonus=0;
+            $rest=0;
             foreach ($pointBS as $poinPros) {
-                if($poinPros['totalPointBonus']!='')
-                    $totalPointBonus+=array_sum(explode('@_@',$poinPros['totalPointBonus']));
+                //$rest=$poinPros['rest_point'];echo $poinPros['id_pros'].' '. $rest.'<br/>';
+                if($poinPros['totalPointBonus'])
+                    $allPointBonus=$allPointBonus+$poinPros['totalPointBonus']-$rest;
                 else
-                    $totalPointBonus+=array_sum(explode('@_@',$poinPros['ponitsByType']));
+                    $allPointBonus=$allPointBonus+$poinPros['point_bonus']-$rest;
+                $rest=$poinPros['rest_point'];//echo $poinPros['id_pros'].' '. $rest.'<br/>';
+                /*if($poinPros['totalPointBonus'])
+                    $allPointBonus+=array_sum(explode('@_@',$poinPros['totalPointBonus']));
+                else
+                    $allPointBonus+=array_sum(explode('@_@',$poinPros['ponitsByType']));*/
             }
-            $allPointBonus+=$totalPointBonus;
-        }
-        $request.=" GROUP BY grm_demande_cadeaux.id_pros ORDER BY gouvernerat.nom LIMIT $limit OFFSET $offset";
+        }//die;
+        $request.="  ORDER BY gouvernerat.nom LIMIT $limit OFFSET $offset";
         //echo $request;die;
         $stmt=$PDO->prepare($request);
         $stmt->execute();
         $prospects=$stmt->fetchAll(PDO::FETCH_ASSOC);
         //calculer les points bonus par prospects
         foreach ($prospects as $prospect) {
-            $sql="SELECT *,pointsRealByType as totalPointBonus FROM `grm_demande_cadeaux` WHERE id_pros=".$prospect['id_pros'];
+            $sql="SELECT *,	point_bonus_reel as totalPointBonus FROM `grm_demande_cadeaux` JOIN prospect ON grm_demande_cadeaux.id_pros=prospect.id
+  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros=".$prospect['id_pros']." AND date_validation IS NOT NULL".$cnditions." ORDER BY grm_demande_cadeaux.date_validation";
             $stmt=$PDO->prepare($sql);
             $stmt->execute();
             $pointBS=$stmt->fetchAll(PDO::FETCH_ASSOC);
             $totalPointBonus=0;
+            $rest=0;
             foreach ($pointBS as $poinPros) {
-                if($poinPros['totalPointBonus']!='')
+                if($poinPros['totalPointBonus'])
+                    $totalPointBonus=$totalPointBonus+$poinPros['totalPointBonus']-$rest;
+                else
+                    $totalPointBonus=$totalPointBonus+$poinPros['point_bonus']-$rest;
+                $rest=$poinPros['rest_point'];
+                /*if($poinPros['totalPointBonus']!='')
                     $totalPointBonus+=array_sum(explode('@_@',$poinPros['totalPointBonus']));
                 else
-                    $totalPointBonus+=array_sum(explode('@_@',$poinPros['ponitsByType']));
+                    $totalPointBonus+=array_sum(explode('@_@',$poinPros['ponitsByType']));*/
+                //echo $allPointBonus.'<br/>';
             }
             $prospect['totalPointBonus']=$totalPointBonus;
             $totalPB[]=$prospect;
-        }
+        }//die;
         $totalPB['reponse']=$totalPB;
-        $totalPB['total']=count($total);
+        $totalPB['total']=$total;
         $totalPB['totalPointBonus']=$allPointBonus;
         return $totalPB;
     }
