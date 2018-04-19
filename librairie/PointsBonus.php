@@ -34,7 +34,7 @@ class PointsBonus {
         $allPointBonus=0;
         //$pointBS=array();
         $request="SELECT DISTINCT(id_pros),point_bonus_reel as totalPointBonus,id_demandeur,date_validation,grmuser FROM `grm_demande_cadeaux` JOIN prospect ON grm_demande_cadeaux.id_pros=prospect.id
-  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros!=1 AND id_pros!=2 AND date_validation IS NOT NULL";
+  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros!=1 AND id_pros!=2 AND grm_demande_cadeaux.etat=4 ";
         $cnditions="";
         if($gvrn) {
             $cnditions.=" AND gouvernerat.id=$gvrn";
@@ -65,7 +65,7 @@ class PointsBonus {
         //Calculer la totaliter des points bonus sans limite
         foreach ($prospects as $prospect) {
             $sql="SELECT *,	point_bonus_reel as totalPointBonus FROM `grm_demande_cadeaux` JOIN prospect ON grm_demande_cadeaux.id_pros=prospect.id
-  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros=".$prospect['id_pros']." AND date_validation IS NOT NULL".$cnditions;
+  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros=".$prospect['id_pros']." AND grm_demande_cadeaux.etat=4 ".$cnditions;
             $stmt=$PDO->prepare($sql);
             $stmt->execute();
             $pointBS=$stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -92,7 +92,7 @@ class PointsBonus {
         //calculer les points bonus par prospects
         foreach ($prospects as $prospect) {
             $sql="SELECT *,	point_bonus_reel as totalPointBonus FROM `grm_demande_cadeaux` JOIN prospect ON grm_demande_cadeaux.id_pros=prospect.id
-  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros=".$prospect['id_pros']." AND date_validation IS NOT NULL".$cnditions." ORDER BY grm_demande_cadeaux.date_validation";
+  JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros=".$prospect['id_pros']." AND grm_demande_cadeaux.etat=4 ".$cnditions." ORDER BY grm_demande_cadeaux.date_validation";
             $stmt=$PDO->prepare($sql);
             $stmt->execute();
             $pointBS=$stmt->fetchAll(PDO::FETCH_ASSOC);
