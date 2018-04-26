@@ -10,9 +10,10 @@ $Limite=filter_input(INPUT_GET,'d',257);
 if(!$Limite) $Limite=0;
 $users=get('*','users',array('active='=>1),'AND',array('Nom'=>'ASC'));
 $sectrs=get('*','gouvernerat',NULL,'AND',array('nom'=>'ASC'));
-$deleg=$gouver=$from=$to=$isCart=NULL;
+$deleg=$gouver=$delegations=$from=$to=$isCart=NULL;
 $deleg=filter_input(INPUT_GET,'user',FILTER_VALIDATE_INT);
-$gouver=filter_input(INPUT_GET,'secteur',FILTER_VALIDATE_INT);
+$gouver=$_GET['secteur'];//filter_input(INPUT_GET,'secteur',FILTER_VALIDATE_INT);
+$delegations=$_GET['delegation'];
 $from=filter_input(INPUT_GET,'from',FILTER_DEFAULT);
 $to=filter_input(INPUT_GET,'to',FILTER_DEFAULT);
 $isCart=filter_input(INPUT_GET,'iscart',FILTER_DEFAULT);//echo $isCart;die;
@@ -23,7 +24,26 @@ if($from && $to) {
     $to= date('Y-m-d', strtotime($to));
 }
 //echo $from.' '.$to;
-$pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to,$isCart);
+$pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$delegations,$deleg,$from,$to,$isCart);
+
+if($gouver) {
+    $secteurs=implode(',',$gouver);
+    $request = "SELECT * FROM delegation WHERE gouv_id IN ($secteurs) ORDER BY nom";
+    $request = $PDO->prepare($request);
+    $request->execute();
+    $listeDelegation= $request->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    $listeDelegation=get('*','delegation',NULL,'AND',array('nom'=>'ASC'));
+    $listeDelegation=$listeDelegation['reponse'];
+}
+$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+if(isset($_GET['d'])) {
+    $link=explode('&',$actual_link);
+    unset($link[count($link)-1]);
+    $actual_link=implode('&',$link);
+}
+$axtract=str_replace('listePointsBonus','listePbExcel',$actual_link);
+
 //echo '<pre>';print_r($pointsBs);die;
 ?>
 <section class="content-header">
@@ -44,12 +64,21 @@ $pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to,$isCart);
                                 <?endforeach;?>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Sécteur</label>
-                            <select class="form-control" name="secteur">
-                                <option value="">Sécteur</option>
+                        <div class="form-group" id="getSect">
+                            <label>Sécteurs</label>
+                            <select class="selectpicker" multiple data-live-search="true" name="secteur[]" title="Sécteur">
                                 <?foreach ($sectrs['reponse'] as $sectr):?>
-                                    <option <?=($gouver==$sectr['id'])?'selected':''; ?> value="<?=$sectr['id'];?>"><?=$sectr['nom'];?></option>
+                                    <option <?php if($gouver && in_array($sectr['id'], $gouver))  echo "selected";?> value="<?=$sectr['id'];?>"><?=$sectr['nom'];?></option>
+                                <?endforeach;?>
+                            </select>
+                        </div>
+                        <div class="form-group" id="getDelegation">
+                            <label>Délégations</label>
+                            <select id="delegationListe" name="delegation[]" class="selectpicker" multiple data-live-search="true" title="Délégations">
+                                <?
+
+                                foreach ($listeDelegation as $peos):  ?>
+                                    <option <?php if($delegations && in_array($peos['id'], $delegations))  echo "selected";?> value="<?=$peos['id']?>"><?=$peos['nom']?></option>
                                 <?endforeach;?>
                             </select>
                         </div>
@@ -90,6 +119,8 @@ $pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to,$isCart);
                             <a href="listePointsBonus" class="btn btn-danger">Annuler</a>
                         </div>
                     </form>
+                    <br/>
+                    <a class="btn btn-success" href="<?=$axtract?>">Extraction EXCEL</a><br/><br/>
                 </div>
                 <div class="box-body">
                     <h3>Total Points Bonus: <?=$pointsBs['totalPointBonus'];?></h3>
@@ -97,6 +128,7 @@ $pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to,$isCart);
                         <thead>
                         <tr>
                             <th>Secteur</th>
+                            <th>Délégation</th>
                             <th>prospect</th>
                             <th>Délégué</th>
                             <th>Date</th>
@@ -108,6 +140,7 @@ $pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to,$isCart);
                             <?$pros=get('*','prospect',array('id='=>$pbs['id_pros']));?>
                             <tr>
                                 <td><?= getinfo($pros['reponse'][0]['gouvernorat'],'gouvernerat','nom')?></td>
+                                <td><?= $pbs['delegt']?></td>
                                 <td><?=$pros['reponse'][0]['id'].' '.$pros['reponse'][0]['nom'].' '.$pros['reponse'][0]['prenom'];?></td>
                                 <td><?=($pbs['grmuser'])?getinfo($pbs['id_demandeur'],'grm_users','Nom').' '.getinfo($pbs['id_demandeur'],'grm_users','Prenom'):getinfo($pbs['id_demandeur'],'users','Nom').' '.getinfo($pbs['id_demandeur'],'users','Prenom');?></td>
                                 <td><?php
@@ -137,13 +170,6 @@ $pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$deleg,$from,$to,$isCart);
         </div>
 
         <div class="col-md-7">
-            <?$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-            if(isset($_GET['d'])) {
-                $link=explode('&',$actual_link);
-                unset($link[count($link)-1]);
-                $actual_link=implode('&',$link);
-            }
-            ?>
 
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
                 <? pagination($pointsBs['total'], 30, $actual_link."&d=", ""); ?>

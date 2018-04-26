@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="<?= WEBRootD ?>/plugins/select2/select2.min.css">
     <link rel="stylesheet" href="<?= WEBRootD ?>/dist/css/skins/skin-purple-light.min.css">
    <link rel="stylesheet" href="<?= WEBRootD ?>/css/app_css/bootstrap-switch.min.css">
+    <link rel="stylesheet" href="<?= WEBRoot ?>/css/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="<?= WEBRoot ?>/css/my_style.css">
     <!-- bootstrap wysihtml5 - text editor -->
     <!--<link rel="stylesheet" href="<?= WEBRoot ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">-->
@@ -87,6 +89,8 @@
 <script src="<?= WEBRootD ?>/js/jquery.highchartTable-min.js"></script>
 <!--<script src="<?= WEBRoot ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
 <script src="<?= WEBRootD ?>/js/bootstrap-switch.min.js"></script>
+<script type="text/javascript" src="<?= WEBRoot ?>/js/bootstrap-multiselect.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="<?= WEBRoot ?>/js/MyCode.js"></script>
 <? if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])): ?>
     <script type="text/javascript">

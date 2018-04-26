@@ -976,3 +976,33 @@ $(document).ready(function() {
 
     //alert(referrer);
 });
+jQuery(document).ready(function(){
+    $('.multiFitltre').multiselect({
+        maxHeight: 300,
+        enableFiltering: true,
+        enableCaseInsensitiveFiltering: true,
+        filterPlaceholder: 'Recherche',
+        buttonClass: 'btn btn-facebook',
+        numberDisplayed: 6,
+        nonSelectedText: 'Merci de selectionner',
+        nSelectedText: 'Selectionnez ',
+        buttonWidth: '100%'
+    });
+});
+$(function () {
+    $('#getSect .selectpicker').change(function () {
+        $.ajax({
+            url: url+"/ajax/afterselect/delegation.php",
+            type:'POST',
+            dataType:'json',
+            data: {secteur:$(this).val()},
+            success: function(res){
+                var delegations = jQuery.parseJSON(JSON.stringify(res));
+                if(delegations.result=='success') {
+                    $('#delegationListe').empty().append(delegations.list);
+                    $('#delegationListe').selectpicker('refresh');
+                }
+            }
+        });
+    });
+});
