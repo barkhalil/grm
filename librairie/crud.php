@@ -177,7 +177,7 @@ function get($columns = null, $table = null, $where = null, $concats = "AND", $o
  * fonction to search with mutiple value of filter search
  * @global type $PDO
  */
-function GetData($NomFilter, $SpecFilter = null, $SectFilter = null, $DelFilter = null, $ActiviteFilter = null, $Potentiel = null,$Etab=null, $limit = null,$PrenomFilter=null){
+function GetData($NomFilter, $SpecFilter = null, $SectFilter = null, $DelFilter = null, $ActiviteFilter = null, $Potentiel = null,$Etab=null, $limit = null,$PrenomFilter=null,$idFilter=null){
      global $PDO;
      $retour=array(); 
      $strSQLFilter="";
@@ -203,8 +203,11 @@ function GetData($NomFilter, $SpecFilter = null, $SectFilter = null, $DelFilter 
    if($NomFilter!=""){ 
         $strSQLFilter.= " AND nom LIKE '$NomFilter%' ";
    }
-    if($PrenomFilter!=""){
+   if($PrenomFilter!=""){
         $strSQLFilter.= " AND prenom LIKE '$PrenomFilter%' ";
+   }
+   if($idFilter!=""){
+        $strSQLFilter.= " AND id =$idFilter ";
    }
    if($ActiviteFilter!=NULL && $ActiviteFilter!=""){
        $inActivite = implode(',', $ActiviteFilter ); 
