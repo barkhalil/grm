@@ -603,11 +603,24 @@ function PbAdd(page) {
         })
     }
 }
+
 function FinalisationPb() {
+    var p=0;
+    var checkBox = document.getElementById("cdxSansPB");
+    if (checkBox.checked == true){
+        pp=1;
+
+    }
+    else
+    {
+        pp=0;
+    }
+    
     $.ajax({
         url:url+'/ajax/Bonus/validationDemande.php',
         type:'POST',
         data:{
+            pp: pp,
             idDemande: $('#idDemande').val(),
             idRemise: $('#id_remise').val(),
             ObsAdm: $('#ObsAdm').val(),

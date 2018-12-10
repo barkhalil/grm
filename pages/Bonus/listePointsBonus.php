@@ -90,7 +90,7 @@ $axtract=str_replace('listePointsBonus','listePbExcel',$actual_link);
                                     $from = str_replace('-', '/', $from);
                                 }
                                 ?>
-                                <input type='text' name="from" class="form-control" placeholder="De" onkeydown="return false" value="<?=($from)?$from:'';?>" />
+                                <input type='text' name="from" class="form-control" placeholder="<?=($from)?$from:'';?>" onkeydown="return false" value="<?=($from)?$from:'';?>" />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -104,7 +104,7 @@ $axtract=str_replace('listePointsBonus','listePbExcel',$actual_link);
                                     $to = str_replace('-', '/', $to);
                                 }
                                 ?>
-                                <input type='text' name="to" class="form-control" placeholder="À" onkeydown="return false" value="<?=($to)?$to:'';?>"/>
+                                <input type='text' name="to" class="form-control" placeholder="<?=($to)?$to:'';?>" onkeydown="return false" value="<?=($to)?$to:'';?>"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
