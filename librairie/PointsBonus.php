@@ -36,6 +36,7 @@ class PointsBonus {
         $request="SELECT DISTINCT(id_pros),point_bonus_reel as totalPointBonus,id_demandeur,date_validation,grmuser,delegation.nom as delegt FROM `grm_demande_cadeaux` JOIN prospect ON grm_demande_cadeaux.id_pros=prospect.id 
   JOIN delegation ON delegation.id=prospect.delegation
   JOIN gouvernerat ON prospect.gouvernorat=gouvernerat.id WHERE id_pros!=1 AND id_pros!=2 AND grm_demande_cadeaux.etat=4 ";
+        ;
         $cnditions="";
         if($gvrn) {
             $gouvern=implode(',',$gvrn);
@@ -60,7 +61,9 @@ class PointsBonus {
             $cnditions.=" AND grm_demande_cadeaux.date_validation BETWEEN '$from' AND '$to'";
         }
         $request.=$cnditions;
-        $request=$request." GROUP BY grm_demande_cadeaux.id_pros";//echo $request;die;
+        $request=$request." GROUP BY grm_demande_cadeaux.id_pros";
+        //echo $request;
+
         $stmt=$PDO->prepare($request);
         $stmt->execute();
         $prospects=$stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -72,6 +75,7 @@ JOIN delegation ON delegation.id=prospect.delegation JOIN gouvernerat ON prospec
 WHERE id_pros=".$prospect['id_pros']." AND grm_demande_cadeaux.etat=4 ".$cnditions;
             $stmt=$PDO->prepare($sql);
             $stmt->execute();
+            //echo '<br>'.$sql;
             $pointBS=$stmt->fetchAll(PDO::FETCH_ASSOC);
             //$totalPointBonus=0;
             $rest=0;
@@ -89,6 +93,7 @@ WHERE id_pros=".$prospect['id_pros']." AND grm_demande_cadeaux.etat=4 ".$cnditio
         //echo $request;die;
         $stmt=$PDO->prepare($request);
         $stmt->execute();
+//echo '<br>'.$request;
         $prospects=$stmt->fetchAll(PDO::FETCH_ASSOC);
         //calculer les points bonus par prospects
         foreach ($prospects as $prospect) {

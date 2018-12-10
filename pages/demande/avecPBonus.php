@@ -11,6 +11,7 @@ if(filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT)){
     $_SESSION['newPb']=0;
     $_SESSION['delegue']=0;
     $_SESSION['TotalCdx']=0;
+
     $_SESSION['Obs']='';
     $_SESSION['ProdPbCmd']=null;
     $_SESSION['CdxCmd']=null;
@@ -94,7 +95,7 @@ if($IdSup){
                         <input type="hidden" name="totalPoint" value="<?=$_SESSION['TotPoint'] ?>" id="TotPoint" >
                         <input type="hidden" name="client" value="<?=$id?>" id="client" >
                         <label>
-                            <input type="checkbox" name="cdxSansPB" id="cdxSansPB" value="1" <?= ($_SESSION['cdxSansPB']==1)?'checked': '';?>> Carte
+                            <input type="checkbox" name="cdxSansPB" id="cdxSansPB"  onchange="sess()" <?php if ($_SESSION['cdxSansPB']==1){ echo 'checked';} ?>> Carte
                         </label><br/>
                         <label>Nombre de points bonus : </label>
                         <div id="pBonus">

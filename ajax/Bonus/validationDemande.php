@@ -9,6 +9,8 @@
 session_start();
 require_once '../../Connextion.php';
 include '../../librairie/loadall.php';
+$pp=filter_input(INPUT_POST,'pp',FILTER_VALIDATE_INT);
+$_SESSION['cdxSansPB']=$pp;
 $idDemande=filter_input(INPUT_POST,'idDemande',FILTER_VALIDATE_INT);
 $idRemise=filter_input(INPUT_POST,'idRemise',FILTER_VALIDATE_INT);
 $ObsAdm=filter_input(INPUT_POST,'ObsAdm',FILTER_DEFAULT);
