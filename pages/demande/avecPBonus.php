@@ -95,7 +95,7 @@ if($IdSup){
                         <input type="hidden" name="totalPoint" value="<?=$_SESSION['TotPoint'] ?>" id="TotPoint" >
                         <input type="hidden" name="client" value="<?=$id?>" id="client" >
                         <label>
-                            <input type="checkbox" name="cdxSansPB" id="cdxSansPB"  onchange="sess()" <?php if ($_SESSION['cdxSansPB']==1){ echo 'checked';} ?>> Carte
+                            <input type="checkbox" name="cdxSansPB" id="cdxSansPB"  <?php if ($_SESSION['cdxSansPB']==1){ echo 'checked';} ?>> Carte
                         </label><br/>
                         <label>Nombre de points bonus : </label>
                         <div id="pBonus">
