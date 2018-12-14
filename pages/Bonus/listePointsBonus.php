@@ -17,13 +17,19 @@ $delegations=$_GET['delegation'];
 $from=filter_input(INPUT_GET,'from',FILTER_DEFAULT);
 $to=filter_input(INPUT_GET,'to',FILTER_DEFAULT);
 $isCart=filter_input(INPUT_GET,'iscart',FILTER_DEFAULT);//echo $isCart;die;
+$totalpbdate=0;
+$index=0;
 if($from && $to) {
     $from = str_replace('/', '-', $from);
     $from= date('Y-m-d', strtotime($from));
     $to = str_replace('/', '-', $to);
     $to= date('Y-m-d', strtotime($to));
+   $totalpbdate=$pointsBonus->gps(30,$Limite,$gouver,$delegations,$deleg,$from,$to,$isCart);
+   // $Bs=$pointsBonus->AllPBpros($from,$to);
 }
+
 //echo $from.' '.$to;
+$totalpbdate=$pointsBonus->gps(30,$Limite,$gouver,$delegations,$deleg,$from,$to,$isCart);
 $pointsBs=$pointsBonus->AllPBpros(30,$Limite,$gouver,$delegations,$deleg,$from,$to,$isCart);
 
 if($gouver) {
@@ -32,7 +38,9 @@ if($gouver) {
     $request = $PDO->prepare($request);
     $request->execute();
     $listeDelegation= $request->fetchAll(PDO::FETCH_ASSOC);
+    $poids=$pointsBonus->getPoids($secteurs);
 } else {
+    $poids=0;
     $listeDelegation=get('*','delegation',NULL,'AND',array('nom'=>'ASC'));
     $listeDelegation=$listeDelegation['reponse'];
 }
@@ -43,7 +51,14 @@ if(isset($_GET['d'])) {
     $actual_link=implode('&',$link);
 }
 $axtract=str_replace('listePointsBonus','listePbExcel',$actual_link);
-
+if ($poids !=0 && $totalpbdate['totalPointBonus']!=0 ){
+    $index=number_format(($pointsBs['totalPointBonus'] /(($poids/100)*$totalpbdate['totalPointBonus'])*100),2);
+    if ($index<100 ){
+        $color='#7CFC00';
+    }else{
+        $color='#32CD32';
+    }
+}
 //echo '<pre>';print_r($pointsBs);die;
 ?>
 <section class="content-header">
@@ -123,7 +138,14 @@ $axtract=str_replace('listePointsBonus','listePbExcel',$actual_link);
                     <a class="btn btn-success" href="<?=$axtract?>">Extraction EXCEL</a><br/><br/>
                 </div>
                 <div class="box-body">
-                    <h3>Total Points Bonus: <?=$pointsBs['totalPointBonus'];?></h3>
+                    <h3>Total Points Bonus National: <?=$totalpbdate['totalPointBonus'];?></h3>
+                    <div style="display: inline;">
+                        <span><h3>Poids du Sécteur/s: <?=str_replace(".", ",",$poids);?><span style="padding-left: 2%">Total Points Bonus du Sécteur/s: <?=$pointsBs['totalPointBonus'];?></span></h3></span>
+
+
+                    </div>
+                        <div>
+                    <h3>index de penetration: <span style="color: <?=$color?>"><?=str_replace(".", ",",$index);?>%</span></h3></div>
                     <table class="table table-bordered">
                         <thead>
                         <tr>
