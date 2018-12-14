@@ -54,7 +54,7 @@ $axtract=str_replace('listePointsBonus','listePbExcel',$actual_link);
 if ($poids !=0 && $totalpbdate['totalPointBonus']!=0 ){
     $index=number_format(($pointsBs['totalPointBonus'] /(($poids/100)*$totalpbdate['totalPointBonus'])*100),2);
     if ($index<100 ){
-        $color='#7CFC00';
+        $color='#FF0000';
     }else{
         $color='#32CD32';
     }
