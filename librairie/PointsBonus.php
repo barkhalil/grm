@@ -61,7 +61,11 @@ class PointsBonus {
         ;
         $cnditions="";
 
+        if($isCart) {
+            $cnditions.=" AND grm_demande_cadeaux.isCart=1";
+        } else {
             $cnditions.=" AND (grm_demande_cadeaux.isCart=0 OR grm_demande_cadeaux.isCart IS NULL)";
+        }
 
         if($from && $to) {
             $cnditions.=" AND grm_demande_cadeaux.date_validation BETWEEN '$from' AND '$to'";

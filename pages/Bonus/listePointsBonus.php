@@ -140,7 +140,7 @@ if ($poids !=0 && $totalpbdate['totalPointBonus']!=0 ){
                 <div class="box-body">
                     <h3>Total Points Bonus National: <?=$totalpbdate['totalPointBonus'];?></h3>
                     <div style="display: inline;">
-                        <span><h3>Poids du Sécteur/s: <?=str_replace(".", ",",$poids);?><span style="padding-left: 2%">Total Points Bonus du Sécteur/s: <?=$pointsBs['totalPointBonus'];?></span></h3></span>
+                        <span><h3>Poids du Sécteur(s): <?=str_replace(".", ",",$poids);?>%<span style="padding-left: 2%">Total Points Bonus du Sécteur(s): <?=$pointsBs['totalPointBonus'];?></span></h3></span>
 
 
                     </div>
