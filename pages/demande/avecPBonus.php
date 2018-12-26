@@ -5,6 +5,7 @@
  * Date: 03/01/18
  * Time: 15:59
  */
+
 if(filter_input(INPUT_GET,'annuler',FILTER_VALIDATE_INT)){
     $_SESSION['Point']=0;
     $_SESSION['TotPoint']=0;

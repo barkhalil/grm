@@ -605,7 +605,7 @@ function PbAdd(page) {
 }
 
 function FinalisationPb() {
-    var p=0;
+    var pp=0;
     var checkBox = document.getElementById("cdxSansPB");
     if (checkBox.checked == true){
         pp=1;
@@ -625,9 +625,11 @@ function FinalisationPb() {
             idRemise: $('#id_remise').val(),
             ObsAdm: $('#ObsAdm').val(),
         },
-        success:function (data) {
-            MSg('Demande valider','alert-success');
-            window.location = '../gestionDesDemandes/printDoc&idDemande='+data;
+        success:function (result) {
+
+           MSg('Demande valider','alert-success');
+          window.location = "../gestionDesDemandes/printDoc&idDemande="+result;
+          //  header('Location: ../gestionDesDemandes/printDoc&idDemande='+data);
         },
         error:function () {
             MSg('Un problème est survenu merci de refraichir la page','alert-danger');
