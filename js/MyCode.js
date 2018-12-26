@@ -605,6 +605,7 @@ function PbAdd(page) {
 }
 
 function FinalisationPb() {
+
     var pp=0;
     var checkBox = document.getElementById("cdxSansPB");
     if (checkBox.checked == true){
