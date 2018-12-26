@@ -627,7 +627,7 @@ function FinalisationPb() {
             ObsAdm: $('#ObsAdm').val(),
         },
         success:function (result) {
-alert(result);
+
            MSg('Demande valider','alert-success');
           window.location = "../gestionDesDemandes/printDoc&idDemande="+result;
           //  header('Location: ../gestionDesDemandes/printDoc&idDemande='+data);
