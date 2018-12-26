@@ -161,6 +161,9 @@ if($IdSup){
                             <? endforeach; ?>
 
                         </select>
+                        <label>
+                            <input type="checkbox" name="cdxSansPB" id="cdxSansPB"  hidden>
+                        </label><br/>
                     </div>
                     <label>Nombre de points bonus : </label>
                     <div id="pbByDeleg">

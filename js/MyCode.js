@@ -605,6 +605,7 @@ function PbAdd(page) {
 }
 
 function FinalisationPb() {
+
     var pp=0;
     var checkBox = document.getElementById("cdxSansPB");
     if (checkBox.checked == true){
@@ -626,7 +627,7 @@ function FinalisationPb() {
             ObsAdm: $('#ObsAdm').val(),
         },
         success:function (result) {
-
+alert(result);
            MSg('Demande valider','alert-success');
           window.location = "../gestionDesDemandes/printDoc&idDemande="+result;
           //  header('Location: ../gestionDesDemandes/printDoc&idDemande='+data);
