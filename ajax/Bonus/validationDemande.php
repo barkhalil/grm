@@ -7,7 +7,7 @@
  */
 //just call this page for geting session and add to data base :p
 session_start();
-require_once '../../Connextion.php';
+require '../../Connextion.php';
 include '../../librairie/loadall.php';
 $pp=filter_input(INPUT_POST,'pp',FILTER_VALIDATE_INT);
 $_SESSION['cdxSansPB']=$pp;
@@ -41,6 +41,7 @@ if(!$idDemande) {
 
         );
         $idDemande = add($data, 'grm_demande_cadeaux');
+
         foreach ($_SESSION['ProdPbCmd'] as $key => $value):
             $dataProd = array(
                 'id_demande' => $idDemande,
