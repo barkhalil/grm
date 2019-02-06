@@ -35,7 +35,7 @@ $user= $user['reponse'][0];
                     <label style="color: #582900;">Délégation: </label> <span><?= getinfo($prospect['delegation'],'delegation','nom');?></span><br/>
                     <label style="color: #582900;">Demander par: </label> <span><?= $user['Civilite'].' '.$user['Nom'];?> <?= $user['Prenom'];?></span><br/>
                     <label >Visiteur médical</label> <br/>
-                    <label style="color: #582900;">Matricule : </label> <span>    </span><br/>
+                    <label style="color: #582900;">Matricule : </label> <span>  <?=$user['matricule']?>  </span><br/>
 
                 </td>
                 <td style="vertical-align: top;color: #582900;float: right; text-align: center">
