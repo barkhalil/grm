@@ -122,7 +122,17 @@
                             Gestion fournisseur
                         </a>
                     </li>
+            <?php if ($_SESSION['user']['id']==9){ ?>
+                    <li class="treeview <?if($ActivePage[0]=="gestionDesDemandes") echo 'active'?>">
+                        <a href="#"><i class="fa fa-codepen"></i> <span>Gestion des demandes</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?=WEBRoot?>/gestionDesDemandes/Liste">Demandes cadeaux</a></li>
+
+                        </ul>
+                    </li>
+                    <?php  } ?>
                  <?php  } ?>
+
            <!---- -->
             <!-- <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>-->
         </ul><!-- /.sidebar-menu -->
