@@ -127,17 +127,17 @@ if(!is_numeric($text)){//c pas un id
          }
     }
 function filterShow($Titre,$Liste,$table, $var){
-     if(count($Liste)>0){
-                                echo "<div class=\"pull-left \" style=\"margin-right: 5px;min-width: 20%;\"><h5>$Titre</h5> <ul>";
-                             if(count($Liste)>1 || is_array($Liste)):
-                                foreach ($Liste as $k=>$v):
-                                    echo "<li>".getinfo($v, $table, $var)."</li>";
-                                endforeach;
-                             else: 
-                                 echo "<li>".getinfo($Liste, $table, $var)."</li>";
-                             endif;
-                                echo '</ul></div>';
-                            }
+    if($Liste){
+        echo "<div class=\"pull-left \" style=\"margin-right: 5px;min-width: 20%;\"><h5>$Titre</h5> <ul>";
+        if(count($Liste)>1 || is_array($Liste)):
+            foreach ($Liste as $k=>$v):
+                echo "<li>".getinfo($v, $table, $var)."</li>";
+            endforeach;
+        else:
+            echo "<li>".getinfo($Liste, $table, $var)."</li>";
+        endif;
+        echo '</ul></div>';
+    }
 }
 function testAffectation($IdProd,$idPRo){
     $Cible=get("*",'cible',array("gamme_id="=>$IdProd,"prospect="=>$idPRo),'AND');
