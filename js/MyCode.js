@@ -12,6 +12,10 @@ if(location.host=="grm.vital-crm.tn:10"){
 
 }
 //console.log(url);
+function excel() {
+    window.location = "../gestionDesDemandes/excel";
+
+}
 function MSg(msg, type) {
     console.log(msg);
     jQuery(".alert").addClass(type);
