@@ -19,6 +19,7 @@
                     <a href="<?=WEBRoot?>/prospects/listeAdmin"><i class="fa fa-users"></i> <span>Prospect</span> </a>
                 </li>
                 <? if($_SESSION['user']['type']<=102): ?>
+                <?php  if($_SESSION['user']['id']==6){?>
                     <li class="treeview <?if($ActivePage[0]=="admin") echo 'active'?>">
                         <a href="#"><i class="fa fa-adn"></i> <span>Administrateur</span> <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
@@ -29,6 +30,7 @@
 
                         </ul>
                     </li>
+                    <?php }?>
                     <li class="treeview <?if($ActivePage[0]=="General") echo 'active'?>">
                         <a href="#"><i class="fa fa-codepen"></i> <span>Configuration</span> <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
