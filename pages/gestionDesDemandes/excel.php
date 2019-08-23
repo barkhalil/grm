@@ -40,6 +40,7 @@ $idDemandeau=$_SESSION['idel'];
                         <th>Pour : </th>
                         <th>Etat demande</th>
                         <th>Cadeaux demander</th>
+                        <th>Suivi</th>
 
                     </tr>
                     </thead>
@@ -100,6 +101,13 @@ $idDemandeau=$_SESSION['idel'];
                                     endif;
                                $data.=' </ul>
                             </td>
+                            <td>';
+                               $suivi='';
+                        if($cdt['suivi']==0){$suivi='non valider';}
+                            else{$suivi='valider';}
+
+                            $data.=$suivi;
+                            $data.='</td>
 
                         </tr>';
                   }
