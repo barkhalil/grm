@@ -127,6 +127,7 @@ if($idDemandeau) {
                         <th>Pour : </th>
                         <th>Etat demande</th>
                         <th>Cadeaux demander</th>
+                        <th>Suivi</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -179,6 +180,30 @@ if($idDemandeau) {
                                         <br/>...
                                     <?endif;?>
                                 </ul>
+                            </td>
+                            <td>
+                                <div name="div_<?=$cdt['id']?>" id="div_<?=$cdt['id']?>" >
+                                    <?php
+                                    if($cdt['suivi']==0){
+                                            if($_SESSION['user']['id']==9) {
+                                                ?>
+
+                                                <button type="button" class="btn btn-info"
+                                                        onclick="SuiviCadeau(<?= $cdt['id'] ?>)" data-toggle="tooltip"
+                                                        title="valider" id="">
+                                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                                </button>
+
+                                                <?php
+                                            }
+                                    }
+                                    else {
+                                        echo "valider";
+                                    }
+
+
+                                    ?>
+                                </div>
                             </td>
                             <td>
                                 <? if(($cdt['etat']!=0) && ($_SESSION['user']['type']<=102)):?>

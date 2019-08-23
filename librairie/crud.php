@@ -177,6 +177,21 @@ function get($columns = null, $table = null, $where = null, $concats = "AND", $o
  * fonction to search with mutiple value of filter search
  * @global type $PDO
  */
+function updateCond( $datas,$Where, $table) {
+    global $PDO;
+
+    $strSQL = "UPDATE " . $table . " SET ";
+    foreach ($datas as $key => $value) {
+        $strSQL .= $key . ' = '.$value.',';
+    }
+
+    $strSQL = substr($strSQL, 0, -1) . " WHERE $Where";
+    /*$values[] = $id;
+    $query = $PDO->prepare($strSQL);*/
+    if ($PDO->query($strSQL)) return true;
+    else return false;
+}
+
 function GetData($NomFilter, $SpecFilter = null, $SectFilter = null, $DelFilter = null, $ActiviteFilter = null, $Potentiel = null,$Etab=null, $limit = null,$PrenomFilter=null,$idFilter=null){
      global $PDO;
      $retour=array(); 

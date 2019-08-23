@@ -16,6 +16,33 @@ function excel() {
     window.location = "../gestionDesDemandes/excel";
 
 }
+function SuiviCadeau(id) {
+    $.ajax({
+        url: url + "/ajax/addSuiviCad.php",
+        type: "POST",
+        data: ({
+
+
+            id  : id
+
+
+        }),
+        dataType: 'html',
+        success: function (result) {
+//alert(result);
+
+            $("#div_"+id).html(result);
+            // alert(result);
+            // $("#div_"+dateVisite).html(result);
+
+
+
+        },
+        error: function () {
+            alert("Une erreur c'est produits Merci de refaire la manipulation")
+        }
+    });
+}
 function MSg(msg, type) {
     console.log(msg);
     jQuery(".alert").addClass(type);
