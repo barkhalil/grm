@@ -23,7 +23,12 @@ $bnsEntr=$giftStock->getBnEntr($refBn);
             <tr>
                 <td colspan="2">
                     <h1 style="display: block; text-align: center">Bons d'entrée
+
                         <small>N° <?='BN'.$bnsEntr[0]['ref'].'/'.date('Y',strtotime($bnsEntr[0]['system_date']));?></small>
+                        <br>
+                        <? if ($bnsEntr[0]['idsect']!=0){ ?>
+                        <small>Secteur: <?=getinfo($bnsEntr[0]['idsect'],'gouvernerat','nom')?></small>
+                        <?}?>
                     </h1>
                 </td>
             </tr>

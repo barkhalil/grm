@@ -40,6 +40,7 @@ if(filter_input(INPUT_POST,'addGift',FILTER_VALIDATE_INT)):
             'qte_ex'=>$CadeauxDetails['qte'],
             'prod'=>$id,
             'fournisseur'=>filter_input(0,'four',257),
+            'idsect'=>filter_input(0,'secteur',257),
             'created_by'=>$_SESSION['user']['id'],
             'paht'=>filter_input(0,'paht',516),
             'pvht'=>filter_input(0,'pvht',516),
@@ -52,13 +53,38 @@ if(filter_input(INPUT_POST,'addGift',FILTER_VALIDATE_INT)):
         if($idStock){
             $_SESSION['msg'] = "Stock et prix ajouter";
             $_SESSION['type'] = "alert-success";
+
+          //  $idbon=getinfo($id,'stockbon','id');
+            if($id==63 || $id==54||  $id==53 ||  $id==52 || $id==1054) {
+                $idbon = getinfoByIdv3('id', 'stockbon', ' idbn=' . $id . ' and idsect=' . filter_input(0, 'secteur', 257));
+                if (!$idbon) {
+                    $data = array(
+                        'idbn' => $id,
+                        'qte' => filter_input(0, 'Newqte', 257),
+                        'idsect' => filter_input(0, 'secteur', 257)
+
+                    );
+                    $idStock = add($data, 'stockbon');
+                } else {
+                    $qtebn = getinfoByIdv3('qte', 'stockbon', ' idbn=' . $id . ' and idsect=' . filter_input(0, 'secteur', 257));
+
+                    //$qtebn=getinfo($id,'stockbon','qte');
+                    $new = filter_input(0, 'Newqte', 257);
+                    $aj = $new + $qtebn;
+                    update(
+                        $idbon, array('qte' => $aj), 'stockbon'
+                    );
+
+                }
+            }
+
             //update stock prod promotionnel :
             $valIni=$CadeauxDetails['qte'];
             $valFinal = $newQte + $valIni;
             update(
                 $id,array('qte'=>$valFinal),'grm_gift'
             );
-            redirect('../gift/ListeCadeaux');
+           redirect('../gift/ListeCadeaux');
         }else{
             $_SESSION['msg'] = "problème erreur mochkla wa 7lili";
             $_SESSION['type'] = "alert-danger";
@@ -154,7 +180,27 @@ endif;
                             <?endforeach;?>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>Secteur</label>
+                        <?
+                        $ch='';
+                        if($id==63 || $id==54||  $id==53 ||  $id==52 || $id==1054){
+                            $ch='required';
+                        }
+                        ?>
+                    <select id="secteur" name="secteur" class="form-control" <?$ch?>>
+                        <?php
+                        $ListeSecteur=get("*",'gouvernerat',array('1='=>1),'AND',array('nom'=>'ASC'));
+                        ?><option value="0">non défini</option>
+                        <? foreach($ListeSecteur['reponse'] as $sect):
 
+                            ?>
+                            <option value="<?=$sect['id']?>"><?=$sect['nom']?></option>
+
+                        <?endforeach?>
+
+                    </select>
+                    </div>
 
                 </div>
             </div>

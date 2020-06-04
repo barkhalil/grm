@@ -64,6 +64,7 @@
                             <li><a href="<?=WEBRoot?>/gift/Liste">Autre demandes</a></li>
                         <?endif;?>
                         <li><a href="<?=WEBRoot?>/gift/ListeCadeaux">Liste des articles</a></li>
+                        <li><a href="<?=WEBRoot?>/gift/bonAchat">Stock BA </a></li>
                         <li><a href="<?=WEBRoot?>/gift/AddCadeaux">Ajouter un article</a></li>
                         <li><a href="<?=WEBRoot?>/gift/listeBnEntree">Liste des bons d'entrée</a></li>
                         <? if($_SESSION['user']['type']<=102): ?>

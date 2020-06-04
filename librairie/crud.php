@@ -438,7 +438,15 @@ function getinfo($id, $table, $var)
     $retour = $query->fetch();
     return $retour->$var;
 }
-
+function getinfoByIdv3($var, $table,$cond)
+{
+    global $PDO;
+    $strSQL = "SELECT $var FROM ".$table." WHERE  $cond";
+    $query = $PDO->query($strSQL);
+    // $query->execute(array($id));
+    $retour = $query->fetch();
+    return $retour->$var;
+}
 function getGenInfo($id, $table, $Cand, $var)
 {
     global $PDO;
