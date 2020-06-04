@@ -10,6 +10,7 @@ session_start();
 require '../../Connextion.php';
 include '../../librairie/loadall.php';
 $pp=filter_input(INPUT_POST,'pp',FILTER_VALIDATE_INT);
+$etat=filter_input(INPUT_POST,'etat',FILTER_VALIDATE_INT);
 $_SESSION['cdxSansPB']=$pp;
 $idDemande=filter_input(INPUT_POST,'idDemande',FILTER_VALIDATE_INT);
 $idRemise=filter_input(INPUT_POST,'idRemise',FILTER_VALIDATE_INT);
@@ -85,7 +86,7 @@ if($_SESSION['TotalCdx']>0){
         'pointsRealByType'=>$pointByType,
         'famille'=>10
     );
-    $data['etat']=4;
+    $data['etat']=$etat;
 
     update($idDemande,$data,'grm_demande_cadeaux');
     //echo '<pre>';print_r($_SESSION['CdxCmd']);exit;
@@ -102,7 +103,9 @@ if($_SESSION['TotalCdx']>0){
         );
         add($dataProd,'grm_cadeaux_demander');
         //demiussion produits  :
+    if($etat==4){
         $Gcc->DimStockProduits($key,$value);
+    }
     endforeach;
     foreach($_SESSION['CdxCmd'] as $key=>$value):
         $dataProd=array(
@@ -113,7 +116,9 @@ if($_SESSION['TotalCdx']>0){
         );
         add($dataProd,'grm_cadeaux_demander');
         //deminisussion cadeaux git
+    if($etat==4){
         $Gcc->DimStock($key,$value);
+
         if($key==63 || $key==54||  $key==53 ||  $key==52 || $key==1054) {
             $sect=getinfo($_SESSION['PbClient'],'prospect','gouvernorat');
             $idbon = getinfoByIdv3('id', 'stockbon', ' idbn=' . $key . ' and idsect=' .$sect);
@@ -128,6 +133,7 @@ if($_SESSION['TotalCdx']>0){
             );
 
         }
+    }
     endforeach;
     //echo 'ok22';exit;
     $pointsBonus->viderSession();

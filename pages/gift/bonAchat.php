@@ -47,7 +47,7 @@ $ListeCadeaux=get('*','stockbon',array('1='=>1),'AND',array('idbn'=>'ASC'));
                                 getinfo($cade['idbn'],'grm_gift','code_article');
                                 ?></td>
                             <td><?=getinfo($cade['idbn'],'grm_gift','titre');?></td>
-                            <td><?=getinfo($cade['idbn'],'gouvernerat','nom') ?></td>
+                            <td><?=getinfo($cade['idsect'],'gouvernerat','nom') ?></td>
 
                             <td><?=$cade['qte']?></td>
 

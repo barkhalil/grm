@@ -35,6 +35,7 @@ $edit=filter_input(INPUT_GET,'edit',FILTER_VALIDATE_INT);
 $DemandeInfo=get('*','grm_demande_cadeaux',array('id='=>$id));
 $Dmd=$DemandeInfo['reponse'][0];
 $pointsBs=explode('@_@',$Dmd['ponitsByType']);
+
 if(!isset($_SESSION['firsttime'])) {
     $_SESSION['idDmd']=$id;
     for($i=0;$i<count($pointsBs);$i++) {
@@ -295,7 +296,7 @@ if($IdSup){
                 <a href="DmdPb&annuler=1" class="btn btn-danger pull-left">
                     Annuler
                 </a>
-                <button href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb()">Finaliser</button>
+                <button href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb(4)">Finaliser</button>
                 <div class="clearfix"></div>
             </div>
         </div>

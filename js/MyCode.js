@@ -635,7 +635,7 @@ function PbAdd(page) {
     }
 }
 
-function FinalisationPb() {
+function FinalisationPb(etat) {
 
     var pp=0;
     var checkBox = document.getElementById("cdxSansPB");
@@ -652,6 +652,7 @@ function FinalisationPb() {
         url:url+'/ajax/Bonus/validationDemande.php',
         type:'POST',
         data:{
+            etat: etat,
             pp: pp,
             idDemande: $('#idDemande').val(),
             idRemise: $('#id_remise').val(),
@@ -660,7 +661,7 @@ function FinalisationPb() {
         success:function (result) {
 
            MSg('Demande valider','alert-success');
-          window.location = "../gestionDesDemandes/printDoc&idDemande="+result;
+          window.location = "../gestionDesDemandes/Liste";
           //  header('Location: ../gestionDesDemandes/printDoc&idDemande='+data);
         },
         error:function () {
