@@ -81,6 +81,7 @@ if($idDemandeau) {
                         <th>Pour : </th>
                         <th>Etat demande</th>
                         <th>Cadeaux demander</th>
+                        <th>Type </th>
                         <th>Suivi</th>
 
                     </tr>
@@ -134,6 +135,14 @@ if($idDemandeau) {
                                         <br/>...
                                     <?endif;?>
                                 </ul>
+                            </td>
+                            <td><?
+                                if($cdt['isCart']==0){
+                                echo "BA";
+                                }else{
+                                echo "Carte";
+                                }
+                                ?>
                             </td>
                             <td>
                                 <div name="div_<?=$cdt['id']?>" id="div_<?=$cdt['id']?>" >
