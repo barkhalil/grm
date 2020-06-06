@@ -135,6 +135,7 @@
                         <ul class="treeview-menu">
                             <li><a href="<?=WEBRoot?>/gestionDesDemandes/ListeCadeau">Liste cadeaux</a></li>
                             <li><a href="<?=WEBRoot?>/gestionDesDemandes/Liste">Demandes cadeaux</a></li>
+                            <li><a href="<?=WEBRoot?>/gestionDesDemandes/sodexo">Sodexo</a></li>
 
                         </ul>
                     </li>
