@@ -91,7 +91,7 @@
 <script src="<?= WEBRootD ?>/js/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<?= WEBRoot ?>/js/bootstrap-multiselect.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="<?= WEBRoot ?>/js/MyCode.js?v=7"></script>
+<script type="text/javascript" src="<?= WEBRoot ?>/js/MyCode.js?v=8"></script>
 <? if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])): ?>
     <script type="text/javascript">
         MSg("<?= $_SESSION['msg']?>", "<?=$_SESSION['type']?>");

@@ -670,6 +670,10 @@ function FinalisationPb(etat) {
 
     })
 }
+function sodexo() {
+    window.location = "../gestionDesDemandes/excelSodexo";
+
+}
 function validerDmdCdx() {
     $.ajax({
         url:url+'/ajax/Bonus/ValidateListeBonus.php',
