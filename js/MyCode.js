@@ -8,7 +8,7 @@ if(location.host=="grm.vital-crm.tn:10"){
     var url = f + s ;
 }else{
    // var url = f + s + "/GrmProject";
-    var url = f + s + "/grm"; 
+    var url = f + s + "/grm";
 
 }
 //console.log(url);
@@ -80,7 +80,7 @@ function GetPageI(Page,id) {
 function FindDel() {
     var sect = $("#Secteur").val();
     if (sect != "") {
-        // ajax rechercher les délégation associer : 
+        // ajax rechercher les délégation associer :
         $.ajax({
             url: url + "/ajax/FindDel.php",
             type: "POST",
@@ -131,7 +131,7 @@ function AddPRod(admin) {
 
 }
 $('#AddDmd').on('click',function () {
-    
+
 })
 function VerifyPoints() {
 
@@ -251,7 +251,7 @@ function FindDelListe() {
 function FindDelDemande() {
     var sect = $("#Secteur").val();
     if (sect != "") {
-        // ajax rechercher les délégation associer : 
+        // ajax rechercher les délégation associer :
         $.ajax({
             url: url + "/ajax/FindDel_2.php",
             type: "POST",
@@ -389,7 +389,7 @@ $(function () {
     //filter
     $("#FilterPros").click(function (event) {
         //event.preventDefault();
-        // ajax call 
+        // ajax call
         $("#ListeDiv").html('');
         var secteur = $("#Secteur").val();
         var spec = $("#Spec").val();
@@ -416,10 +416,10 @@ $(function () {
             $("#MsgPRo").append("Merci de choisir le secteur et la spécialité").show();
         }
     });
-    /*$("#ListeDiv").bind('change','#AllLink',function(ee){  
+    /*$("#ListeDiv").bind('change','#AllLink',function(ee){
      $("INPUT[id*='PRosSel_']").attr('checked', $('#AllLink').is(':checked'));
      //  $(".checkbox1").prop('checked', $(this).prop("checked"));
-     }); $('#AllLink').change(function() {  
+     }); $('#AllLink').change(function() {
      var checkboxes = $(this).closest('form').find(':checkbox');
      if($(this).is(':checked')) {
      checkboxes.prop('checked', true);
@@ -635,7 +635,7 @@ function PbAdd(page) {
     }
 }
 
-function FinalisationPb(etat) {
+function FinalisationPb(etat,d) {
 
     var pp=0;
     var checkBox = document.getElementById("cdxSansPB");
@@ -647,7 +647,7 @@ function FinalisationPb(etat) {
     {
         pp=0;
     }
-    
+
     $.ajax({
         url:url+'/ajax/Bonus/validationDemande.php',
         type:'POST',
@@ -659,10 +659,12 @@ function FinalisationPb(etat) {
             ObsAdm: $('#ObsAdm').val(),
         },
         success:function (result) {
-
-           MSg('Demande valider','alert-success');
-          window.location = "../gestionDesDemandes/Liste";
-          //  header('Location: ../gestionDesDemandes/printDoc&idDemande='+data);
+alert(etat);
+          // MSg('Demande valider','alert-success');
+         // window.location = "../"+result;
+          // header('Location: '+result);
+            window.location.href = "/grm/gestionDesDemandes/Liste&idDel=&d="+d;
+           // console.log(result);
         },
         error:function () {
             MSg('Un problème est survenu merci de refraichir la page','alert-danger');
