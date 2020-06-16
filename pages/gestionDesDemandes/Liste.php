@@ -236,7 +236,7 @@ if($idDemandeau) {
                                             <i class="fa fa-calculator"></i>
                                         </a>
                                     <?else: if($cdt['etat']<2 && $_SESSION['user']['type']<=102) :?>
-                                        <a href="DmdPb&idDemande=<?=$cdt['id']?>&edit=1" class="btn btn-success" data-toggle="tooltip" title="Valider">
+                                        <a href="DmdPb&idDemande=<?=$cdt['id']?>&edit=1&d=<?=$Limite?>" class="btn btn-success" data-toggle="tooltip" title="Valider">
                                             <i class="fa fa-check"></i>
                                         </a>
                                     <?endif;?>
@@ -282,7 +282,10 @@ if($idDemandeau) {
 
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
 
-                <? pagination($Cadeaux['total'], 30, WEBRoot . "/gestionDesDemandes/Liste".$link."&d=", ""); ?>
+                <? pagination($Cadeaux['total'], 30, WEBRoot . "/gestionDesDemandes/Liste".$link."&d=", "");
+                $_SESSION['lastP']="/gestionDesDemandes/Liste".$link."&d=".$Limite;
+
+                ?>
 
             </div>
 

@@ -31,6 +31,7 @@ $id=filter_input(INPUT_GET,'idDemande',FILTER_VALIDATE_INT);
 $Pbs=get('*','grm_pb_type',array('etat='=>1));
 $pb=$Pbs['reponse'][0];
 $edit=filter_input(INPUT_GET,'edit',FILTER_VALIDATE_INT);
+$d=filter_input(INPUT_GET,'d',FILTER_VALIDATE_INT);
 //echo '<pre>';print_r($_SESSION);die;
 $DemandeInfo=get('*','grm_demande_cadeaux',array('id='=>$id));
 $Dmd=$DemandeInfo['reponse'][0];
@@ -296,7 +297,7 @@ if($IdSup){
                 <a href="DmdPb&annuler=1" class="btn btn-danger pull-left">
                     Annuler
                 </a>
-                <button href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb(4)">Finaliser</button>
+                <button href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb(4,<?=$d?>)">Finaliser</button>
                 <div class="clearfix"></div>
             </div>
         </div>

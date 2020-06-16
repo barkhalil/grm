@@ -212,7 +212,8 @@ if($IdSup){
                 <a href="avecPBonus&annuler=1" class="btn btn-danger pull-left">
                     Annuler
                 </a>
-                <a href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb(0)">Finaliser</a>
+                <button href="javascript:void(0)" class="btn btn-success pull-right" onclick="FinalisationPb(0,0)">Finaliser</button>
+
                 <div class="clearfix"></div>
             </div>
         </div>

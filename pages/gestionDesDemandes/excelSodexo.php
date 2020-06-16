@@ -16,7 +16,8 @@ $de=$_SESSION['debut'];
 $a=$_SESSION['au'];
 $idDemandeau=$_SESSION['idel'];
 
-
+echo $de.'<br>' ;
+echo $a;
 if($idDemandeau) {
     //if($idDemandeau ==2 )
     // récupération des cadeaux demander :
@@ -25,6 +26,7 @@ if($idDemandeau) {
     // récupération des cadeaux demander :
     $Cadeaux=get("*",'grm_demande_cadeaux',array('famille='=>10,'etat='=>0,'isCart='=>0,'date_remise_point>='=>$de,'date_remise_point<='=>$a),'AND',array('id'=>'ASC'));
 }
+
 
 
 

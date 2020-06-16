@@ -86,6 +86,9 @@ if($_SESSION['TotalCdx']>0){
         'pointsRealByType'=>$pointByType,
         'famille'=>10
     );
+    if(!$etat){
+        $etat=0;
+    }
     $data['etat']=$etat;
 
     update($idDemande,$data,'grm_demande_cadeaux');
@@ -103,9 +106,9 @@ if($_SESSION['TotalCdx']>0){
         );
         add($dataProd,'grm_cadeaux_demander');
         //demiussion produits  :
-    if($etat==4){
-        $Gcc->DimStockProduits($key,$value);
-    }
+        if($etat==4){
+            $Gcc->DimStockProduits($key,$value);
+        }
     endforeach;
     foreach($_SESSION['CdxCmd'] as $key=>$value):
         $dataProd=array(
@@ -116,29 +119,31 @@ if($_SESSION['TotalCdx']>0){
         );
         add($dataProd,'grm_cadeaux_demander');
         //deminisussion cadeaux git
-    if($etat==4){
-        $Gcc->DimStock($key,$value);
+        if($etat==4){
+            $Gcc->DimStock($key,$value);
 
-        if($key==63 || $key==54||  $key==53 ||  $key==52 || $key==1054) {
-            $sect=getinfo($_SESSION['PbClient'],'prospect','gouvernorat');
-            $idbon = getinfoByIdv3('id', 'stockbon', ' idbn=' . $key . ' and idsect=' .$sect);
+            if($key==63 || $key==54||  $key==53 ||  $key==52 || $key==1054) {
+                $sect=getinfo($_SESSION['PbClient'],'prospect','gouvernorat');
+                $idbon = getinfoByIdv3('id', 'stockbon', ' idbn=' . $key . ' and idsect=' .$sect);
 
-            $qtebn = getinfoByIdv3('qte', 'stockbon', ' idbn=' . $key . ' and idsect=' .$sect);
+                $qtebn = getinfoByIdv3('qte', 'stockbon', ' idbn=' . $key . ' and idsect=' .$sect);
 
-            //$qtebn=getinfo($id,'stockbon','qte');
-            $new = filter_input(0, 'Newqte', 257);
-            $aj = $qtebn-$value;
-            update(
-                $idbon, array('qte' => $aj), 'stockbon'
-            );
+                //$qtebn=getinfo($id,'stockbon','qte');
+                $new = filter_input(0, 'Newqte', 257);
+                $aj = $qtebn-$value;
+                update(
+                    $idbon, array('qte' => $aj), 'stockbon'
+                );
 
+            }
         }
-    }
     endforeach;
     //echo 'ok22';exit;
     $pointsBonus->viderSession();
-    echo $idDemande;
-    //redirect('printDoc&idDemande='.$idDemande);
+    //echo $idDemande;
+   // echo $_SESSION['lastP'];
+   // redirect('../'.$_SESSION['lastP']);
+    echo "../gestionDesDemandes/Liste&idDel=&d=30";
 }else{
     echo false;
 }exit;
