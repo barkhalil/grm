@@ -18,7 +18,7 @@ $excel ="<table border='1px'>
     <th>Prix vente hors taxe</th>
     <th>Prix vente TTC</th>
 </tr>";
-$request="SELECT *,grm_gift_family.nom as family FROM grm_gift LEFT JOIN grm_gift_family ON grm_gift.famille=grm_gift_family.id ORDER BY grm_gift.famille";
+$request="SELECT *,grm_gift_family.nom as family FROM grm_gift LEFT JOIN grm_gift_family ON grm_gift.famille=grm_gift_family.id where grm_gift.etat=1 ORDER BY grm_gift.famille";
 $stmt=$PDO->prepare($request);
 $stmt->execute();
 $gifts= $stmt->fetchAll(PDO::FETCH_ASSOC);
