@@ -40,6 +40,7 @@ $idDemandeau=$_SESSION['idel'];
                         <th>Pour : </th>
                         <th>Etat demande</th>
                         <th>Cadeaux demander</th>
+                        <th>Type</th>
                         <th>Suivi</th>
 
                     </tr>
@@ -101,6 +102,15 @@ $idDemandeau=$_SESSION['idel'];
                                     endif;
                                $data.=' </ul>
                             </td>
+                             <td>';
+
+                                if($cdt['isCart']==0){
+                               $data.= "BA";
+                                }else{
+                                    $data.= "Carte";
+                                }
+                                
+                           $data.=' </td>
                             <td>';
                                $suivi='';
                         if($cdt['suivi']==0){$suivi='non valider';}
