@@ -75,7 +75,7 @@ endif;
                 </div>
                 <div class="form-group">
                     <label>Quantité initital : </label>
-                    <input type="number"   step="1" value="<?=$CadeauxDetails['qte']?>" name="qte" class="form-control" >
+                    <input type="number"   step="1" value="<?=$CadeauxDetails['qte']?>" name="qte" class="form-control" readonly>
                 </div>
 
                     </div>
