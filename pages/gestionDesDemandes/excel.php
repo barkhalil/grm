@@ -109,7 +109,7 @@ $idDemandeau=$_SESSION['idel'];
                                 }else{
                                     $data.= "Carte";
                                 }
-                                
+
                            $data.=' </td>
                             <td>';
                                $suivi='';
