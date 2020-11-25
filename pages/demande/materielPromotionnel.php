@@ -59,7 +59,7 @@ if($annuler==1){
                     <div class="form-group">
 
 
-                        <label>Par Produit</label>
+                        <label>Version</label>
 
                         <select name="version" class="form-control"  id="version" required>
 
