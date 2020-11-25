@@ -43,6 +43,34 @@ function SuiviCadeau(id) {
         }
     });
 }
+function getversion() {
+
+
+    var gamme = $('#ProdSeaC').val();
+
+
+//alert('fffffffffff'+gamme);
+    $.ajax({
+        url: url+"/ajax/afterselect/version.php",
+        type:'POST',
+        dataType:'json',
+        data: {
+            gamme:gamme},
+        success: function(res){
+            var prod = jQuery.parseJSON(JSON.stringify(res));
+
+
+            $('#version').empty().append(prod.list);
+
+
+        }
+    });
+
+}
+
+
+
+
 function MSg(msg, type) {
     console.log(msg);
     jQuery(".alert").addClass(type);
@@ -755,6 +783,7 @@ function AddPRodDemande(admin) {
 $('#BtnPromo').click(function () {
     // add to cmd liste by add to sessions :
     var ProdSeaC= $("#ProdSeaC").val();
+    var version= $("#version").val();
     var qte= $("#qte").val();
     var type=$('#uType').val();
     var delegue=$('#delegue').val();
@@ -762,7 +791,7 @@ $('#BtnPromo').click(function () {
         $.ajax({
             type:'POST',
             url:url+'/ajax/promo/addPromoSession.php',
-            data:{ProdSeaC:ProdSeaC,qte:qte,type:type,delegue:delegue},
+            data:{ProdSeaC:ProdSeaC,qte:qte,type:type,delegue:delegue,version:version},
             success:function (data) {
                 $("#ListeProdSessions").html(data);
             },
@@ -932,6 +961,30 @@ function myFunction(id,index) {
         }
     }
 }
+
+function toexcel() {
+    /* alert("eeeee");
+     window.open('data:application/vnd.ms-excel,' + document.getElementById('venteanim'));
+     e.preventDefault();*/
+
+    var table = $(venteanim);
+    if(table && table.length){
+        var preserveColors = (table.hasClass('table2excel_with_colors') ? true : false);
+        $(table).table2excel({
+            exclude: ".noExl",
+            name: "Excel Document Name",
+            filename: "Liste prodPromo DLG",
+            fileext: ".xls",
+            exclude_img: true,
+            exclude_links: true,
+            exclude_inputs: true,
+            preserveColors: preserveColors
+        });
+    }
+
+}
+
+
 function searchInTable(input,idTable) {
     // Declare variables
     var input, filter, table, tr, td, i;

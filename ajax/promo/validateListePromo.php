@@ -22,7 +22,8 @@ if($_SESSION['PromoCmd']>0){
         $dataProd=array(
             'id_promo'=>$idD,
             'id_prod'=>$key,
-            'qte'=>$value
+            'qte'=>$value,
+            'version'=>$_SESSION['PromoCmdVers'][$key]['version_id']
         );
         add($dataProd,'promo_prod');
     endforeach;

@@ -29,11 +29,22 @@ if(filter_input(0,'Add',257)):
     );
     $IdDEmande=update($id,$dataDemande,'promo_demander');
     if($IdDEmande ){
+
+
         //echo '<pre>';print_r($Products);die;
         foreach ($Gifts['reponse'] as $keyG):
-            delete($keyG['id'],'promo_prod');
+
+
+           if($keyG['version']) {
+               $qtever = getinfoByIdv3('qte', 'grm_art_version', ' id_art=' . $keyG['id_prod'] . ' and id=' . $keyG['version']);
+               $valFinal = +$qtever - $keyG['qte'];
+
+               updateCond(array('qte' => $valFinal), ' id_art=' . $keyG['id_prod'] . ' and id=' . $keyG['version'] . ' ', 'grm_art_version');
+               // delete($keyG['id'],'promo_prod');
+           }
+            $Gcc->DimStock($keyG['id_prod'],$keyG['qte']);
         endforeach;
-        if(count($Products)>0){
+       /* if(count($Products)>0){
             foreach ($Products as $key => $value):
                 add(array(
                     'id_promo'=>$id,
@@ -41,8 +52,11 @@ if(filter_input(0,'Add',257)):
                     'qte'=>$value,
                 ), 'promo_prod');
                 $Gcc->DimStock($key,$value);
+
+
+
             endforeach;
-        }
+        }*/
     }
     $_SESSION['msg'] = "Votre demande est sauvegarder";
     $_SESSION['type'] = "alert-success";
@@ -76,7 +90,7 @@ endif;
                 <div class="box box-comment box-body">
                     <div class="form-group">
                         <label>Les produits disponible : </label>
-                        <select class="form-control select2" name="cadeaux" id="ProdSelect" onchange="AddPRod(1)">
+                        <select class="form-control select2" name="cadeaux" id="ProdSelect" onchange="AddPRod(1)" disabled>
                             <option value="">Choix</option>
                             <?
                             $ListeGift = get('*', 'grm_gift',array(
@@ -98,19 +112,24 @@ endif;
                         <? foreach($Gifts['reponse'] as $Prod): ?>
                             <div class="form-group" id="<?=$Prod['id_prod']?>">
                                 <label>
-                                    <a href="javascript:void(0)" onclick="RemouveDiv('<?=$Prod['id_prod']?>')" class="btn btn-danger">
+                                    <!--<a href="javascript:void(0)" onclick="RemouveDiv('<?=$Prod['id_prod']?>')" class="btn btn-danger">
                                         <i class="fa fa-trash"></i>
-                                    </a>
+                                    </a>-->
                                     <?=getinfo($Prod['id_prod'],'grm_gift' ,'titre')?><br/> Quantité :
 
                                 </label>
-                                <input type="number" name="prodValue[<?=$Prod['id_prod']?>]" value="<?=$Prod['qte']?>"  min="1" class="form-control QteProd" onchange="VerifyPoints()">
+                                <input type="number" name="prodValue[<?=$Prod['id_prod']?>]" value="<?=$Prod['qte']?>"  min="1" class="form-control QteProd" onchange="VerifyPoints()" disabled>
                                 <?  if(getinfo($Prod['id_prod'],'grm_gift' ,'serialisable')==1 ){ ?>
                                     <div id="prodSerie'+prod+'">
                                         <label>Numero de Série</label>
                                         <textarea name="Series" class="form-control"></textarea>
                                     </div>
                                 <? } ?>
+                                <?if($Prod['version']){?>
+                                    <label>Version :</label>
+                                <input type="text" name="prodValue[<?=$Prod['version']?>]" value="<?=getinfoByIdv3('version', 'grm_art_version', ' id_art=' . $Prod['id_prod'].
+                                    ' and id='.$Prod['version'])?>" class="form-control" disabled>
+                           <?}?>
                             </div>
                         <?endforeach;?>
                     </div>

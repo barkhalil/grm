@@ -239,6 +239,23 @@ function getNbrVi($de,$a,$user=null,$limite=0){
     $Vi=$stmt->fetchAll(PDO::FETCH_ASSOC);
      return $Vi;
 }
+function getProdDm($de,$a,$user,$prod){
+    global $PDO;
+    $sql="SELECT sum(promo_prod.qte) as tot from promo_demander,promo_prod where promo_prod.id_promo=promo_demander.id 
+and promo_demander.par=$user and  promo_demander.etat=1 and  promo_demander.date_validation>='$de' 
+and promo_demander.date_validation<='$a' and promo_prod.id_prod=$prod";
+
+
+    /*$sql="SELECT COUNT(id_pros) AS Total FROM `visite` WHERE `id_visiteur` = $user
+AND `type` = 1 AND date_visite >= '$de' AND date_visite <= '$a' 
+GROUP By id_pros HAVING Total >$limite  ORDER BY id_pros  DESC"; //GROUP BY how to count this groupe ?*/
+
+    //  print_r($Vi);
+    $query = $PDO->query($sql);
+    // $query->execute($query);
+    $retour = $query->fetch();
+    return $retour->tot;
+}
 function getNbreDayOuv($de,$a){
     $jourV=get('*','date_jouv',array(
         'date_j>='=>$de,

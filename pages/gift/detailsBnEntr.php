@@ -41,6 +41,7 @@ $bnsEntr=$giftStock->getBnEntr($refBn);
                 <th style="border: 1px solid #999;padding: 10px">Désignation</th>
                 <th style="border: 1px solid #999;padding: 10px">Déscription</th>
                 <th style="border: 1px solid #999;padding: 10px">Quantité</th>
+                <th style="border: 1px solid #999;padding: 10px">Version</th>
             </tr>
             </thead>
             <tbody>
@@ -53,6 +54,17 @@ $bnsEntr=$giftStock->getBnEntr($refBn);
                     <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($article['prod'],'grm_gift','titre');?></td>
                     <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($article['prod'],'grm_gift','description');?></td>
                     <td style="border: 1px solid #999;padding: 10px;"><?=$article['qte'];?></td>
+                    <td style="border: 1px solid #999;padding: 10px;"><?
+                        if($article['version']){
+                            $ver=getinfoByIdv3('version', 'grm_art_version', ' id_art=' . $article['prod'].
+                                ' and id='.$article['version']);
+                            echo $ver;
+                        }
+
+                        else{
+                            echo 'non défini';
+                        }
+                        ?></td>
                 </tr>
             <?endforeach;?>
             </tbody>

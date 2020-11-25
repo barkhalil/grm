@@ -40,7 +40,7 @@ if($annuler==1){
                     </div>
                     <div class="form-group">
                         <label>Les articles disponible : </label>
-                        <select class="form-control select2" name="prodListe" id="ProdSeaC">
+                        <select class="form-control select2" onchange="getversion()" name="prodListe" id="ProdSeaC">
                             <option value="">Choix</option>
                             <?
                             // ajouter filter par famille
@@ -53,6 +53,17 @@ if($annuler==1){
                                 ?>
                                 <option value="<?= $Gift['id'] ?>" ><?= $Gift['code_article'].' '. $Gift['titre'] ?></option>
                             <? endforeach; ?>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+
+
+                        <label>Par Produit</label>
+
+                        <select name="version" class="form-control"  id="version" required>
+
+
 
                         </select>
                     </div>

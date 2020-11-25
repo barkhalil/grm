@@ -53,6 +53,7 @@ $user= $user['reponse'][0];
                 <th style="border: 1px solid #999;padding: 10px">Cadeaux</th>
                 <th style="border: 1px solid #999;padding: 10px">Déscription</th>
                 <th style="border: 1px solid #999;padding: 10px">Quantité</th>
+                <th style="border: 1px solid #999;padding: 10px">Version</th>
             </tr>
             </thead>
             <tbody>
@@ -62,12 +63,23 @@ $user= $user['reponse'][0];
                     <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_prod'],'grm_gift','titre');?></td>
                     <td style="border: 1px solid #999;padding: 10px;"><?=getinfo($cd['id_prod'],'grm_gift','description');?></td>
                     <td style="border: 1px solid #999;padding: 10px;"><?=$cd['qte'];?></td>
+                    <td style="border: 1px solid #999;padding: 10px;"><?
+                        if($cd['version']){
+                        $ver=getinfoByIdv3('version', 'grm_art_version', ' id_art=' . $cd['id_prod'].
+                            ' and id='.$cd['version']);
+                        echo $ver;
+                        }
+
+                        else{
+                            echo 'non défini';
+                        }
+                        ?></td>
                 </tr>
             <?endforeach;?>
             </tbody>
             <tfoot>
             <tr>
-                <td colspan="2">
+                <td colspan="3">
                     <div style="margin-top: 15px; width: 100%;vertical-align: top;">
                         <div style="width: 49%;display: inline-block;vertical-align: top;">
                             <h4 style="color: #582900;">Observation administrateur: </h4>
