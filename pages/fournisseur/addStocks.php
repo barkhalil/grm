@@ -35,8 +35,14 @@ if(!$serCh ){ // id int
 if(filter_input(INPUT_POST,'addGift',FILTER_VALIDATE_INT)):
     $newQte=filter_input(0,'Newqte',257);
     if(filter_input(0,'Newqte',257)>0) {
+         $fam=getinfo($id,'grm_gift','famille');
+            if($fam==5) {
+
+                $vv=filter_input(INPUT_POST,'version',FILTER_DEFAULT);}
+
         $data=array(
             'qte'=>filter_input(0,'Newqte',257),
+            'version'=>$vv,
             'qte_ex'=>$CadeauxDetails['qte'],
             'prod'=>$id,
             'fournisseur'=>filter_input(0,'four',257),
@@ -84,7 +90,25 @@ if(filter_input(INPUT_POST,'addGift',FILTER_VALIDATE_INT)):
             update(
                 $id,array('qte'=>$valFinal),'grm_gift'
             );
-           redirect('../gift/ListeCadeaux');
+
+            $fam=getinfo($id,'grm_gift','famille');
+            if($fam==5) {
+
+                $idver=filter_input(INPUT_POST,'version',FILTER_DEFAULT);
+              //  echo $idver.' ********';
+                $qtever = getinfoByIdv3('qte', 'grm_art_version', ' id_art=' . $id . ' and id='.$idver);
+                $valFinal = $newQte + $qtever;
+                update(
+                    $idver,array('qte'=>$valFinal),'grm_art_version'
+                );
+
+            }
+
+
+
+
+
+            redirect('../gift/ListeCadeaux');
         }else{
             $_SESSION['msg'] = "problème erreur mochkla wa 7lili";
             $_SESSION['type'] = "alert-danger";
@@ -143,6 +167,28 @@ endif;
                         <label>Nouvelle Quantité : </label>
                         <input type="number" min="0" step="1" value="" name="Newqte" class="form-control" required >
                     </div>
+                   <? $fam=getinfo($id,'grm_gift','famille');
+                    if($fam==5) {?>
+                    <div class="form-group">
+                        <label>Version : </label>
+                        <select class="form-control" name="version" id="version" required>
+                            <option value="">Choix</option>
+                            <?
+                            // ajouter filter par famille
+                            $ListeGift =  get('*', 'grm_art_version',array(
+                                //  'dispo =' => 1,
+
+                                'id_art = '=>$id
+                            ));
+                            foreach ($ListeGift['reponse'] as $Gift):
+                                ?>
+                                <option value="<?= $Gift['id'] ?>" ><?= $Gift['version']?></option>
+                            <? endforeach; ?>
+
+                        </select>
+
+                    </div>
+                    <?}?>
                     <div class="form-group">
                         <label>Ref.</label>
                         <input type="text" name="ref" value="" class="form-control" required>

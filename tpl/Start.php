@@ -85,6 +85,7 @@
 <script src="<?= WEBRootD ?>/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <script src="<?= WEBRootD ?>/plugins/select2/select2.full.min.js"></script>
 <script src="<?= WEBRootD ?>/js/jquery.autocomplete.js"></script>
+<script src="<?= WEBRootD ?>/js/jquery.table2excel.js"></script>
 <script src="<?= WEBRootD ?>/js/highcharts.js"></script>
 <script src="<?= WEBRootD ?>/js/jquery.highchartTable-min.js"></script>
 <!--<script src="<?= WEBRoot ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->

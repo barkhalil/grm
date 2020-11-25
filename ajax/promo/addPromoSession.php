@@ -9,6 +9,7 @@ session_start();
 require_once '../../Connextion.php';
 include '../../librairie/loadall.php';
 $ProdSeaC=filter_input(INPUT_POST,'ProdSeaC',FILTER_VALIDATE_INT);
+$version=filter_input(INPUT_POST,'version',FILTER_VALIDATE_INT);
 $qte=filter_input(INPUT_POST,'qte',FILTER_VALIDATE_INT);
 $type=filter_input(INPUT_POST,'type',FILTER_VALIDATE_INT);
 $delegue=filter_input(INPUT_POST,'delegue',FILTER_VALIDATE_INT);
@@ -20,8 +21,15 @@ if(!$type) {
     $url="PromoDetails&IdSup=";
 }
 $_SESSION['delegue']=$delegue;
+$version_nom = getinfoByIdv3('version', 'grm_art_version', ' id=' . $version);
+$_SESSION['version_nom']=$version_nom;
+$_SESSION['version_id']=$version;
+
+
 if($ProdSeaC && $qte):
     $_SESSION['PromoCmd'][$ProdSeaC]=$qte;
+    $_SESSION['PromoCmdVers'][$ProdSeaC]['version']=$version_nom;
+    $_SESSION['PromoCmdVers'][$ProdSeaC]['version_id']=$version;
     if(isset($_SESSION['PromoCmd']) && count($_SESSION['PromoCmd'])>0):
 
         ?>
@@ -29,6 +37,7 @@ if($ProdSeaC && $qte):
             <thead>
             <tr>
                 <th>Nom du produits</th>
+                <th>version</th>
                 <th>Qte</th>
                 <th></th>
             </tr>
@@ -38,6 +47,7 @@ if($ProdSeaC && $qte):
             foreach ($_SESSION['PromoCmd'] as $key=>$value):?>
                 <tr>
                     <td><?echo getinfo($key,'grm_gift','titre')?></td>
+                    <td><? echo $_SESSION['PromoCmdVers'][$key]['version']?></td>
                     <td><? echo $value?></td>
                     <td>
                         <a href="<?=$url.$key?>" class="btn btn-danger">

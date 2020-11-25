@@ -191,7 +191,18 @@ function updateCond( $datas,$Where, $table) {
     if ($PDO->query($strSQL)) return true;
     else return false;
 }
+function SUM($tab,$var,$cond)
+{
 
+    global $PDO;
+    $strSQL = "SELECT SUM($var) as nb FROM ".$tab." WHERE ".$cond;
+    $query = $PDO->query($strSQL);
+    // $query->execute($query);
+    $retour = $query->fetch();
+    return $retour->nb;
+
+
+}
 function GetData($NomFilter, $SpecFilter = null, $SectFilter = null, $DelFilter = null, $ActiviteFilter = null, $Potentiel = null,$Etab=null, $limit = null,$PrenomFilter=null,$idFilter=null){
      global $PDO;
      $retour=array(); 
@@ -446,6 +457,14 @@ function getinfoByIdv3($var, $table,$cond)
     // $query->execute(array($id));
     $retour = $query->fetch();
     return $retour->$var;
+}function getinfoByIdv4($var,$ret, $table,$cond)
+{
+    global $PDO;
+    $strSQL = "SELECT $var as $ret FROM ".$table." WHERE  $cond";
+    $query = $PDO->query($strSQL);
+    // $query->execute(array($id));
+    $retour = $query->fetch();
+    return $retour->$ret;
 }
 function getGenInfo($id, $table, $Cand, $var)
 {

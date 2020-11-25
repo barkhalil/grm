@@ -68,6 +68,8 @@
                         <li><a href="<?=WEBRoot?>/gift/ListeCadeaux">Liste des articles</a></li>
                         <li><a href="<?=WEBRoot?>/gift/bonAchat">Stock BA </a></li>
                         <li><a href="<?=WEBRoot?>/gift/AddCadeaux">Ajouter un article</a></li>
+                        <li><a href="<?=WEBRoot?>/gift/version">Ajouter une version </a></li>
+                        <li><a href="<?=WEBRoot?>/gift/matPRes">liste des produits promo par Réseau </a></li>
                         <li><a href="<?=WEBRoot?>/gift/listeBnEntree">Liste des bons d'entrée</a></li>
                         <? if($_SESSION['user']['type']<=102): ?>
                             <li><a href="<?=WEBRoot?>/gift/Quota">Quota</a></li>

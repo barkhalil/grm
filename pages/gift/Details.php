@@ -39,13 +39,74 @@ $CadeauxDetails=$Cadeaux['reponse'][0];
                 <h3> Information</h3>
                 <ul>
                     <li>Code  : <?=$CadeauxDetails['bare_code']?></li>
-                    <li>Sérialisable :  <?=$CadeauxDetails['serialisable']==1 ? "Oui" : "Non"?></li>
-                    <li>PAHT  : <?=$CadeauxDetails['paht']?></li>
-                    <li>PVHT  : <?=$CadeauxDetails['pvht']?></li>
-                    <li>PVTTC : <?=$CadeauxDetails['pvttc']?></li>
+
                     <li>Stock Alert : <?=$CadeauxDetails['stoc_alert']?></li>
                 </ul>
             </div>
+                <div class="col-md-6">
+                    <h3> Versions : <span><a href="version?prod=<?=$id?>"  class="btn btn-success" data-toggle="tooltip" title="Modifier"><i class="fa fa-plus-circle"></i></a></span>
+                    </h3>
+                    <table  class="table table-bordered">
+                        <tr>
+                            <td>nom</td>
+                            <td>date creation</td>
+                            <td>dernière mise à jour  du stock</td>
+                            <td>Qte entrée</td>
+                            <td>Qte restante</td>
+                            <td>Qte utilisé</td>
+
+                        </tr>
+                        <?
+                        $ListeGift = get('*', 'grm_art_version',array(
+                            //  'dispo =' => 1,
+
+                            'id_art = '=>$id
+                        ));
+
+                        foreach ($ListeGift['reponse'] as $Gift):
+                            ?>
+
+                            <tr>
+
+
+                                <td><?=$Gift['version']?></td>
+                                <td><?
+
+                                   echo getinfoByIdv3('created_at','grm_art_version',' id_art='.$id.' and version="'.$Gift['version'].'"');
+                                    ?></td><td><?
+
+                                   echo getinfoByIdv4('MIN(system_date)','nb','grm_stock',' prod='.$id.' and version="'.$Gift['id'].'"');
+                                    ?></td>
+                                <td>
+                                    <?
+                                   $qteent=SUM('grm_stock','qte',' version='.$Gift['id'].' and prod='.$id);
+                                   if($qteent){
+                                       echo $qteent;
+                                   }else{
+                                       $qteent=0;
+                                       echo $qteent;
+                                   }
+
+                                    ?>
+
+                                </td>
+                                <td><?=$Gift['qte']?></td>
+                                <td><?=$qteent-$Gift['qte']?></td>
+
+                            </tr>
+
+
+
+                        <? endforeach; ?>
+
+
+                    </table>
+
+
+
+
+
+                </div>
 
             </div>
             </div>
