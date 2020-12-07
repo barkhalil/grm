@@ -8,6 +8,7 @@
 $now=date('d-m-Y');
 $excel ="<table border='1px'>
 <tr>
+    <th>ID CRM</th>
     <th>Code article</th>
     <th>Désignation</th>
     <th>Déscription</th>
@@ -27,6 +28,7 @@ $gifts= $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($gifts as $gift):
     $excel.="
 <tr>
+    <td>".$gift['id']."</td> 
     <td>".$gift['code_article']."</td> 
     <td>".$gift['titre']."</td> 
     <td>".$gift['description']."</td> 
