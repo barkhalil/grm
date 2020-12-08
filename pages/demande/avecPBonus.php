@@ -125,7 +125,7 @@ if($IdSup){
                             <label for="ProdSeaC">Liste des produits</label>
                             <select class="form-control select2" name="prodListe" id="ProdSeaC">
                                 <option value="">Choix du produits</option>
-                                <? $request="select products.*,products_prix.qte from products INNER JOIN products_prix ON products.id=products_prix.id_prod";
+                                <? $request="select * from products";
                                 $sql = $PDO->prepare($request);
                                 $sql->execute();
                                 $ListeProd = $sql->fetchAll(PDO::FETCH_ASSOC);
