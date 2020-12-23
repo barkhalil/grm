@@ -102,6 +102,43 @@ if(filter_input(INPUT_POST,'addGift',FILTER_VALIDATE_INT)):
                     $idver,array('qte'=>$valFinal),'grm_art_version'
                 );
 
+                $sendmail = new SendMail(new PHPMailer());
+
+                $vali = null;
+
+                $HtmlTable = ' 
+        
+        <table class="table" border="1" style="width: 60%">
+
+   
+    <tr>
+    
+        <td colspan="2">DATE : '.date("Y-m-d").'</td>
+    </tr>
+    <tr>
+        <td colspan="2">Article : '.getinfo($id,'grm_gift','titre').'</td>
+    </tr>
+    <tr>
+        <td colspan="2">Version : '.getinfo($idver,'grm_art_version' ,'version' ).'</td>
+    </tr>
+    <tr>
+        <td colspan="2">QTE : '.$valFinal.'</td>
+    </tr>
+    <tr>
+        <td colspan="2">REF : '.filter_input(0,'ref',516).'</td>
+    </tr>
+    <tr>
+        <td >Par : '.getinfo($_SESSION['user']['id'],'grm_users' ,'Nom' ).' '.getinfo($_SESSION['user']['id'],'grm_users' ,'Prenom' ).'</td>
+        
+    </tr>
+   
+    ';
+
+
+                $HtmlTable .= '</table>';
+                $sendmail->send2('coordinatrice.marketing1@vital.com.tn', $HtmlTable,' mise à jour stock','il.jridi@vital.com.tn');
+
+
             }
 
 
