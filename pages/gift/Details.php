@@ -31,7 +31,7 @@ $CadeauxDetails=$Cadeaux['reponse'][0];
                 <ul>
                     <li>Point Bonus :  <?=$CadeauxDetails['point_bonus']?></li>
                     <li>Disponible :  <?=$CadeauxDetails['dispo']==1 ? "Oui" : "Non"?></li>
-                    <li>Quantité :  <?=$CadeauxDetails['qte']?></li>
+                    <li>Quantité :  <?=getStockProd($id)->qte?></li>
                     <li>Quantité utiliser :  <?=$CadeauxDetails['qte_utiliser']?></li>
                 </ul>
             </div>
