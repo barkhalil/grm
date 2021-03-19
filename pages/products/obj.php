@@ -143,7 +143,7 @@ else $ListeProd=get("*",'products',array('gamme_id='=>$ListeOfGamme['reponse'][0
                         <? if(!$id): ?>
 
 
-                        
+
                             <button type="submit" name="AddProd" value="1" class="btn btn-primary btn-block">Ajouter un produit</button>
                         <?else:?>
                             <button type="submit" name="ModProd" value="1" class="btn btn-warning btn-block">Modifier un produit</button>
