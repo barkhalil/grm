@@ -472,6 +472,16 @@ function getinfo($id, $table, $var)
     $retour = $query->fetch();
     return $retour->$var;
 }
+
+function getsatut($id)
+{
+    global $db;
+    $strSQL = "SELECT Tiers_EncoursStatus  FROM kb_VTiers  WHERE  Tiers_Stat3= ?";
+    $query = $db->prepare($strSQL);
+    $query->execute(array($id));
+    $retour = $query->fetch();
+    return $retour->Tiers_EncoursStatus;
+}
 function getinfoByIdv3($var, $table,$cond)
 {
     global $PDO;
