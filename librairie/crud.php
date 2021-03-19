@@ -476,9 +476,9 @@ function getinfo($id, $table, $var)
 function getsatut($id)
 {
     global $db;
-    $strSQL = "SELECT Tiers_EncoursStatus  FROM kb_VTiers  WHERE  Tiers_Stat3= ?";
-    $query = $db->prepare($strSQL);
-    $query->execute(array($id));
+    $strSQL = "SELECT Tiers_EncoursStatus  FROM kb_VTiers  WHERE  Tiers_Stat3="."'".$id."'";
+    $query = $db->query($strSQL);
+   // $query->execute(array($id));
     $retour = $query->fetch();
     return $retour->Tiers_EncoursStatus;
 }
