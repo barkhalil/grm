@@ -26,6 +26,10 @@ $gifts= $stmt->fetchAll(PDO::FETCH_ASSOC);
 //$products=get('*','products',NULL,'AND',array('name'=>'ASC'));
 //echo '<pre>';print_r($gifts);die;
 foreach ($gifts as $gift):
+    $qte=getStockProd($gift['grm_gift.id'])->qte;
+if(!$qte){
+    $qte=0;
+}
     $excel.="
 <tr>
     <td>".$gift['idcrm']."</td> 
@@ -33,8 +37,8 @@ foreach ($gifts as $gift):
     <td>".$gift['titre']."</td> 
     <td>".$gift['description']."</td> 
     <td>".$gift['family']."</td> 
-    <td>".$gift['qte']."</td> 
-    <td>".$gift['qte_utiliser']."</td> 
+    <td>".$qte."</td> 
+    <td></td> 
     <td>".$gift['paht']."</td> 
     <td>".$gift['pvht']."</td> 
     <td>".$gift['pvttc']."</td> 

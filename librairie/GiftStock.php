@@ -21,7 +21,7 @@ class GiftStock extends GrmController {
     }
     public function getGiftAlert() {
         global $PDO;
-        $Sql="SELECT * FROM grm_gift WHERE qte<=stoc_alert AND stoc_alert>0";
+        $Sql="SELECT * FROM grm_gift ";
         $stmt=$PDO->prepare($Sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
