@@ -45,8 +45,8 @@ if(!$qte){
 </tr>";
 endforeach;
 $excel.="</table>";
-echo $excel;
-/*header( 'content-type: text/html; charset=utf-8' );
+//echo $excel;
+header( 'content-type: text/html; charset=utf-8' );
 header('Content-type: application/vnd.ms-excel');
 header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
@@ -54,4 +54,4 @@ header("Content-disposition: attachment; filename=inventaireArtc-".$now.".xls");
 
 print $excel;
 
-exit;*/
+exit;
