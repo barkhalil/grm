@@ -26,7 +26,7 @@ $gifts= $stmt->fetchAll(PDO::FETCH_ASSOC);
 //$products=get('*','products',NULL,'AND',array('name'=>'ASC'));
 //echo '<pre>';print_r($gifts);die;
 foreach ($gifts as $gift):
-    $qte=getStockProd($gift['grm_gift.id'])->qte;
+    $qte=getStockProd($gift['idcrm'])->qte;
 if(!$qte){
     $qte=0;
 }
