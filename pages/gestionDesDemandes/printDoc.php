@@ -13,21 +13,45 @@ $prospect= get('*','prospect',array('id='=>$dmd['reponse'][0]['id_pros']));
 $prospect= $prospect['reponse'][0];
 $user= get('*','users',array('id='=>$dmd['reponse'][0]['id_demandeur']));
 $user= $user['reponse'][0];
+ $vv=getinfoByIdv3('hash','bs',' id_demande='.$idDmd);
+if($vv) {
+    $path = '' . WEBRoot . '/ajax/qr2.php?id=' . $idDmd;
+}else{
+    $path='15963';
+}
 ?>
+<style type="text/css" media="print">
+    @page
+    {
+        size:  auto;   /* auto is the initial value */
+        margin: 0mm;  /* this affects the margin in the printer settings */
+    }
+
+    html
+    {
+        background-color: #FFFFFF;
+        margin: 0px;  /* this affects the margin on the html before sending to printer */
+    }
+
+   
+    </style>
 <section class="content-header" style="background: #fff;">
+    <input id="txtpath" name="txtpath" type="text" hidden value="<?=$path?>">
     <h1 class="pull-left"> Cadeaux demandés : </h1>
-    <button type="button" id="BtnToPrint" value="1" onclick="PrintDiv()" class="btn btn-facebook pull-right">Imprimer <i class="fa fa-print"></i></button>
+    <button type="button" id="BtnToPrint" value="1" onclick="PrintDiv2()" class="btn btn-facebook pull-right">Imprimer <i class="fa fa-print"></i></button>
     <div class="clearfix"></div>
 </section><!-- Main content -->
 <section class="content" id="DivToPrint" style="background: #fff;">
     <div class="box-body" style="">
         <table style="width:  100%;">
             <tr>
-                <td colspan="2">
+                <td></td>
+                <td >
                     <h1 style="display: block; text-align: center">Bon de sortie
                         <small>N° <?=$idDmd?> / <?= date('d-m-Y',strtotime($dmd['reponse'][0]['date_validation']))?></small>
                     </h1>
                 </td>
+                <td></td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">
@@ -38,6 +62,16 @@ $user= $user['reponse'][0];
                     <label style="color: #582900;">Matricule : </label> <span>  <?=$user['matricule']?>  </span><br/>
 
                 </td>
+                <td>
+                    <?
+                    if($vv){
+                        $path=''.WEBRoot.'/ajax/qr2.php?id='.$idDmd
+                    ?>
+                   <div id="qrcode"> <img src="<?=$path?>" class="img-responsive center-block">
+                   </div>
+                       <?}?>
+
+                </td>
                 <td style="vertical-align: top;color: #582900;float: right; text-align: center">
                     <b>Vital</b><br/>
                     <b>Service commercial</b><br/>
@@ -46,7 +80,6 @@ $user= $user['reponse'][0];
                     MF : 748728 N / A / M / 000<br/>
                     Adresse: Boumhal - Tunisie<br/>
                     <span style="color: #582900;float: right;">Date de bon de commande:  <small style="color: #000;"><?= $dmd['reponse'][0]['system_date']?></small></span>
-
                 </td>
             </tr>
 

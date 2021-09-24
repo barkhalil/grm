@@ -504,6 +504,10 @@ function PrintDiv() {
     $(".box-footer").show();
     $(".direct-chat-img").show();
 }
+function PrintDiv2() {
+
+    window.print(document.getElementById('DivToPrint'));
+}
 function Jouv(da) {
     console.log('da', da);
     var par = $("#" + da);
