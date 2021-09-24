@@ -9,6 +9,10 @@
 session_start();
 require '../../Connextion.php';
 include '../../librairie/loadall.php';
+$algo = "PASSWORD_BCRYPT";
+$options = [
+    'cost' => 12,
+];
 $pp=filter_input(INPUT_POST,'pp',FILTER_VALIDATE_INT);
 $etat=filter_input(INPUT_POST,'etat',FILTER_VALIDATE_INT);
 $_SESSION['cdxSansPB']=$pp;
@@ -17,6 +21,7 @@ $idRemise=filter_input(INPUT_POST,'idRemise',FILTER_VALIDATE_INT);
 $ObsAdm=filter_input(INPUT_POST,'ObsAdm',FILTER_DEFAULT);
 $Pbs=get('*','grm_pb_type',array('etat='=>1));
 $points=array();
+
 if(!$idDemande) {
     foreach ($Pbs['reponse'] as $pb) {
         if ($_SESSION['Point' . $pb['id']]) {
@@ -42,6 +47,18 @@ if(!$idDemande) {
 
         );
         $idDemande = add($data, 'grm_demande_cadeaux');
+        $chaine=$_SESSION['PbClient'].' '.$_SESSION['delegue'].' 1 '.date('Y-m-d').' '.$_SESSION['TotPoint'].' '
+            .$_SESSION['TotPoint'].' '.$_SESSION['TotalCdx'].' '.$_SESSION['cdxSansPB'].' '.$_SESSION['Obs'].' '
+            .date('Y-m-d').' '.$_SESSION['user']['id'].' '.$pointByType.' 10';
+        $hash=password_hash(strtolower("hhh"), PASSWORD_BCRYPT, $options);
+        $data22 = array(
+            'id_demande' =>$idDemande,
+            'hash' => $hash,
+
+
+        );
+        $idhash= add($data22, 'bs');
+
 
         foreach ($_SESSION['ProdPbCmd'] as $key => $value):
             $dataProd = array(
