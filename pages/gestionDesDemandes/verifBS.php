@@ -21,6 +21,23 @@ if($qr){
     }
 
 }
+$idDm=filter_input(INPUT_GET,'idDm',257);
+if($idDm){
+
+
+    if(update($idDm,array(
+        'etat_bs'=>1,
+        'rendu_le'=>date('Y-m-d H:i:s')
+
+    ) ,'grm_demande_cadeaux')){
+        $_SESSION['msg'] = "La modification  est bien passer";
+        $_SESSION['type'] ="alert-success";
+        header('Location:verifBS');
+    } else{
+        $_SESSION['msg']="Une Erreur c'est produite";
+        $_SESSION['type']="alert-danger";
+    }
+}
 ?>
 
 
@@ -41,7 +58,7 @@ if($qr){
 
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary" name="AddBtn" value="1">Ajouter</button>
+                        <button type="submit" class="btn btn-primary" name="AddBtn" value="1">Vérifier</button>
                     </div>
                 </form>
 
@@ -167,6 +184,15 @@ if($qr){
                     </table>
 
                 </div>
+
+
+
+
+                    <div class="form-group pull-right">
+                        <a href="verifBS&idDm=<?=$idDmd?>" class="btn btn-success" data-toggle="tooltip" title="Valider">
+                            <i class="fa fa-check"></i>
+                        </a>
+                    </div>
 
             </div>
         </div>
