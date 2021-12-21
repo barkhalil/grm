@@ -92,7 +92,7 @@
 <script src="<?= WEBRootD ?>/js/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<?= WEBRoot ?>/js/bootstrap-multiselect.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="<?= WEBRoot ?>/js/MyCode.js?v=11"></script>
+<script type="text/javascript" src="<?= WEBRoot ?>/js/MyCode.js?v=12"></script>
 
 
 <? if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])): ?>

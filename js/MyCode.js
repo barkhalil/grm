@@ -491,6 +491,28 @@ $(function () {
 
     });
 });
+function toexcelv2(tabname,filename) {
+    //alert(""+ tabname+" "+filename);
+    /* window.open('data:application/vnd.ms-excel,' + document.getElementById('venteanim'));
+     e.preventDefault();*/
+
+    var table = $(budgq);
+    if(table && table.length){
+        var preserveColors = (table.hasClass('table2excel_with_colors') ? true : false);
+        $(table).table2excel({
+            exclude: ".noExl",
+            name: "Excel Document Name",
+            filename: ""+filename,
+            fileext: ".xls",
+            exclude_img: true,
+            exclude_links: true,
+            exclude_inputs: true,
+            preserveColors: preserveColors
+        });
+    }
+
+}
+
 function PrintDiv() {
     $(".box-footer").hide();
     $(".direct-chat-img").hide();
