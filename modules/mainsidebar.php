@@ -81,6 +81,7 @@
                     <a href="#"><i class="fa fa-codepen"></i> <span>Gestion des demandes</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                         <li><a href="<?=WEBRoot?>/gestionDesDemandes/verifBS">Vérification BS</a></li>
+                        <li><a href="<?=WEBRoot?>/gestionDesDemandes/etat_BS">Etat Bon Sortie</a></li>
                         <li><a href="<?=WEBRoot?>/gestionDesDemandes/ListeCadeau">Liste cadeaux</a></li>
 
                         <li><a href="<?=WEBRoot?>/gestionDesDemandes/Liste">Demandes cadeaux</a></li>
