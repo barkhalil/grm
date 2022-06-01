@@ -461,6 +461,26 @@ function redirect($url, $time = 0)
     //echo 'console.log('. json_encode( $result ) .')';
     return $result;
 }
+ function getStockCollisage($Art)
+{
+    global $db;
+
+    $y=date("Y");
+    $query = "SELECT 
+                  XArt_Colisage as qte
+                
+                  FROM art
+                
+                  WHERE Art_Car5='$Art'";
+    //echo $query.'<br/>';
+
+    //  echo 'console.log('.$query.')';
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $result = $statement->fetch(PDO::FETCH_OBJ);
+    //echo 'console.log('. json_encode( $result ) .')';
+    return $result;
+}
 
 
 function getinfo($id, $table, $var)
