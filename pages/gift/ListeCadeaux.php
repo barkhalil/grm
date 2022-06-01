@@ -102,6 +102,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                         <th>Famille</th>
                         <th>Point Bonus</th>
                         <th>Quantité</th>
+                        <th>Colisage</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -126,7 +127,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                                  ?><td><?=$cade['qte']?></td>
                                  <? }
                             ?>
-
+                            <td><?=getStockCollisage($cade['id'])->qte?></td>
                             <td>
                                 <? if($cade['dispo']): ?>
                                     <a href="ListeCadeaux&famille=<?=$familleId?>&d=<?=$Limite?>&NonDispo=<?=$cade['id']?>" class="btn btn-danger" data-toggle="tooltip" title="Non disponible">
