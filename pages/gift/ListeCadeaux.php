@@ -121,7 +121,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                             <td><?=getinfo($cade['famille'],'grm_gift_family','nom') ?></td>
                             <td><?=$cade['point_bonus']?></td>
 
-                            <? if($cade['famille']==5){?>
+                            <? if($cade['famille']==5 || $cade['famille']==6){?>
                             <td><?=getStockProd($cade['id'])->qte?></td>
                             <?}else {
                                  ?><td><?=$cade['qte']?></td>
