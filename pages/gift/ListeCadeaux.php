@@ -20,6 +20,12 @@ if($familleId){
     $where['famille = ']= $familleId;
     $link.="&famille=$familleId";
 }
+$repmat=filter_input(INPUT_GET,'grp',FILTER_VALIDATE_INT);
+
+if($repmat){
+    $where['grp = ']= $repmat;
+    $link.="&grp=$repmat";
+}
 $title=filter_input(INPUT_GET,'title',FILTER_SANITIZE_STRING);
 if($title){
     $where['titre like']= "%$title%";
@@ -67,13 +73,24 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
         <div class="col-md-9">
             <div class="box box-danger box-body">
                 <form class="form-inline">
+
                     <div class="form-group">
                         <select name="famille" class="form-control">
-                            <option>Toutes les familles</option>
+                            <option>Toutes les familles </option>
                             <? $listeFamille=get("*",'grm_gift_family');
                             foreach($listeFamille['reponse'] as $famille):
                                 ?>
                                 <option value="<?=$famille['id']?>" <? if($familleId==$famille['id']) echo "selected='selected'"?>><?=$famille['nom']?></option>
+                            <?endforeach?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select name="grp" class="form-control">
+                            <option>Groupe</option>
+                            <? $listeFamille2=get("*",'rep_mat');
+                            foreach($listeFamille2['reponse'] as $famille2):
+                                ?>
+                                <option value="<?=$famille2['id']?>" <? if($repmat==$famille2['id']) echo "selected='selected'"?>><?=$famille2['nom']?></option>
                             <?endforeach?>
                         </select>
                     </div>
@@ -102,6 +119,7 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                         <th>Famille</th>
                         <th>Point Bonus</th>
                         <th>Quantité</th>
+                        <th>Groupe</th>
                         <th>Colisage</th>
                         <th>Action</th>
                     </tr>
@@ -127,6 +145,10 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                                  ?><td><?=$cade['qte']?></td>
                                  <? }
                             ?>
+                            <td><?
+                                if($cade['grp']) {
+                                    echo getinfoByIdv3('nom', 'rep_mat', 'id=' . $cade['grp']);
+                                }?></td>
                             <td><?=getStockCollisage($cade['id'])->qte?></td>
                             <td>
                                 <? if($cade['dispo']): ?>
