@@ -138,13 +138,13 @@ $ListeCadeaux=get('*','grm_gift',$where,"AND",array('id'=>'DESC'), array($Limite
                             <td><?=$cade['titre']?></td>
                             <td><?=getinfo($cade['famille'],'grm_gift_family','nom') ?></td>
                             <td><?=$cade['point_bonus']?></td>
-
-                            <? if($cade['famille']==5 || $cade['famille']==6){?>
                             <td><?=getStockProd($cade['id'])->qte?></td>
+                            <? /*if($cade['famille']==5 || $cade['famille']==6){?>
+
                             <?}else {
                                  ?><td><?=$cade['qte']?></td>
                                  <? }
-                            ?>
+                            */?>
                             <td><?
                                 if($cade['grp']) {
                                     echo getinfoByIdv3('nom', 'rep_mat', 'id=' . $cade['grp']);
