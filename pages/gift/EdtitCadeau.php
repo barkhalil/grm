@@ -22,6 +22,7 @@ $data=array(
     'paht'=>filter_input(0,'paht',516),
     'pvht'=>filter_input(0,'pvht',516),
     'famille'=>filter_input(0,'famille',257),
+    'grp'=>filter_input(0,'grp',257),
     'pvttc'=>filter_input(0,'pvttc',516),
     'stoc_alert'=>filter_input(0,'stoc_alert',516),
     'cree_par'=>$_SESSION['user']['id']
@@ -124,6 +125,16 @@ endif;
                             ?>
                             <option value="<?=$fami['id']?>"  <? if($CadeauxDetails['famille']==$fami['id']) echo 'selected="selected"'?> > <?=$fami['nom']?></option>
                         <?endforeach;?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select name="grp" class="form-control" required>
+                        <option>Groupe</option>
+                        <? $listeFamille2=get("*",'rep_mat');
+                        foreach($listeFamille2['reponse'] as $famille2):
+                            ?>
+                            <option value="<?=$famille2['id']?>" <? if($CadeauxDetails['grp']==$famille2['id']) echo 'selected="selected"'?> ><?=$famille2['nom']?></option>
+                        <?endforeach?>
                     </select>
                 </div>
                 <div class="form-group">
