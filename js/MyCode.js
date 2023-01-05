@@ -4,7 +4,7 @@
 
 var f = "http://";
 var s = location.host;
-if(location.host=="grm.vital-crm.tn:10"){
+if(location.host=="grm.vital-crm.tn:443"){
     var url = f + s ;
 }else{
    // var url = f + s + "/GrmProject";
