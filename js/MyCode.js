@@ -11,6 +11,10 @@ if(location.host=="grm.vital-crm.tn:443"){
     var url = f + s + "/grm";
 
 }
+
+
+
+
 //console.log(url);
 function excel() {
     window.location = "../gestionDesDemandes/excel";

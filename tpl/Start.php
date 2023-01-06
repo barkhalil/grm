@@ -78,6 +78,7 @@
 <script src="<?= WEBRootD ?>/plugins/jQuery/jQuery-2.1.4.min.js"></script><!-- Bootstrap 3.3.5 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/fr.js"></script>
+
 <script src="<?= WEBRootD ?>/bootstrap/js/bootstrap.min.js"></script><!-- AdminLTE App -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<?= WEBRootD ?>/dist/js/app.min.js"></script>
@@ -87,12 +88,14 @@
 <script src="<?= WEBRootD ?>/js/jquery.autocomplete.js"></script>
 <script src="<?= WEBRootD ?>/js/jquery.table2excel.js"></script>
 <script src="<?= WEBRootD ?>/js/highcharts.js"></script>
+<script src="<?= WEBRootD ?>/librairie/qr.js"></script>
 <script src="<?= WEBRootD ?>/js/jquery.highchartTable-min.js"></script>
 <!--<script src="<?= WEBRoot ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
 <script src="<?= WEBRootD ?>/js/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<?= WEBRoot ?>/js/bootstrap-multiselect.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="<?= WEBRoot ?>/js/MyCode.js?v=12"></script>
+<script href="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="<?= WEBRoot ?>/js/MyCode.js?v=13"></script>
 
 
 <? if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])): ?>

@@ -65,9 +65,32 @@ if($vv) {
                 <td>
                     <?
                     if($vv){
-                        $path=''.WEBRoot.'/ajax/qr2.php?id='.$idDmd
-                    ?>
-                   <div id="qrcode"> <img src="<?=$path?>" class="img-responsive center-block">
+                       // $path=''.WEBRoot.'/ajax/qr2.php?id='.$idDmd
+
+
+                        ?>
+
+
+
+                        <!-- (B) GENERATE QR CODE HERE -->
+                        <div style="padding-left: 45%" id="qrcode"></div>
+
+                        <!-- (C) CREATE QR CODE ON PAGE LOAD -->
+                        <script>
+                            window.addEventListener("load", () => {
+                                var qrc = new QRCode(document.getElementById("qrcode"), {
+                                    text: "<?=$vv?>",
+                                    width: 140,
+                                    height: 140,
+                                    colorDark: "#0a0a0a",
+                                    colorLight: "#ffffff",
+                                    // QRCode.CorrectLevel.L | QRCode.CorrectLevel.M | QRCode.CorrectLevel.H
+                                    correctLevel : QRCode.CorrectLevel.H
+                                });
+                            });
+                        </script>
+                    <??>
+                   <div id="qrcode"> <!---<img src="<?=$path?>" class="img-responsive center-block">--->
                    </div>
                        <?}?>
 
