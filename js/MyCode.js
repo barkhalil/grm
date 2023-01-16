@@ -717,7 +717,7 @@ function FinalisationPb(etat,d) {
             ObsAdm: $('#ObsAdm').val(),
         },
         success:function (result) {
-alert(etat);
+alert(result);
           // MSg('Demande valider','alert-success');
          // window.location = "../"+result;
           // header('Location: '+result);
