@@ -107,7 +107,7 @@ if($idDemandeau) {
                     <select class="form-control" name="id_demandeur" onchange="GetPage('Liste')" id="TypeClient" >
                         <option value=""> Pour utilisateur</option>
                         <?
-                        $ListeUser = get('*', 'users',array('active>'=>0));
+                        $ListeUser = get('*', 'users',array('zone>='=>8,'zone<='=>11));
                         foreach ($ListeUser['reponse'] as $user):
                             ?>
                             <option value="<?= $user['id'] ?>" <? if ($user['id'] == $idDemandeau) {
