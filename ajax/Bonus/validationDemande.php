@@ -83,7 +83,7 @@ if(!$idDemande) {
 }
 if($_SESSION['TotalCdx']>0){
     $cadeauxDmd=get('*','grm_cadeaux_demander',array('id_demande='=>$idDemande));
-   /* foreach ($Pbs['reponse'] as $pb) {
+    foreach ($Pbs['reponse'] as $pb) {
         if($_SESSION['Point'.$pb['id']]) {
             $points[]=$_SESSION['Point'.$pb['id']];
         }
@@ -92,7 +92,7 @@ if($_SESSION['TotalCdx']>0){
         $pointByType=implode($points,'@_@');
     } else {
         $pointByType=getinfo($idDemande,'grm_demande_cadeaux','ponitsByType');
-    }*/
+    }
     $data=array(
         'point_bonus_reel'=>$_SESSION['TotPoint'],
         'rest_point'=>$_SESSION['TotPoint']-$_SESSION['TotalCdx'],
@@ -109,7 +109,7 @@ if(!$etat){
     $data['etat']=$etat;
 
     update($idDemande,$data,'grm_demande_cadeaux');
-    echo '<pre>';print_r($_SESSION['CdxCmd']);exit;
+  //  echo '<pre>';print_r($_SESSION['CdxCmd']);exit;
     foreach ($cadeauxDmd['reponse'] as $cdx) {
         delete($cdx['id'],'grm_cadeaux_demander');
     }
