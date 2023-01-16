@@ -95,7 +95,7 @@
 <script type="text/javascript" src="<?= WEBRoot ?>/js/bootstrap-multiselect.js"></script>
 <script href="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="<?= WEBRoot ?>/js/MyCode.js?v=16"></script>
+<script type="text/javascript" src="<?= WEBRoot ?>/js/MyCode.js?v=17"></script>
 
 
 <? if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])): ?>

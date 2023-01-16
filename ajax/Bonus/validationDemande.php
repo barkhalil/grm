@@ -103,9 +103,7 @@ if($_SESSION['TotalCdx']>0){
         'pointsRealByType'=>$pointByType,
         'famille'=>10
     );
-    if(!$etat){
-        $etat=0;
-    }
+
     $data['etat']=$etat;
 
    echo  update($idDemande,$data,'grm_demande_cadeaux');
@@ -160,6 +158,6 @@ if($_SESSION['TotalCdx']>0){
     //echo $idDemande;
    // echo $_SESSION['lastP'];
    // redirect('../'.$_SESSION['lastP']);
-    echo "../gestionDesDemandes/Liste&idDel=&d=30";
+   // echo "../gestionDesDemandes/Liste&idDel=&d=30";
 }
 
