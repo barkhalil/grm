@@ -707,7 +707,7 @@ function FinalisationPb(etat,d) {
     }
 
     $.ajax({
-        url:url+'../ajax/Bonus/validationDemande.php',
+        url:url+'/ajax/Bonus/validationDemande.php',
         type:'POST',
         data:{
             etat: etat,
@@ -717,7 +717,7 @@ function FinalisationPb(etat,d) {
             ObsAdm: $('#ObsAdm').val(),
         },
         success:function (result) {
-//alert(etat);
+alert(etat);
           // MSg('Demande valider','alert-success');
          // window.location = "../"+result;
           // header('Location: '+result);
