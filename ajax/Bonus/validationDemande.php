@@ -108,7 +108,8 @@ if(!$etat){
 }
     $data['etat']=$etat;
 
-    update($idDemande,$data,'grm_demande_cadeaux');
+   echo update($idDemande,$data,'grm_demande_cadeaux');
+
   //  echo '<pre>';print_r($_SESSION['CdxCmd']);exit;
     foreach ($cadeauxDmd['reponse'] as $cdx) {
         delete($cdx['id'],'grm_cadeaux_demander');

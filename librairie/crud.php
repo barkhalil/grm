@@ -54,7 +54,7 @@ function update($id, $datas, $table)
     $strSQL = substr($strSQL, 0, -1) . " WHERE id = ?";
     $values[] = $id;
     $query = $PDO->prepare($strSQL);
-   $query->execute($values);
+   return $query->execute($values);
 }
 
 /***
