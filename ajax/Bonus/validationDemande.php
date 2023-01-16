@@ -81,7 +81,7 @@ if(!$idDemande) {
         $idRemise = $_SESSION['user']['id'];
     }
 }
-if($idDemande){
+if($_SESSION['TotalCdx']>0){
     $cadeauxDmd=get('*','grm_cadeaux_demander',array('id_demande='=>$idDemande));
     foreach ($Pbs['reponse'] as $pb) {
         if($_SESSION['Point'.$pb['id']]) {
@@ -109,7 +109,7 @@ if(!$etat){
     $data['etat']=$etat;
 
     update($idDemande,$data,'grm_demande_cadeaux');
-    //echo '<pre>';print_r($_SESSION['CdxCmd']);exit;
+    echo '<pre>';print_r($_SESSION['CdxCmd']);exit;
     foreach ($cadeauxDmd['reponse'] as $cdx) {
         delete($cdx['id'],'grm_cadeaux_demander');
     }
@@ -137,7 +137,7 @@ if(!$etat){
         add($dataProd,'grm_cadeaux_demander');
         //deminisussion cadeaux git
         if($etat==4){
-            $Gcc->DimStock($key,$value);
+            //$Gcc->DimStock($key,$value);
 
             if($key==63 || $key==54||  $key==53 ||  $key==52 || $key==1054) {
                 $sect=getinfo($_SESSION['PbClient'],'prospect','gouvernorat');
