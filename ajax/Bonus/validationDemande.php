@@ -81,6 +81,19 @@ if(!$idDemande) {
         $idRemise = $_SESSION['user']['id'];
     }
 }
+
+
+if($idDemande && $etat==4){
+    $data=array(
+       
+        'etat'=>$etat
+
+    );
+
+
+
+    echo update($idDemande,$data,'grm_demande_cadeaux');
+}
 if($_SESSION['TotalCdx']>0){
     $cadeauxDmd=get('*','grm_cadeaux_demander',array('id_demande='=>$idDemande));
     foreach ($Pbs['reponse'] as $pb) {
