@@ -81,7 +81,7 @@ if(!$idDemande) {
         $idRemise = $_SESSION['user']['id'];
     }
 }
-if($_SESSION['TotalCdx']>0){
+if($idDemande){
     $cadeauxDmd=get('*','grm_cadeaux_demander',array('id_demande='=>$idDemande));
     foreach ($Pbs['reponse'] as $pb) {
         if($_SESSION['Point'.$pb['id']]) {
