@@ -21,8 +21,7 @@ $idRemise=filter_input(INPUT_POST,'idRemise',FILTER_VALIDATE_INT);
 $ObsAdm=filter_input(INPUT_POST,'ObsAdm',FILTER_DEFAULT);
 $Pbs=get('*','grm_pb_type',array('etat='=>1));
 $points=array();
-echo $etat.'  '.$idDemande;
-/*
+
 if(!$idDemande) {
     foreach ($Pbs['reponse'] as $pb) {
         if ($_SESSION['Point' . $pb['id']]) {
@@ -104,10 +103,12 @@ if($_SESSION['TotalCdx']>0){
         'pointsRealByType'=>$pointByType,
         'famille'=>10
     );
-
+if(!$etat){
+    $etat=0;
+}
     $data['etat']=$etat;
 
-   echo  update($idDemande,$data,'grm_demande_cadeaux');
+    update($idDemande,$data,'grm_demande_cadeaux');
     //echo '<pre>';print_r($_SESSION['CdxCmd']);exit;
     foreach ($cadeauxDmd['reponse'] as $cdx) {
         delete($cdx['id'],'grm_cadeaux_demander');
@@ -161,4 +162,4 @@ if($_SESSION['TotalCdx']>0){
    // redirect('../'.$_SESSION['lastP']);
    // echo "../gestionDesDemandes/Liste&idDel=&d=30";
 }
-*/
+
