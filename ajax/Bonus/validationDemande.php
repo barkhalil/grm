@@ -156,7 +156,7 @@ if($_SESSION['TotalCdx']>0){
         }
     endforeach;
     //echo 'ok22';exit;
-    $pointsBonus->viderSession();
+   // $pointsBonus->viderSession();
     //echo $idDemande;
    // echo $_SESSION['lastP'];
    // redirect('../'.$_SESSION['lastP']);
