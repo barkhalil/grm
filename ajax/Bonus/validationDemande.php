@@ -21,7 +21,8 @@ $idRemise=filter_input(INPUT_POST,'idRemise',FILTER_VALIDATE_INT);
 $ObsAdm=filter_input(INPUT_POST,'ObsAdm',FILTER_DEFAULT);
 $Pbs=get('*','grm_pb_type',array('etat='=>1));
 $points=array();
-
+echo $etat.'  '.$idDemande;
+/*
 if(!$idDemande) {
     foreach ($Pbs['reponse'] as $pb) {
         if ($_SESSION['Point' . $pb['id']]) {
@@ -160,4 +161,4 @@ if($_SESSION['TotalCdx']>0){
    // redirect('../'.$_SESSION['lastP']);
    // echo "../gestionDesDemandes/Liste&idDel=&d=30";
 }
-
+*/
