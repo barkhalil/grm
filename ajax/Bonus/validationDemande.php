@@ -82,7 +82,7 @@ if(!$idDemande) {
     }
 }
 
-
+/*
 if($idDemande && $etat==4){
     $data=array(
        
@@ -93,8 +93,11 @@ if($idDemande && $etat==4){
 
 
     echo update($idDemande,$data,'grm_demande_cadeaux');
-}
-if($_SESSION['TotalCdx']>0){
+
+
+
+}*/
+if($_SESSION['TotalCdx']>0  && $idDemande){
     $cadeauxDmd=get('*','grm_cadeaux_demander',array('id_demande='=>$idDemande));
     foreach ($Pbs['reponse'] as $pb) {
         if($_SESSION['Point'.$pb['id']]) {
@@ -124,31 +127,31 @@ if(!$etat){
    echo update($idDemande,$data,'grm_demande_cadeaux');
 
   //  echo '<pre>';print_r($_SESSION['CdxCmd']);exit;
-    foreach ($cadeauxDmd['reponse'] as $cdx) {
+   /* foreach ($cadeauxDmd['reponse'] as $cdx) {
         delete($cdx['id'],'grm_cadeaux_demander');
-    }
+    }*/
     //echo 'ok22';exit;
     foreach ($_SESSION['ProdPbCmd'] as $key=>$value):
-        $dataProd=array(
+      /*  $dataProd=array(
             'id_demande'=>$idDemande,
             'id_cadeaux'=>$key,
             'qte'=>$value,
             'type_cdx'=>1,
-        );
-        add($dataProd,'grm_cadeaux_demander');
+        );*/
+       // add($dataProd,'grm_cadeaux_demander');
         //demiussion produits  :
         if($etat==4){
             $Gcc->DimStockProduits($key,$value);
         }
     endforeach;
     foreach($_SESSION['CdxCmd'] as $key=>$value):
-        $dataProd=array(
+      /*  $dataProd=array(
             'id_demande'=>$idDemande,
             'id_cadeaux'=>$key,
             'qte'=>$value,
             'type_cdx'=>2,
         );
-        add($dataProd,'grm_cadeaux_demander');
+        add($dataProd,'grm_cadeaux_demander');*/
         //deminisussion cadeaux git
         if($etat==4){
             //$Gcc->DimStock($key,$value);
@@ -176,4 +179,14 @@ if(!$etat){
    // redirect('../'.$_SESSION['lastP']);
    // echo "../gestionDesDemandes/Liste&idDel=&d=30";
 }
+$_SESSION['Point']=0;
+$_SESSION['TotPoint']=0;
+$_SESSION['TotalCdx']=0;
+$_SESSION['Obs']='';
+$_SESSION['ProdPbCmd']=null;
+$_SESSION['CdxCmd']=null;
+unset($_SESSION['TotalCdx']);
+unset($_SESSION['firsttime']);
+unset($_SESSION['ProdPbCmd']);
+unset($_SESSION['CdxCmd']);
 
