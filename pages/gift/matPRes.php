@@ -12,7 +12,7 @@ $usr = filter_input(INPUT_GET, 'user');
 //if(!$de) $de = date('Y-m-d', strtotime('-1 month', strtotime(date('Y-m-01'))));
 if(!$de) $de = date('Y-m-01');
 if(!$a) $a = date('Y-m-d');
-if(!$res) $res=1;
+if(!$res) $res=6;
 
 
 $ListeUsers = get("*", 'delRes', array('res='=>$res), 'AND', array('id_Del' => 'ASC'));
@@ -32,9 +32,10 @@ $ListeUser=$ListeUsers['reponse']
                     <form method="get" class="form-inline pull-left">
 
                         <select class="form-control" name="res" required>
-                            <option value="1" selected>Réseau 1</option>
-                            <option value="2">Réseau 2</option>
-                            <option value="3">Réseau 3</option>
+                            <option value="6" selected>BU 1</option>
+                            <option value="7">BU 2</option>
+                            <option value="8">BU 3</option>
+                            <option value="9">BU 4</option>
                         </select>
 
                         <div class="form-group"><label>De </label><input type="date" name="de" class="form-control"
