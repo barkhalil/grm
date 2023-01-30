@@ -82,7 +82,7 @@ if(!$idDemande) {
     }
 }
 
-/*
+
 if($idDemande && $etat==4){
     $data=array(
        
@@ -96,7 +96,7 @@ if($idDemande && $etat==4){
 
 
 
-}*/
+}
 if($_SESSION['TotalCdx']>0  && $idDemande){
     $cadeauxDmd=get('*','grm_cadeaux_demander',array('id_demande='=>$idDemande));
     foreach ($Pbs['reponse'] as $pb) {
