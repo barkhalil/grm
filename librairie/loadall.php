@@ -11,6 +11,6 @@ include 'Products.php';
 include 'PointsBonus.php';
 include 'CancelDmds.php';
 include 'GiftStock.php';
-require_once  'phpmailer/phpmailer/PHPMailerAutoload.php';
+//require_once  'phpmailer/phpmailer/PHPMailerAutoload.php';
 include_once 'src/QrCode.php';
 require_once 'passwordLib.php';
