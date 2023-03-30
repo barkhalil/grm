@@ -79,6 +79,11 @@ endif;
                     <input type="number"   step="1" value="<?=(getStockProd($CadeauxDetails['id'])->qte)+0?>" name="qte" class="form-control" readonly>
                 </div>
 
+
+
+
+
+                
                     </div>
         </div>
         <div class="col-md-4">
