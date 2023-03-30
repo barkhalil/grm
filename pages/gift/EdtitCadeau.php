@@ -76,7 +76,7 @@ endif;
                 </div>
                 <div class="form-group">
                     <label>Quantité initital : </label>
-                    <input type="number"   step="1" value="<?=getStockProd($CadeauxDetails['id'])->qte?>" name="qte" class="form-control" readonly>
+                    <input type="number"   step="1" value="<?=(getStockProd($CadeauxDetails['id'])->qte)+0?>" name="qte" class="form-control" readonly>
                 </div>
 
                     </div>
@@ -85,17 +85,17 @@ endif;
             <div class="box box-success box-body">
                 <div class="form-group">
                     <label>PAHT</label>
-                    <input type="text" name="paht" value="<?=$CadeauxDetails['paht']?>" class="form-control">
+                    <input type="text" name="paht" value="<?=$CadeauxDetails['paht']+0?>" class="form-control">
                     </div>
 
             <div class="form-group">
                 <label>PVHT</label>
-                <input type="text" name="pvht" value="<?=$CadeauxDetails['pvht']?>" class="form-control">
+                <input type="text" name="pvht" value="<?=$CadeauxDetails['pvht']+0?>" class="form-control">
             </div>
 
         <div class="form-group">
             <label>PVTTC</label>
-            <input type="text" name="pvttc" value="<?=$CadeauxDetails['pvttc']?>" class="form-control">
+            <input type="text" name="pvttc" value="<?=$CadeauxDetails['pvttc']+0?>" class="form-control">
         </div>
                 <div class="form-group">
                     <label>Stock Alert</label>
