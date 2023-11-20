@@ -84,6 +84,16 @@ function delete($id, $table)
  *
  *    return @retour    : tableau contenant la requête executée, les éventuelles erreurs et le resultat de la requête
  */
+function getGenInfov2( $table, $Cand, $var)
+{
+    global $PDO;
+    $strSQL = "SELECT $var FROM $table WHERE  $Cand";
+    $query = $PDO->query($strSQL);
+    // $query->execute($query);
+    $retour = $query->fetch();
+    return $retour->$var;
+}
+
 function get($columns = null, $table = null, $where = null, $concats = "AND", $order = null, $limit = null)
 {
     global $PDO;
