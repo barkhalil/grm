@@ -33,6 +33,20 @@ if($idDemandeau) {
 }
 //echo '<pre>';print_r($Cadeaux);die;
 ?>
+<style>
+#listeCadeauTab, #listeCadeauTab th, #listeCadeauTab td {
+    border: 1px solid #aaa !important;
+    border-collapse: collapse;
+}
+#listeCadeauTab thead th {
+    background-color: #f5f5f5;
+    text-align: center;
+    vertical-align: middle;
+}
+#listeCadeauTab td[rowspan] {
+    vertical-align: middle;
+}
+</style>
 <section class="content-header">
     <h1> Liste demande cadeaux</h1>
 </section><!-- Main content -->
@@ -71,7 +85,7 @@ if($idDemandeau) {
                    <div style="padding-bottom: 4%;">
                    <button type="button" name="create_excel" id="create_excel" class="btn btn-success pull-right" onclick="excel()">Vers excel</button>
                    </div>
-                   <table class="table table-bordered sameline-btns" id="listeCadeauTab" >
+                   <table class="table table-bordered sameline-btns" id="listeCadeauTab" style="border-collapse:collapse;border:2px solid #aaa;" >
                     <thead>
                     <tr>
                         <th>#</th>
