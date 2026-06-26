@@ -75,100 +75,83 @@ if($idDemandeau) {
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>date remise</th>
+                        <th>Date remise</th>
                         <th>Point remis</th>
                         <th>Délégué</th>
-                        <th>Pour : </th>
+                        <th>Pour</th>
                         <th>Etat demande</th>
-                        <th>Cadeaux demander</th>
-                        <th>Type </th>
+                        <th>Cadeaux demandés</th>
+                        <th>Type</th>
                         <th>Suivi</th>
-
+                        <th>Creer Par</th>
                     </tr>
                     </thead>
                     <tbody>
                     <? foreach ($Cadeaux['reponse'] as $cdt): ?>
+                        <?php
+                        // Délégué
+                        if($cdt['id_demandeur']==2){
+                            $delegue = getinfo(63,'users','Nom').' '.getinfo(63,'users','prenom');
+                        } else {
+                            $delegue = getinfo($cdt['id_demandeur'],'users','Nom').' '.getinfo($cdt['id_demandeur'],'users','prenom');
+                        }
+
+                        // Etat
+                        if($cdt['etat']==0){
+                            $etat = "En cours de traitement";
+                        }elseif($cdt['etat']==1){
+                            $etat = "Pointer";
+                        }elseif($cdt['etat']==-1){
+                            $etat = "Refusée";
+                        }elseif($cdt['etat']==-2){
+                            $etat = "Annulée après validation";
+                        }elseif($cdt['etat']==2){
+                            $etat = "Points insuffisant, reste = ".$cdt['rest_point'];
+                        }elseif($cdt['etat']==4){
+                            $etat = "Validé avec reste = ".$cdt['rest_point'];
+                        }else{
+                            $etat = "Livré le ".$cdt['date_livraison'];
+                        }
+
+                        // Cadeaux — tous les items en texte pur séparés par " | "
+                        $ListeCadeaux = get("*",'grm_cadeaux_demander',array('id_demande='=>$cdt['id']));
+                        $cadeauxItems = array();
+                        foreach($ListeCadeaux['reponse'] as $item){
+                            if($item['type_cdx']==1){
+                                $nom = getinfo($item['id_cadeaux'],'products','name');
+                            } else {
+                                $nom = getinfo($item['id_cadeaux'],'grm_gift','titre');
+                            }
+                            $cadeauxItems[] = $item['qte'].' x '.$nom;
+                        }
+                        $cadeauxTexte = implode(' | ', $cadeauxItems);
+
+                        // Suivi
+                        $suiviTexte = ($cdt['suivi']==0) ? "En cours" : "Validé";
+                        ?>
                         <tr>
-                            <td><?=$cdt['id']. '/' . date("Y", strtotime($cdt['system_date']))?></td>
+                            <td><?=$cdt['id'].'/'.date("Y", strtotime($cdt['system_date']))?></td>
                             <td><?=$cdt['date_remise_point']?></td>
                             <td><?=$cdt['point_bonus']?></td>
-                            <td><?php if($cdt['id_demandeur']==2):
-                                    echo getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
-                                else:
-                                    echo getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
-                                endif;
-                                ?>
+                            <td><?=$delegue?></td>
+                            <td><?=getinfo($cdt['id_pros'],'prospect','Nom').' '.getinfo($cdt['id_pros'],'prospect','prenom')?></td>
+                            <td><?=$etat?></td>
+                            <td><?=htmlspecialchars($cadeauxTexte)?></td>
+                            <td><?=($cdt['isCart']==0) ? "BA" : "Carte"?></td>
+                             <td><?=getinfo($cdt['cree_par'],'grm_users','Nom').' '.getinfo($cdt['cree_par'],'grm_users','prenom')?></td>
+                           
+                           <!-------- <td>
+                                <?php if($cdt['suivi']==0 && $_SESSION['user']['id']==9): ?>
+                                <button type="button" class="btn btn-info btn-action-only"
+                                        onclick="SuiviCadeau(<?=$cdt['id']?>)"
+                                        data-toggle="tooltip" title="Valider"
+                                        data-excel="En cours">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </button>
+                                <?php else: ?>
+                                <?=$suiviTexte?>
+                                <?php endif; ?>------>
                             </td>
-                            <td><?=getinfo($cdt['id_pros'],'prospect' ,'Nom').' '.getinfo($cdt['id_pros'],'prospect' ,'prenom')?></td>
-                            <td><?
-                                if($cdt['etat']==0){
-                                    echo "En cours de traitement";
-                                }elseif($cdt['etat']==1){
-                                    echo "Pointer";
-                                }elseif($cdt['etat']==-1){
-                                    echo "Refusée";
-                                }elseif($cdt['etat']==-2){
-                                    echo "Annulée aprés validation";
-                                }elseif($cdt['etat']==2){
-                                    echo "Points insufissant, avec reste =  ".$cdt['rest_point'];
-                                }elseif($cdt['etat']==4){
-                                    echo "Valider avec reste = ".$cdt['rest_point'];
-                                }else{
-                                    echo "Livrer le " .$cdt['date_livraison'];
-                                }
-                                ?></td>
-                            <td>
-                                <ul class="small-padding">
-                                    <? $ListeCadeaux=get("*",'grm_cadeaux_demander',array('id_demande='=>$cdt['id']));
-                                    for($i=0;$i<3;$i++):
-                                        if($ListeCadeaux['total']<=$i) break;?>
-                                        <li>
-                                            <?= $ListeCadeaux['reponse'][$i]['qte']?> pour
-                                            <? if($ListeCadeaux['reponse'][$i]['type_cdx']==1){
-                                                echo   getinfo($ListeCadeaux['reponse'][$i]['id_cadeaux'],'products' ,'name');
-                                            }else{
-                                                echo  getinfo($ListeCadeaux['reponse'][$i]['id_cadeaux'],'grm_gift' ,'titre') ;
-                                            }?>
-                                        </li>
-                                    <?endfor;?>
-                                    <?if($ListeCadeaux['total']>3):?>
-                                        <br/>...
-                                    <?endif;?>
-                                </ul>
-                            </td>
-                            <td><?
-                                if($cdt['isCart']==0){
-                                echo "BA";
-                                }else{
-                                echo "Carte";
-                                }
-                                ?>
-                            </td>
-                            <td>
-                                <div name="div_<?=$cdt['id']?>" id="div_<?=$cdt['id']?>" >
-                                    <?php
-                                    if($cdt['suivi']==0){
-                                        if($_SESSION['user']['id']==9) {
-                                            ?>
-
-                                            <button type="button" class="btn btn-info"
-                                                    onclick="SuiviCadeau(<?= $cdt['id'] ?>)" data-toggle="tooltip"
-                                                    title="valider" id="">
-                                                <i class="fa fa-check" aria-hidden="true"></i>
-                                            </button>
-
-                                            <?php
-                                        }
-                                    }
-                                    else {
-                                        echo "valider";
-                                    }
-
-
-                                    ?>
-                                </div>
-                            </td>
-
                         </tr>
                     <?endforeach;?>
                     </tbody>
