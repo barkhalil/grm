@@ -1,137 +1,117 @@
-<style>
-    table.table-bordered{
-        border:1px solid #333;
-        margin-top:20px;
-    }
-    table.table-bordered > thead > tr > th{
-        border:1px solid #333;
-    }
-    table.table-bordered > tbody > tr > td{
-        border:1px solid #333;
-    }
-</style>
 <?php
+$de          = $_SESSION['debut'];
+$a           = $_SESSION['au'];
+$idDemandeau = $_SESSION['idel'];
 
-$de=$_SESSION['debut'];
-$a=$_SESSION['au'];
-$idDemandeau=$_SESSION['idel'];
+if($idDemandeau){
+    $Cadeaux = get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'point_bonus>'=>0,'date_remise_point>='=>$de,'date_remise_point<='=>$a),'AND',array('id'=>'ASC'));
+} else {
+    $Cadeaux = get("*",'grm_demande_cadeaux',array('famille='=>10,'date_remise_point>='=>$de,'date_remise_point<='=>$a),'AND',array('id'=>'ASC'));
+}
 
+$data  = '<style>';
+$data .= 'table,th,td{border:1px solid #333;border-collapse:collapse;padding:4px 8px;font-size:12px;font-family:Arial,sans-serif;}';
+$data .= 'thead th{background:#d9e1f2;font-weight:bold;text-align:center;}';
+$data .= 'td{vertical-align:middle;}';
+$data .= '</style>';
 
-    if($idDemandeau) {
-        //if($idDemandeau ==2 )
-        // récupération des cadeaux demander :
-        $Cadeaux=get("*",'grm_demande_cadeaux',array('id_demandeur='=>$idDemandeau,'point_bonus>'=>0,'date_remise_point>='=>$de,'date_remise_point<='=>$a),'AND',array('id'=>'ASC'));
+$data .= '<table>';
+$data .= '<thead><tr>';
+$data .= '<th>#</th>';
+$data .= '<th>Date remise</th>';
+$data .= '<th>Point remis</th>';
+$data .= '<th>Délégué</th>';
+$data .= '<th>Pour</th>';
+$data .= '<th>Etat demande</th>';
+$data .= '<th>Cadeau</th>';
+$data .= '<th>Qté</th>';
+$data .= '<th>Type</th>';
+$data .= '<th>Créé par</th>';
+$data .= '</tr></thead>';
+$data .= '<tbody>';
+
+foreach($Cadeaux['reponse'] as $cdt){
+
+    // Délégué
+    if($cdt['id_demandeur']==2){
+        $delegue = getinfo(63,'users','Nom').' '.getinfo(63,'users','prenom');
     } else {
-        // récupération des cadeaux demander :
-        $Cadeaux=get("*",'grm_demande_cadeaux',array('famille='=>10,'date_remise_point>='=>$de,'date_remise_point<='=>$a),'AND',array('id'=>'ASC'));
+        $delegue = getinfo($cdt['id_demandeur'],'users','Nom').' '.getinfo($cdt['id_demandeur'],'users','prenom');
     }
 
+    // Etat
+    if($cdt['etat']==0){
+        $etat = "En cours de traitement";
+    }elseif($cdt['etat']==1){
+        $etat = "Pointer";
+    }elseif($cdt['etat']==-1){
+        $etat = "Refusée";
+    }elseif($cdt['etat']==-2){
+        $etat = "Annulée après validation";
+    }elseif($cdt['etat']==2){
+        $etat = "Points insuffisant, reste = ".$cdt['rest_point'];
+    }elseif($cdt['etat']==4){
+        $etat = "Validé avec reste = ".$cdt['rest_point'];
+    }else{
+        $etat = "Livré le ".$cdt['date_livraison'];
+    }
 
+    // Cadeaux
+    $ListeCadeaux = get("*",'grm_cadeaux_demander',array('id_demande='=>$cdt['id']));
+    $cadeauxItems = array();
+    foreach($ListeCadeaux['reponse'] as $item){
+        $nom = ($item['type_cdx']==1)
+            ? getinfo($item['id_cadeaux'],'products','name')
+            : getinfo($item['id_cadeaux'],'grm_gift','titre');
+        $cadeauxItems[] = array('qte'=>$item['qte'], 'nom'=>$nom);
+    }
 
+    $nbCadeaux = max(1, count($cadeauxItems));
+    $ref       = $cdt['id'].'/'.date("Y", strtotime($cdt['system_date']));
+    $pour      = getinfo($cdt['id_pros'],'prospect','Nom').' '.getinfo($cdt['id_pros'],'prospect','prenom');
+    $creePar   = getinfo($cdt['cree_par'],'grm_users','Nom').' '.getinfo($cdt['cree_par'],'grm_users','prenom');
+    $type      = ($cdt['isCart']==0) ? "BA" : "Carte";
 
+    if(empty($cadeauxItems)){
+        $data .= '<tr>';
+        $data .= '<td>'.$ref.'</td>';
+        $data .= '<td>'.$cdt['date_remise_point'].'</td>';
+        $data .= '<td>'.$cdt['point_bonus'].'</td>';
+        $data .= '<td>'.htmlspecialchars($delegue).'</td>';
+        $data .= '<td>'.htmlspecialchars($pour).'</td>';
+        $data .= '<td>'.$etat.'</td>';
+        $data .= '<td>—</td>';
+        $data .= '<td>—</td>';
+        $data .= '<td>'.$type.'</td>';
+        $data .= '<td>'.htmlspecialchars($creePar).'</td>';
+        $data .= '</tr>';
+    } else {
+        foreach($cadeauxItems as $idx => $cadeau){
+            $data .= '<tr>';
+            if($idx === 0){
+                $data .= '<td rowspan="'.$nbCadeaux.'">'.$ref.'</td>';
+                $data .= '<td rowspan="'.$nbCadeaux.'">'.$cdt['date_remise_point'].'</td>';
+                $data .= '<td rowspan="'.$nbCadeaux.'">'.$cdt['point_bonus'].'</td>';
+                $data .= '<td rowspan="'.$nbCadeaux.'">'.htmlspecialchars($delegue).'</td>';
+                $data .= '<td rowspan="'.$nbCadeaux.'">'.htmlspecialchars($pour).'</td>';
+                $data .= '<td rowspan="'.$nbCadeaux.'">'.$etat.'</td>';
+            }
+            $data .= '<td>'.htmlspecialchars($cadeau['nom']).'</td>';
+            $data .= '<td>'.$cadeau['qte'].'</td>';
+            if($idx === 0){
+                $data .= '<td rowspan="'.$nbCadeaux.'">'.$type.'</td>';
+                $data .= '<td rowspan="'.$nbCadeaux.'">'.htmlspecialchars($creePar).'</td>';
+            }
+            $data .= '</tr>';
+        }
+    }
+}
 
- $data= '<table class="table table-bordered sameline-btns" id="listeCadeauTab" >
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>date remise</th>
-                        <th>Point remis</th>
-                        <th>Délégué</th>
-                        <th>Pour : </th>
-                        <th>Etat demande</th>
-                        <th>Cadeaux demander</th>
-                        <th>Type</th>
-                        <th>Suivi</th>
+$data .= '</tbody></table>';
 
-                    </tr>
-                    </thead>
-                    <tbody>';
-
-                    foreach ($Cadeaux['reponse'] as $cdt){
-                       $data.='
-                       <tr>
-                            <td>';
-                        $data.= $cdt['id']. '/' . date("Y", strtotime($cdt['system_date'])).'</td>'.
-                            '<td>';
-                        $data.= $cdt['date_remise_point'].'</td>'.
-                            '<td>';
-                        $data.=$cdt['point_bonus'].'</td>'.
-                            '<td>';
-                                if($cdt['id_demandeur']==2):
-                                    $data.= getinfo(63,'users' ,'Nom').' '.getinfo(63,'users' ,'prenom');
-                                else:
-                                    $data.=getinfo($cdt['id_demandeur'],'users' ,'Nom').' '.getinfo($cdt['id_demandeur'],'users' ,'prenom');
-                                endif;
-
-                        $data.='</td>'.
-                            '<td>'.getinfo($cdt['id_pros'],'prospect' ,'Nom').' '.getinfo($cdt['id_pros'],'prospect' ,'prenom').'</td>'
-                            .'<td>';
-                                if($cdt['etat']==0){
-                                   $data.= "En cours de traitement";
-                                }elseif($cdt['etat']==1){
-                                    $data.=  "Pointer";
-                                }elseif($cdt['etat']==-1){
-                                    $data.=  "Refusée";
-                                }elseif($cdt['etat']==-2){
-                                    $data.=  "Annulée aprés validation";
-                                }elseif($cdt['etat']==2){
-                                    $data.=  "Points insufissant, avec reste =  ".$cdt['rest_point'];
-                                }elseif($cdt['etat']==4){
-                                    $data.=  "Valider avec reste = ".$cdt['rest_point'];
-                                }else{
-                                    $data.=  "Livrer le " .$cdt['date_livraison'];
-                                }
-                               $data.=  '</td>'
-                            .'<td>
-                                <ul class="small-padding">';
-                                    $ListeCadeaux=get("*",'grm_cadeaux_demander',array('id_demande='=>$cdt['id']));
-                                    for($i=0;$i<3;$i++):
-                                        if($ListeCadeaux['total']<=$i) break;
-                                       $data.='<li>';
-                                        $data.=$ListeCadeaux['reponse'][$i]['qte'].' pour';
-                                            if($ListeCadeaux['reponse'][$i]['type_cdx']==1){
-                                                $data.=   getinfo($ListeCadeaux['reponse'][$i]['id_cadeaux'],'products' ,'name');
-                                            }else{
-                                                $data.=  getinfo($ListeCadeaux['reponse'][$i]['id_cadeaux'],'grm_gift' ,'titre') ;
-                                            }
-
-                                        $data.='</li>';
-                                    endfor;
-                                    if($ListeCadeaux['total']>3):
-                                        $data.='<br/>...';
-                                    endif;
-                               $data.=' </ul>
-                            </td>
-                             <td>';
-
-                                if($cdt['isCart']==0){
-                               $data.= "BA";
-                                }else{
-                                    $data.= "Carte";
-                                }
-
-                           $data.=' </td>
-                            <td>';
-                               $suivi='';
-                        if($cdt['suivi']==0){$suivi='non valider';}
-                            else{$suivi='valider';}
-
-                            $data.=$suivi;
-                            $data.='</td>
-
-                        </tr>';
-                  }
-$data.= '</tbody>
-                </table>';
-
-
-
-header( 'content-type: text/html; charset=utf-8' );
-//header('Content-type: application/vnd.ms-excel');
+header('content-type: text/html; charset=utf-8');
 header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-disposition: attachment; filename=Liste_Cadeaux_'.$de.'_'.$a.'.xls');
 
-header("Content-disposition: attachment; filename=Liste.xls");
-
-print $data;
-
+echo $data;
 exit;

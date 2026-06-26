@@ -83,10 +83,11 @@ if($idDemandeau) {
                 </div>
                <?php if($Cadeaux){?>
                    <div style="padding-bottom: 4%;">
-                   <button type="button" name="create_excel" id="create_excel" class="btn btn-success pull-right" onclick="excel()">Vers excel</button>
-                   </div>
-                   <table class="table table-bordered sameline-btns" id="listeCadeauTab" style="border-collapse:collapse;border:2px solid #aaa;" >
-                    <thead>
+                   <button type="button"  onclick="toexcelv2('cagro','ca par grossite')"
+                        class="btn btn-primary pull-right" >Extraction</button>
+                     </div>
+                    <table class="table table-bordered">
+                         <thead>
                     <tr>
                         <th>#</th>
                         <th>Date remise</th>
