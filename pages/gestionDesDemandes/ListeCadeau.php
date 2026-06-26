@@ -86,8 +86,7 @@ if($idDemandeau) {
                    <button type="button"  onclick="toexcelv2('cagro','ca par grossite')"
                         class="btn btn-primary pull-right" >Extraction</button>
                      </div>
-                    <table class="table table-bordered">
-                         <thead>
+                      <table class="table table-bordered table-condensed" name="budgq" id="budgq">      <thead>
                     <tr>
                         <th>#</th>
                         <th>Date remise</th>
