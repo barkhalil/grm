@@ -82,7 +82,7 @@ if($idDemandeau) {
                         <th>Etat demande</th>
                         <th>Cadeaux demandés</th>
                         <th>Type</th>
-                        <th>Suivi</th>
+                       
                         <th>Creer Par</th>
                     </tr>
                     </thead>
@@ -113,46 +113,49 @@ if($idDemandeau) {
                             $etat = "Livré le ".$cdt['date_livraison'];
                         }
 
-                        // Cadeaux — tous les items en texte pur séparés par " | "
+                        // Cadeaux — liste complète avec qté et nom
                         $ListeCadeaux = get("*",'grm_cadeaux_demander',array('id_demande='=>$cdt['id']));
                         $cadeauxItems = array();
                         foreach($ListeCadeaux['reponse'] as $item){
-                            if($item['type_cdx']==1){
-                                $nom = getinfo($item['id_cadeaux'],'products','name');
-                            } else {
-                                $nom = getinfo($item['id_cadeaux'],'grm_gift','titre');
-                            }
-                            $cadeauxItems[] = $item['qte'].' x '.$nom;
+                            $nom = ($item['type_cdx']==1)
+                                ? getinfo($item['id_cadeaux'],'products','name')
+                                : getinfo($item['id_cadeaux'],'grm_gift','titre');
+                            $cadeauxItems[] = array('qte'=>$item['qte'], 'nom'=>$nom);
                         }
-                        $cadeauxTexte = implode(' | ', $cadeauxItems);
-
-                        // Suivi
-                        $suiviTexte = ($cdt['suivi']==0) ? "En cours" : "Validé";
+                        $nbCadeaux = max(1, count($cadeauxItems));
+                        $creePar   = getinfo($cdt['cree_par'],'grm_users','Nom').' '.getinfo($cdt['cree_par'],'grm_users','prenom');
+                        $pour      = getinfo($cdt['id_pros'],'prospect','Nom').' '.getinfo($cdt['id_pros'],'prospect','prenom');
                         ?>
+                        <?php foreach($cadeauxItems as $idx => $cadeau): ?>
+                        <tr>
+                            <?php if($idx === 0): ?>
+                            <td rowspan="<?=$nbCadeaux?>"><?=$cdt['id'].'/'.date("Y", strtotime($cdt['system_date']))?></td>
+                            <td rowspan="<?=$nbCadeaux?>"><?=$cdt['date_remise_point']?></td>
+                            <td rowspan="<?=$nbCadeaux?>"><?=$cdt['point_bonus']?></td>
+                            <td rowspan="<?=$nbCadeaux?>"><?=$delegue?></td>
+                            <td rowspan="<?=$nbCadeaux?>"><?=$pour?></td>
+                            <td rowspan="<?=$nbCadeaux?>"><?=$etat?></td>
+                            <?php endif; ?>
+                            <td><?=$cadeau['qte']?> x <?=htmlspecialchars($cadeau['nom'])?></td>
+                            <?php if($idx === 0): ?>
+                            <td rowspan="<?=$nbCadeaux?>"><?=($cdt['isCart']==0) ? "BA" : "Carte"?></td>
+                            <td rowspan="<?=$nbCadeaux?>"><?=$creePar?></td>
+                            <?php endif; ?>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php if(empty($cadeauxItems)): ?>
                         <tr>
                             <td><?=$cdt['id'].'/'.date("Y", strtotime($cdt['system_date']))?></td>
                             <td><?=$cdt['date_remise_point']?></td>
                             <td><?=$cdt['point_bonus']?></td>
                             <td><?=$delegue?></td>
-                            <td><?=getinfo($cdt['id_pros'],'prospect','Nom').' '.getinfo($cdt['id_pros'],'prospect','prenom')?></td>
+                            <td><?=$pour?></td>
                             <td><?=$etat?></td>
-                            <td><?=htmlspecialchars($cadeauxTexte)?></td>
+                            <td>—</td>
                             <td><?=($cdt['isCart']==0) ? "BA" : "Carte"?></td>
-                             <td><?=getinfo($cdt['cree_par'],'grm_users','Nom').' '.getinfo($cdt['cree_par'],'grm_users','prenom')?></td>
-                           
-                           <!-------- <td>
-                                <?php if($cdt['suivi']==0 && $_SESSION['user']['id']==9): ?>
-                                <button type="button" class="btn btn-info btn-action-only"
-                                        onclick="SuiviCadeau(<?=$cdt['id']?>)"
-                                        data-toggle="tooltip" title="Valider"
-                                        data-excel="En cours">
-                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                </button>
-                                <?php else: ?>
-                                <?=$suiviTexte?>
-                                <?php endif; ?>------>
-                            </td>
+                            <td><?=$creePar?></td>
                         </tr>
+                        <?php endif; ?>
                     <?endforeach;?>
                     </tbody>
                 </table>
